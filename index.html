@@ -120,12 +120,43 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--focus);outline-offs
 .taxi button{font:600 15px var(--f-body);border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:12px 20px;cursor:pointer}
 footer{color:var(--muted);font-size:13px;max-width:70ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+:root{--c-mall:#2C7C82;--c-uq:#D7141E}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-mall:#5FB7BD;--c-uq:#FF4D55}}
+:root[data-theme="dark"]{--c-mall:#5FB7BD;--c-uq:#FF4D55}
+.en{font-size:13px;color:var(--muted)}
+.mall{width:26px;height:22px;border-radius:6px;background:var(--c-mall);color:#fff;display:flex;align-items:center;justify-content:center;font:700 10px var(--f-body);letter-spacing:.02em;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
+.uq{width:18px;height:18px;background:var(--c-uq);color:#fff;display:flex;align-items:center;justify-content:center;font:800 11px var(--f-body);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
+.uq.big{width:24px;height:24px;font-size:14px}
+.listhead{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.search{display:flex;align-items:center;gap:8px;flex:1 1 260px;max-width:420px}
+.search span{font-size:13px;color:var(--muted)}
+.search input{flex:1;min-width:0;font:15px var(--f-body);color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.search input:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.listbox{display:flex;flex-direction:column;gap:12px}
+.hint{margin:0;color:var(--muted);font-size:13px}
+.lgroup h3{font:500 13px var(--f-display);letter-spacing:.05em;text-transform:uppercase;margin:8px 0 6px;color:var(--muted)}
+.rows{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.row{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.sw{width:14px;height:14px;border-radius:50%;background:var(--c);justify-self:center}
+.sw.sq{border-radius:3px}
+.sw.dia{border-radius:2px;transform:rotate(45deg);background:var(--paper);border:2px solid var(--ink);width:12px;height:12px}
+.rname{display:flex;flex-direction:column;min-width:0}
+.rname b{font-weight:600}
+.rname small{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.rname .rzh{font-family:var(--f-cjk)}
+.ract{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.ract button,.ract a{font:500 12px/1 var(--f-body);color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:6px;padding:7px 9px;background:transparent;cursor:pointer;white-space:nowrap}
+.ract a{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;border-radius:2px}
+@media (max-width:520px){.row{grid-template-columns:22px 1fr}.ract{grid-column:2;justify-content:flex-start}}
 </style>
 
 <div class="wrap">
   <header>
     <h1>Шанхай по-местному<span>上海</span></h1>
-    <p class="lede">25 мест, которые лежат у вас в избранном Amap. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «★ Классика» и «Районы» добавляют на карту главные достопримечательности и подписи районов.</p>
+    <p class="lede">25 мест, которые лежат у вас в избранном Amap. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «★ Классика», «Районы», «ТЦ» и «Uniqlo» добавляют слои. Ниже — все места списком и поиск.</p>
   </header>
 
   <div class="controls">
@@ -137,6 +168,8 @@ footer{color:var(--muted);font-size:13px;max-width:70ch}
     <div class="seg" role="group" aria-label="Слои карты">
       <button id="l-sights" aria-pressed="false">★ Классика</button>
       <button id="l-districts" aria-pressed="false">Районы</button>
+      <button id="l-malls" aria-pressed="false">ТЦ</button>
+      <button id="l-uniqlo" aria-pressed="false">Uniqlo</button>
     </div>
     <div class="seg" role="group" aria-label="Подписи на карте">
       <button id="lang-en" aria-pressed="true">English</button>
@@ -148,7 +181,22 @@ footer{color:var(--muted);font-size:13px;max-width:70ch}
     <div id="map" role="region" aria-label="Карта Шанхая с отмеченными местами"></div>
   </div>
 
-  <div class="groups" id="groups"></div>
+  <div class="listhead">
+    <div class="seg" role="group" aria-label="Вид списка">
+      <button id="vw-cards" aria-pressed="true">Карточки</button>
+      <button id="vw-list" aria-pressed="false">Все места списком</button>
+    </div>
+    <label class="search" for="q"><span>Поиск</span><input id="q" type="search" placeholder="Название, район, Uniqlo, tea…" autocomplete="off"></label>
+  </div>
+  <div class="listbox" id="listbox" hidden>
+    <div class="seg" role="group" aria-label="Группировка">
+      <button id="gb-type" aria-pressed="true">По типу</button>
+      <button id="gb-district" aria-pressed="false">По районам</button>
+    </div>
+    <p class="hint" id="listhint"></p>
+    <div id="list"></div>
+  </div>
+<div class="groups" id="groups"></div>
 
   <footer>Подложка — живая карта Amap, приближается до уровня домов; нужен интернет. Подписи переключаются между английским и китайским. Точки стоят по координатам из Amap; у 大壶春 положение приблизительное, у 汤连得 точки нет. Кнопка «Открыть в Amap» ведёт на точную карточку места. 阿娘面馆 в Amap не нашлась, поэтому её здесь нет.</footer>
 </div>
@@ -173,31 +221,31 @@ const CATS={
 };
 // lng/lat — координаты Amap (GCJ-02); null — точки нет
 const P=[
- {cat:"food",zh:"大壶春(云南南路店)",ru:"Да Ху Чунь",what:"Шэнцзянь старой школы: толстое тесто, мало бульона.",id:"B00155LAB2",ll:[121.4840,31.2272],approx:true},
- {cat:"food",zh:"耳光馄饨(黄家阙店)",ru:"Вонтоны «Пощёчина»",what:"Ночные вонтоны с арахисовым соусом, старый город.",id:"B0FFGQFUAF",ll:[121.4903,31.2132]},
- {cat:"food",zh:"国际饭店帆声饼屋",ru:"Кондитерская Park Hotel",what:"«Бабочки» 蝴蝶酥, очередь из шанхайцев. Хуанхэ-лу, 28.",id:"B00153BA1A",ll:[121.4701,31.2390]},
- {cat:"food",zh:"天山茶城",ru:"Чайный рынок Тяньшань",what:"Садитесь в любую лавку, заварят и дадут попробовать.",id:"B00154DUTQ",ll:[121.4101,31.2115]},
- {cat:"walk",zh:"金陵东路渡口",ru:"Паром Цзиньлин-Дунлу",what:"Через Хуанпу за 2 юаня вместо круиза. Лучше на закате.",id:"BV10596713",ll:[121.4931,31.2325]},
- {cat:"walk",zh:"天安千树",ru:"1000 Trees",what:"Здание-гора с деревьями на Сучжоу-крик, начало прогулки.",id:"B0FFMA0COY",ll:[121.4456,31.2492]},
- {cat:"walk",zh:"四行仓库抗战纪念馆",ru:"Склад Сыхан",what:"Музей обороны 1937 года, стена со следами снарядов.",id:"B0GKOS77AU",ll:[121.4711,31.2404]},
- {cat:"walk",zh:"绿之丘",ru:"Green Hill, Янпу",what:"Бывший склад табака, теперь зелёные террасы над рекой.",id:"B0FFLDMWH2",ll:[121.5388,31.2549]},
- {cat:"walk",zh:"愚园路",ru:"Юйюань-лу",what:"Тихая улица с лавками и старыми домами.",id:"BZAFR002CG",ll:[121.4353,31.2208]},
- {cat:"walk",zh:"新华路",ru:"Синьхуа-лу",what:"Виллы под платанами, в ноябре листья не убирают.",id:"B0FFH02DMW",ll:[121.4225,31.2030]},
- {cat:"walk",zh:"绍兴路",ru:"Шаосин-лу",what:"Короткая книжная улица во Французской концессии.",id:"B0JUFZM0R3",ll:[121.4639,31.2096]},
- {cat:"walk",zh:"步高里",ru:"Бугаоли",what:"Жилой квартал шикумэнь 1930 года, бельё на верёвках.",id:"B00155KHPB",ll:[121.4625,31.2072]},
- {cat:"walk",zh:"多伦路文化名人街",ru:"Улица Долунь",what:"Хункоу, дома писателей 1920–30-х.",id:"B00155FLFD",ll:[121.4816,31.2642]},
- {cat:"walk",zh:"上海鲁迅公园",ru:"Парк Лу Синя",what:"Приходить утром: тайцзи, хор, каллиграфия водой.",id:"B00155KZKW",ll:[121.4832,31.2721]},
- {cat:"art",zh:"1933老场坊",ru:"Бойня 1933",what:"Бетонный лабиринт бывшей скотобойни.",id:"B00155LPBC",ll:[121.4919,31.2546]},
- {cat:"art",zh:"M50创意园",ru:"M50",what:"Галереи в бывших прядильных цехах на Сучжоу-крик.",id:"B0FFFS173H",ll:[121.4493,31.2481]},
- {cat:"art",zh:"龙美术馆(西岸馆)",ru:"Long Museum, Вест-Бунд",what:"Бетонные своды у реки. Пн выходной.",id:"B0FFF2YL75",ll:[121.4648,31.1838]},
- {cat:"art",zh:"上海油罐艺术中心",ru:"Tank Shanghai",what:"Выставки внутри бывших топливных резервуаров.",id:"B0FFHUD4BQ",ll:[121.4646,31.1646]},
- {cat:"other",zh:"朵云书院·旗舰店",ru:"Книжный Duoyun, 52-й этаж",what:"Вид почти как со смотровой по цене кофе. Запись через WeChat.",id:"B0G0P9FUWI",ll:[121.5054,31.2336]},
- {cat:"other",zh:"汤连得(118店)",ru:"Баня Tang Lian De",what:"Купальни, сауны, еда и лежаки, можно на полдня.",id:"B0FFH82IJR",ll:null},
- {cat:"out",zh:"南翔古镇",ru:"Наньсян",what:"Родина сяолунбао. Метро 11, ~40 мин.",id:"B00155LZBN",ll:[121.3082,31.2913]},
- {cat:"out",zh:"上海古猗园",ru:"Сад Гуи",what:"Классический сад рядом с Наньсяном, без толп Юйюаня.",id:"B00151C9B5",ll:[121.3165,31.2919]},
- {cat:"out",zh:"枫泾古镇",ru:"Фэнцзин",what:"Водный городок, тише Чжуцзяцзяо.",id:"B001556VY1",ll:[121.0158,30.8872]},
- {cat:"out",zh:"金泽古镇",ru:"Цзиньцзэ",what:"Городок мостов, почти без туристов.",id:"B0FFF4WNST",ll:[120.9212,31.0370]},
- {cat:"out",zh:"上海东滩湿地公园",ru:"Дунтань, Чунмин",what:"Перелётные птицы в ноябре. Отдельный день.",id:"B00156CLWX",ll:[121.9487,31.5177]}
+ {cat:"food",zh:"大壶春(云南南路店)",en:"Da Hu Chun (Yunnan South Rd)",ru:"Да Ху Чунь",what:"Шэнцзянь старой школы: толстое тесто, мало бульона.",id:"B00155LAB2",ll:[121.4840,31.2272],approx:true},
+ {cat:"food",zh:"耳光馄饨(黄家阙店)",en:"Erguang Wonton (Huangjiaque Rd)",ru:"Вонтоны «Пощёчина»",what:"Ночные вонтоны с арахисовым соусом, старый город.",id:"B0FFGQFUAF",ll:[121.4903,31.2132]},
+ {cat:"food",zh:"国际饭店帆声饼屋",en:"Park Hotel Bakery",ru:"Кондитерская Park Hotel",what:"«Бабочки» 蝴蝶酥, очередь из шанхайцев. Хуанхэ-лу, 28.",id:"B00153BA1A",ll:[121.4701,31.2390]},
+ {cat:"food",zh:"天山茶城",en:"Tianshan Tea City",ru:"Чайный рынок Тяньшань",what:"Садитесь в любую лавку, заварят и дадут попробовать.",id:"B00154DUTQ",ll:[121.4101,31.2115]},
+ {cat:"walk",zh:"金陵东路渡口",en:"Jinling East Rd Ferry",ru:"Паром Цзиньлин-Дунлу",what:"Через Хуанпу за 2 юаня вместо круиза. Лучше на закате.",id:"BV10596713",ll:[121.4931,31.2325]},
+ {cat:"walk",zh:"天安千树",en:"1000 Trees",ru:"1000 Trees",what:"Здание-гора с деревьями на Сучжоу-крик, начало прогулки.",id:"B0FFMA0COY",ll:[121.4456,31.2492]},
+ {cat:"walk",zh:"四行仓库抗战纪念馆",en:"Sihang Warehouse Memorial",ru:"Склад Сыхан",what:"Музей обороны 1937 года, стена со следами снарядов.",id:"B0GKOS77AU",ll:[121.4711,31.2404]},
+ {cat:"walk",zh:"绿之丘",en:"Green Hill, Yangpu Riverside",ru:"Green Hill, Янпу",what:"Бывший склад табака, теперь зелёные террасы над рекой.",id:"B0FFLDMWH2",ll:[121.5388,31.2549]},
+ {cat:"walk",zh:"愚园路",en:"Yuyuan Road",ru:"Юйюань-лу",what:"Тихая улица с лавками и старыми домами.",id:"BZAFR002CG",ll:[121.4353,31.2208]},
+ {cat:"walk",zh:"新华路",en:"Xinhua Road",ru:"Синьхуа-лу",what:"Виллы под платанами, в ноябре листья не убирают.",id:"B0FFH02DMW",ll:[121.4225,31.2030]},
+ {cat:"walk",zh:"绍兴路",en:"Shaoxing Road",ru:"Шаосин-лу",what:"Короткая книжная улица во Французской концессии.",id:"B0JUFZM0R3",ll:[121.4639,31.2096]},
+ {cat:"walk",zh:"步高里",en:"Bugaoli (Cite Bourgogne)",ru:"Бугаоли",what:"Жилой квартал шикумэнь 1930 года, бельё на верёвках.",id:"B00155KHPB",ll:[121.4625,31.2072]},
+ {cat:"walk",zh:"多伦路文化名人街",en:"Duolun Road",ru:"Улица Долунь",what:"Хункоу, дома писателей 1920–30-х.",id:"B00155FLFD",ll:[121.4816,31.2642]},
+ {cat:"walk",zh:"上海鲁迅公园",en:"Lu Xun Park",ru:"Парк Лу Синя",what:"Приходить утром: тайцзи, хор, каллиграфия водой.",id:"B00155KZKW",ll:[121.4832,31.2721]},
+ {cat:"art",zh:"1933老场坊",en:"1933 Old Millfun",ru:"Бойня 1933",what:"Бетонный лабиринт бывшей скотобойни.",id:"B00155LPBC",ll:[121.4919,31.2546]},
+ {cat:"art",zh:"M50创意园",en:"M50 Creative Park",ru:"M50",what:"Галереи в бывших прядильных цехах на Сучжоу-крик.",id:"B0FFFS173H",ll:[121.4493,31.2481]},
+ {cat:"art",zh:"龙美术馆(西岸馆)",en:"Long Museum West Bund",ru:"Long Museum, Вест-Бунд",what:"Бетонные своды у реки. Пн выходной.",id:"B0FFF2YL75",ll:[121.4648,31.1838]},
+ {cat:"art",zh:"上海油罐艺术中心",en:"Tank Shanghai",ru:"Tank Shanghai",what:"Выставки внутри бывших топливных резервуаров.",id:"B0FFHUD4BQ",ll:[121.4646,31.1646]},
+ {cat:"other",zh:"朵云书院·旗舰店",en:"Duoyun Books (Shanghai Tower)",ru:"Книжный Duoyun, 52-й этаж",what:"Вид почти как со смотровой по цене кофе. Запись через WeChat.",id:"B0G0P9FUWI",ll:[121.5054,31.2336]},
+ {cat:"other",zh:"汤连得(118店)",en:"Tang Lian De Spa",ru:"Баня Tang Lian De",what:"Купальни, сауны, еда и лежаки, можно на полдня.",id:"B0FFH82IJR",ll:null},
+ {cat:"out",zh:"南翔古镇",en:"Nanxiang Ancient Town",ru:"Наньсян",what:"Родина сяолунбао. Метро 11, ~40 мин.",id:"B00155LZBN",ll:[121.3082,31.2913]},
+ {cat:"out",zh:"上海古猗园",en:"Guyi Garden",ru:"Сад Гуи",what:"Классический сад рядом с Наньсяном, без толп Юйюаня.",id:"B00151C9B5",ll:[121.3165,31.2919]},
+ {cat:"out",zh:"枫泾古镇",en:"Fengjing Ancient Town",ru:"Фэнцзин",what:"Водный городок, тише Чжуцзяцзяо.",id:"B001556VY1",ll:[121.0158,30.8872]},
+ {cat:"out",zh:"金泽古镇",en:"Jinze Ancient Town",ru:"Цзиньцзэ",what:"Городок мостов, почти без туристов.",id:"B0FFF4WNST",ll:[120.9212,31.0370]},
+ {cat:"out",zh:"上海东滩湿地公园",en:"Dongtan Wetland Park",ru:"Дунтань, Чунмин",what:"Перелётные птицы в ноябре. Отдельный день.",id:"B00156CLWX",ll:[121.9487,31.5177]}
 ];
 P.forEach((p,i)=>p.n=i+1);
 
@@ -245,8 +293,8 @@ P.forEach(p=>{
 
 
 // Слои «Классика» и «Районы» (координаты Amap, GCJ-02)
-const SIGHTS=[{"zh": "外滩", "ru": "Бунд", "what": "Набережная с банками и отелями 1920–30-х. Вечером подсветка с обоих берегов.", "ll": [121.49211, 31.23336]}, {"zh": "东方明珠", "ru": "Телебашня «Восточная жемчужина»", "what": "Символ Пудуна, 1994 год. Смотровая со стеклянным полом.", "ll": [121.49971, 31.23995]}, {"zh": "上海环球金融中心", "ru": "Всемирный финансовый центр", "what": "Небоскрёб-«открывашка», смотровая на 100-м этаже.", "ll": [121.50746, 31.23455]}, {"zh": "外白渡桥", "ru": "Мост Вайбайду", "what": "Стальной мост 1907 года там, где Сучжоу-крик впадает в Хуанпу.", "ll": [121.49023, 31.24334]}, {"zh": "南京路步行街", "ru": "Нанкин-лу", "what": "Главная торговая улица, вечером неон и толпа.", "ll": [121.47982, 31.23574]}, {"zh": "人民广场", "ru": "Народная площадь", "what": "Центр города, рядом Шанхайский музей и Большой театр.", "ll": [121.47552, 31.23196]}, {"zh": "豫园", "ru": "Сад Юйюань", "what": "Сад XVI века и базар вокруг. Приходить к открытию, до толп.", "ll": [121.49245, 31.22694]}, {"zh": "新天地", "ru": "Синьтяньди", "what": "Отреставрированные шикумэнь, рестораны и бары.", "ll": [121.47497, 31.21999]}, {"zh": "田子坊", "ru": "Тяньцзыфан", "what": "Лабиринт переулков с лавками и кафе в жилом квартале.", "ll": [121.46865, 31.20841]}, {"zh": "静安寺", "ru": "Храм Цзинъань", "what": "Золотой буддийский храм среди небоскрёбов.", "ll": [121.4454, 31.22334]}, {"zh": "武康大楼", "ru": "Дом Укан", "what": "Здание-«утюг» 1924 года на углу Уканлу, все его фотографируют.", "ll": [121.43835, 31.20439]}, {"zh": "玉佛禅寺", "ru": "Храм Нефритового Будды", "what": "Действующий монастырь с двумя статуями из нефрита.", "ll": [121.4444, 31.24183]}, {"zh": "上海自然博物馆", "ru": "Музей естествознания", "what": "Здание-спираль в парке Цзинъань, динозавры.", "ll": [121.46227, 31.23497]}, {"zh": "龙华寺", "ru": "Храм Лунхуа", "what": "Старейший храм города, пагода X века.", "ll": [121.45184, 31.17489]}, {"zh": "徐家汇天主堂", "ru": "Собор Сюйцзяхуэй", "what": "Неоготический собор 1910 года.", "ll": [121.43618, 31.19114]}, {"zh": "七宝古镇", "ru": "Цибао", "what": "Старая улица на 9-й линии метро, много уличной еды.", "ll": [121.3579, 31.15426]}, {"zh": "朱家角", "ru": "Чжуцзяцзяо", "what": "Самый известный водный городок. Красиво, но людно.", "ll": [121.04607, 31.10368]}, {"zh": "上海迪士尼乐园", "ru": "Шанхайский Диснейленд", "what": "Целый день. Метро 11 до конечной Disney Resort, около часа от центра.", "ll": [121.66054, 31.14407]}];
-const DISTRICTS=[{"ru": "Хуанпу", "zh": "黄浦", "ll": [121.481, 31.2318], "what": "Бунд, Юйюань, Народная площадь, Нанкин-лу."}, {"ru": "Пудун · Луцзяцзуй", "zh": "浦东", "ll": [121.516, 31.2365], "what": "Небоскрёбы, «Жемчужина», Шанхайская башня. Вид на Бунд с набережной."}, {"ru": "Цзинъань", "zh": "静安", "ll": [121.454, 31.24], "what": "Храм Цзинъань, Нанкин-си-лу, жилые лилуны."}, {"ru": "Бывш. Французская концессия", "zh": "法租界", "ll": [121.452, 31.212], "what": "Платаны, виллы, Уканлу и кафе. Лучший район для прогулок. Это историческая часть города, а не административный район: она лежит в Сюйхуэе, Хуанпу и Цзинъане, поэтому границы у неё нет."}, {"ru": "Сюйхуэй", "zh": "徐汇", "ll": [121.4385, 31.189], "what": "Собор Сюйцзяхуэй, храм Лунхуа, Вест-Бунд."}, {"ru": "Чаннин", "zh": "长宁", "ll": [121.413, 31.217], "what": "Юйюань-лу, Синьхуа-лу, тихие жилые кварталы."}, {"ru": "Путо", "zh": "普陀", "ll": [121.428, 31.249], "what": "Сучжоу-крик, M50, 1000 Trees."}, {"ru": "Хункоу", "zh": "虹口", "ll": [121.488, 31.262], "what": "Шанхай 1930-х: Долунь, бойня 1933, парк Лу Синя."}, {"ru": "Янпу", "zh": "杨浦", "ll": [121.53, 31.265], "what": "Бывшая промзона, набережная с кранами, университеты."}];
+const SIGHTS=[{"zh": "外滩", "ru": "Бунд", "what": "Набережная с банками и отелями 1920–30-х. Вечером подсветка с обоих берегов.", "ll": [121.49211, 31.23336], "en": "The Bund"}, {"zh": "东方明珠", "ru": "Телебашня «Восточная жемчужина»", "what": "Символ Пудуна, 1994 год. Смотровая со стеклянным полом.", "ll": [121.49971, 31.23995], "en": "Oriental Pearl Tower"}, {"zh": "上海环球金融中心", "ru": "Всемирный финансовый центр", "what": "Небоскрёб-«открывашка», смотровая на 100-м этаже.", "ll": [121.50746, 31.23455], "en": "Shanghai World Financial Center"}, {"zh": "外白渡桥", "ru": "Мост Вайбайду", "what": "Стальной мост 1907 года там, где Сучжоу-крик впадает в Хуанпу.", "ll": [121.49023, 31.24334], "en": "Waibaidu Bridge"}, {"zh": "南京路步行街", "ru": "Нанкин-лу", "what": "Главная торговая улица, вечером неон и толпа.", "ll": [121.47982, 31.23574], "en": "Nanjing Road Pedestrian Street"}, {"zh": "人民广场", "ru": "Народная площадь", "what": "Центр города, рядом Шанхайский музей и Большой театр.", "ll": [121.47552, 31.23196], "en": "People's Square"}, {"zh": "豫园", "ru": "Сад Юйюань", "what": "Сад XVI века и базар вокруг. Приходить к открытию, до толп.", "ll": [121.49245, 31.22694], "en": "Yu Garden"}, {"zh": "新天地", "ru": "Синьтяньди", "what": "Отреставрированные шикумэнь, рестораны и бары.", "ll": [121.47497, 31.21999], "en": "Xintiandi"}, {"zh": "田子坊", "ru": "Тяньцзыфан", "what": "Лабиринт переулков с лавками и кафе в жилом квартале.", "ll": [121.46865, 31.20841], "en": "Tianzifang"}, {"zh": "静安寺", "ru": "Храм Цзинъань", "what": "Золотой буддийский храм среди небоскрёбов.", "ll": [121.4454, 31.22334], "en": "Jing'an Temple"}, {"zh": "武康大楼", "ru": "Дом Укан", "what": "Здание-«утюг» 1924 года на углу Уканлу, все его фотографируют.", "ll": [121.43835, 31.20439], "en": "Wukang Mansion"}, {"zh": "玉佛禅寺", "ru": "Храм Нефритового Будды", "what": "Действующий монастырь с двумя статуями из нефрита.", "ll": [121.4444, 31.24183], "en": "Jade Buddha Temple"}, {"zh": "上海自然博物馆", "ru": "Музей естествознания", "what": "Здание-спираль в парке Цзинъань, динозавры.", "ll": [121.46227, 31.23497], "en": "Shanghai Natural History Museum"}, {"zh": "龙华寺", "ru": "Храм Лунхуа", "what": "Старейший храм города, пагода X века.", "ll": [121.45184, 31.17489], "en": "Longhua Temple"}, {"zh": "徐家汇天主堂", "ru": "Собор Сюйцзяхуэй", "what": "Неоготический собор 1910 года.", "ll": [121.43618, 31.19114], "en": "Xujiahui Cathedral"}, {"zh": "七宝古镇", "ru": "Цибао", "what": "Старая улица на 9-й линии метро, много уличной еды.", "ll": [121.3579, 31.15426], "en": "Qibao Ancient Town"}, {"zh": "朱家角", "ru": "Чжуцзяцзяо", "what": "Самый известный водный городок. Красиво, но людно.", "ll": [121.04607, 31.10368], "en": "Zhujiajiao Water Town"}, {"zh": "上海迪士尼乐园", "ru": "Шанхайский Диснейленд", "what": "Целый день. Метро 11 до конечной Disney Resort, около часа от центра.", "ll": [121.66054, 31.14407], "en": "Shanghai Disneyland"}];
+const DISTRICTS=[{"ru": "Хуанпу", "zh": "黄浦", "ll": [121.481, 31.2318], "what": "Бунд, Юйюань, Народная площадь, Нанкин-лу.", "en": "Huangpu"}, {"ru": "Пудун · Луцзяцзуй", "zh": "浦东", "ll": [121.516, 31.2365], "what": "Небоскрёбы, «Жемчужина», Шанхайская башня. Вид на Бунд с набережной.", "en": "Pudong · Lujiazui"}, {"ru": "Цзинъань", "zh": "静安", "ll": [121.454, 31.24], "what": "Храм Цзинъань, Нанкин-си-лу, жилые лилуны.", "en": "Jing'an"}, {"ru": "Бывш. Французская концессия", "zh": "法租界", "ll": [121.452, 31.212], "what": "Платаны, виллы, Уканлу и кафе. Лучший район для прогулок. Это историческая часть города, а не административный район: она лежит в Сюйхуэе, Хуанпу и Цзинъане, поэтому границы у неё нет.", "en": "Former French Concession"}, {"ru": "Сюйхуэй", "zh": "徐汇", "ll": [121.4385, 31.189], "what": "Собор Сюйцзяхуэй, храм Лунхуа, Вест-Бунд.", "en": "Xuhui"}, {"ru": "Чаннин", "zh": "长宁", "ll": [121.413, 31.217], "what": "Юйюань-лу, Синьхуа-лу, тихие жилые кварталы.", "en": "Changning"}, {"ru": "Путо", "zh": "普陀", "ll": [121.428, 31.249], "what": "Сучжоу-крик, M50, 1000 Trees.", "en": "Putuo"}, {"ru": "Хункоу", "zh": "虹口", "ll": [121.488, 31.262], "what": "Шанхай 1930-х: Долунь, бойня 1933, парк Лу Синя.", "en": "Hongkou"}, {"ru": "Янпу", "zh": "杨浦", "ll": [121.53, 31.265], "what": "Бывшая промзона, набережная с кранами, университеты.", "en": "Yangpu"}];
 const sightLayer=L.layerGroup(), districtLayer=L.layerGroup();
 const amapLink=(ll,name)=>`https://uri.amap.com/marker?position=${ll[0]},${ll[1]}&name=${encodeURIComponent(name)}&coordinate=gaode&callnative=1`;
 SIGHTS.forEach(s=>{
@@ -296,7 +344,7 @@ function drawCards(){
     `<section class="group" style="--c:var(${c.c})"><h2><i></i>${c.name}</h2><div class="cards">`+
     P.filter(p=>p.cat===k).map(p=>
       `<article class="card${sel===p.n?" on":""}" id="card-${p.n}" data-n="${p.n}">
-        <div class="top"><span class="num">${p.n}</span><div><div class="zh" lang="zh">${p.zh}</div><div class="ru">${p.ru}</div></div></div>
+        <div class="top"><span class="num">${p.n}</span><div><div class="zh" lang="zh">${p.zh}</div><div class="ru">${p.ru}</div><div class="en">${p.en}</div></div></div>
         <p class="what">${p.what}</p>
         <div class="meta">
           <a href="https://www.amap.com/place/${p.id}" target="_blank" rel="noopener">Открыть в Amap</a>
@@ -331,7 +379,7 @@ document.getElementById("chips").addEventListener("click",e=>{
   const b=e.target.closest("[data-cat]");if(!b)return;
   on[b.dataset.cat]=!on[b.dataset.cat];
   if(!Object.values(on).some(Boolean))on[b.dataset.cat]=true;
-  render();
+  render();drawList();
 });
 document.getElementById("v-city").onclick=()=>setView("city");
 document.getElementById("v-region").onclick=()=>setView("region");
@@ -347,6 +395,126 @@ document.getElementById("groups").addEventListener("click",e=>{
 });
 document.getElementById("taxi-close").onclick=()=>{document.getElementById("taxi").hidden=true;};
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("taxi").hidden=true;});
+
+// Слои «ТЦ» и «Uniqlo» (OpenStreetMap → GCJ-02)
+const MALLS=[{"zh": "上海国金中心商场", "en": "IFC Mall", "what": "Люкс на Луцзяцзуе, Apple Store со стеклянным цилиндром.", "ll": [121.50239, 31.23619]}, {"zh": "恒隆广场", "en": "Plaza 66", "what": "Люкс-бренды на Нанкин-си-лу.", "ll": [121.45344, 31.22793]}, {"zh": "静安嘉里中心", "en": "Jing'an Kerry Centre", "what": "Бренды и рестораны напротив храма Цзинъань.", "ll": [121.4492, 31.22399]}, {"zh": "兴业太古汇", "en": "HKRI Taikoo Hui", "what": "Большой ТЦ, внутри огромная Starbucks Reserve Roastery рядом.", "ll": [121.46309, 31.22908]}, {"zh": "环贸iapm", "en": "iapm", "what": "Модные бренды на Хуайхай, открыт до 23:00.", "ll": [121.4581, 31.21573]}, {"zh": "K11购物艺术中心", "en": "K11 Art Mall", "what": "ТЦ-галерея с выставками на Хуайхай.", "ll": [121.47356, 31.22356]}, {"zh": "TX淮海", "en": "TX Huaihai", "what": "Молодёжный ТЦ с поп-апами и коллаборациями.", "ll": [121.46888, 31.22047]}, {"zh": "来福士广场", "en": "Raffles City", "what": "Масс-маркет у Народной площади.", "ll": [121.4766, 31.23256]}, {"zh": "新世界城", "en": "New World City", "what": "Универмаг на Нанкин-лу.", "ll": [121.47364, 31.23503]}, {"zh": "上海市第一百货商店", "en": "Shanghai No.1 Department Store", "what": "Исторический универмаг 1936 года.", "ll": [121.4748, 31.23512]}, {"zh": "正大广场", "en": "Super Brand Mall", "what": "Огромный ТЦ на Луцзяцзуе с видом на Бунд.", "ll": [121.49919, 31.23665]}, {"zh": "港汇恒隆广场", "en": "Grand Gateway 66", "what": "Главный ТЦ Сюйцзяхуэя, прямо над метро.", "ll": [121.43695, 31.19412]}, {"zh": "美罗城", "en": "Metro City", "what": "ТЦ-шар в Сюйцзяхуэе, электроника и еда.", "ll": [121.44018, 31.19304]}, {"zh": "静安大悦城", "en": "Joy City", "what": "Колесо обозрения на крыше.", "ll": [121.47205, 31.24407]}, {"zh": "环球港", "en": "Global Harbor", "what": "Один из самых больших ТЦ города, Путо.", "ll": [121.41308, 31.23429]}, {"zh": "前滩太古里", "en": "Taikoo Li Qiantan", "what": "Открытый ТЦ у реки, новый район Цяньтань.", "ll": [121.48244, 31.15232]}, {"zh": "外滩金融中心", "en": "BFC Bund Finance Center", "what": "ТЦ у южного Бунда, рядом Юйюань.", "ll": [121.49786, 31.22661]}, {"zh": "陆家嘴中心L+MALL", "en": "L+Mall", "what": "Новый ТЦ на Луцзяцзуе.", "ll": [121.51561, 31.23111]}, {"zh": "合生汇", "en": "Hopson One", "what": "Большой ТЦ на Уцзяочане, ночной фудкорт.", "ll": [121.51794, 31.29982]}, {"zh": "久光百货", "en": "Jiuguang Department Store", "what": "Японский универмаг у храма Цзинъань.", "ll": [121.44574, 31.22395]}];
+const UNIQLO=[{"zh": "优衣库", "en": "Uniqlo · Gufang Road", "ll": [121.40197, 31.13291], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · New Songjiang Road", "ll": [121.2192, 31.03789], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Xujiahui", "ll": [121.4428, 31.19229], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Chenhang Highway", "ll": [121.50388, 31.09466], "flag": false}, {"zh": "优衣库(静安大悦城)", "en": "Uniqlo · Joy City", "ll": [121.47219, 31.24279], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Nanjing Road", "ll": [121.48352, 31.23681], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Zhoujiadu Road", "ll": [121.49328, 31.17932], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Wujiang Road", "ll": [121.45892, 31.22942], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Ziyun Road", "ll": [121.40753, 31.20699], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Shuicheng Road", "ll": [121.39221, 31.20079], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Changshou Road", "ll": [121.4371, 31.23934], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Kaijin Road", "ll": [121.42847, 31.18394], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Taikang Road", "ll": [121.46845, 31.20671], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Dahuayi Road", "ll": [121.41223, 31.27058], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Tianhong Road", "ll": [121.49833, 31.26365], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Xianxia Xincun", "ll": [121.38962, 31.21404], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Dingxiang Road", "ll": [121.55998, 31.22871], "flag": false}, {"zh": "优衣库(陆家嘴中心L+MALL)", "en": "Uniqlo · L+Mall", "ll": [121.51611, 31.22906], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Yuqiao Road", "ll": [121.56488, 31.15754], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Shangnan Road", "ll": [121.51323, 31.14038], "flag": false}, {"zh": "优衣库(美罗城)", "en": "Uniqlo · Metro City", "ll": [121.4398, 31.19353], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Chengshan Road", "ll": [121.53598, 31.17912], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Tangbei", "ll": [121.35007, 31.15377], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Caobao Road", "ll": [121.43197, 31.16899], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Little Pumpkin Street", "ll": [121.42661, 31.28007], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Wuzhong Road", "ll": [121.36959, 31.1707], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Huamu Road", "ll": [121.56365, 31.21287], "flag": false}, {"zh": "优衣库", "en": "Uniqlo · Nianjiabang Road", "ll": [121.57042, 31.1142], "flag": false}, {"zh": "优衣库(淮海中路全球旗舰店)", "en": "Uniqlo · Huaihai Rd Global Flagship", "ll": [121.46102, 31.21724], "flag": true}, {"zh": "优衣库", "en": "Uniqlo · Caoan Highway", "ll": [121.16224, 31.28811], "flag": false}];
+const mallLayer=L.layerGroup(), uqLayer=L.layerGroup();
+const extMarkers=new Map();
+function popupHtml(kind,it,amap){
+  return `<div class="pp"><div class="pp-kind">${kind}</div><div class="pp-zh" lang="zh">${it.zh}</div><div class="pp-ru">${it.ru||it.en}</div>${it.ru?`<div class="en">${it.en}</div>`:""}<p class="pp-what">${it.what||""}</p><a href="${amap}" target="_blank" rel="noopener">Открыть в Amap</a></div>`;
+}
+MALLS.forEach(m=>{
+  const mk=L.marker([m.ll[1],m.ll[0]],{icon:L.divIcon({className:"",iconSize:[26,22],iconAnchor:[13,11],html:'<div class="mall">ТЦ</div>'}),title:m.en,keyboard:true});
+  mk.bindTooltip(m.en,{className:"nm",direction:"top",offset:[0,-12]});
+  mk.bindPopup(popupHtml("Торговый центр",m,amapLink(m.ll,m.zh)));
+  mallLayer.addLayer(mk); extMarkers.set(m,mk);
+});
+UNIQLO.forEach(u=>{
+  const sz=u.flag?24:18;
+  const mk=L.marker([u.ll[1],u.ll[0]],{icon:L.divIcon({className:"",iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],html:`<div class="uq${u.flag?" big":""}">U</div>`}),title:u.en,keyboard:true,zIndexOffset:u.flag?200:0});
+  mk.bindTooltip(u.en,{className:"nm",direction:"top",offset:[0,-10]});
+  mk.bindPopup(popupHtml(u.flag?"Uniqlo · главный флагман":"Uniqlo",u,amapLink(u.ll,u.zh)));
+  uqLayer.addLayer(mk); extMarkers.set(u,mk);
+});
+SIGHTS.forEach((s0,i)=>{const mk=sightLayer.getLayers()[i];if(mk){mk.setTooltipContent(s0.ru+" · "+s0.en);extMarkers.set(s0,mk);}});
+document.getElementById("l-malls").onclick=e=>{toggleLayer(e.currentTarget,mallLayer);drawList();};
+document.getElementById("l-uniqlo").onclick=e=>{toggleLayer(e.currentTarget,uqLayer);drawList();};
+document.getElementById("l-sights").onclick=e=>{toggleLayer(e.currentTarget,sightLayer);drawList();};
+
+// Район по точке (границы DBOUNDS)
+function inRing([x,y],ring){let c=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [xi,yi]=ring[i],[xj,yj]=ring[j];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c;}return c;}
+function districtOf(ll){
+  if(!ll)return "Без точки на карте";
+  for(const [ru,polys] of Object.entries(DBOUNDS)){
+    if(polys.some(poly=>inRing(ll,poly[0])&&!poly.slice(1).some(h=>inRing(ll,h))))return ru;
+  }
+  return "Другие районы и пригороды";
+}
+
+// Единый список всех сохранённых мест
+const KINDS={
+  mine:{name:"Мои места",layerBtn:null},
+  sight:{name:"Классика",layerBtn:"l-sights",layer:sightLayer},
+  mall:{name:"Торговые центры",layerBtn:"l-malls",layer:mallLayer},
+  uq:{name:"Uniqlo",layerBtn:"l-uniqlo",layer:uqLayer}
+};
+const ALL=[
+  ...P.map(p=>({kind:"mine",ref:p,zh:p.zh,ru:p.ru,en:p.en,what:p.what,ll:p.ll,cat:p.cat,amap:`https://www.amap.com/place/${p.id}`})),
+  ...SIGHTS.map(x=>({kind:"sight",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...MALLS.map(x=>({kind:"mall",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...UNIQLO.map(x=>({kind:"uq",ref:x,zh:x.zh,ru:x.en,en:"",what:x.flag?"Главный флагман Uniqlo на Хуайхай-лу.":"",ll:x.ll,amap:amapLink(x.ll,x.zh)}))
+];
+ALL.forEach(a=>{
+  a.district=districtOf(a.ll);
+  a.hay=[a.zh,a.ru,a.en,a.what,a.district,KINDS[a.kind].name,a.cat?CATS[a.cat].name:"",
+    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":""].join(" ").toLowerCase();
+});
+
+let groupBy="type", query="";
+const esc=t=>String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function hl(t){
+  const e=esc(t);if(!query)return e;
+  const q=esc(query).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  return e.replace(new RegExp(q,"gi"),m=>`<mark>${m}</mark>`);
+}
+function layerOn(k){const b=KINDS[k].layerBtn;return !b||document.getElementById(b).getAttribute("aria-pressed")==="true";}
+function swatch(a){
+  if(a.kind==="mine")return `<span class="sw" style="--c:var(${CATS[a.cat].c})"></span>`;
+  if(a.kind==="sight")return `<span class="sw dia"></span>`;
+  if(a.kind==="mall")return `<span class="sw sq" style="--c:var(--c-mall)"></span>`;
+  return `<span class="sw sq" style="--c:var(--c-uq)"></span>`;
+}
+function drawList(){
+  const box=document.getElementById("list");
+  if(!box)return;
+  const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
+  document.getElementById("listhint").textContent=query
+    ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
+    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «★ Классика», «ТЦ», «Uniqlo».`;
+  const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:KINDS[a.kind].name):a.district;
+  const groups=new Map();
+  items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
+  let order=[...groups.keys()];
+  if(groupBy==="district")order.sort((x,y)=>groups.get(y).length-groups.get(x).length);
+  box.innerHTML=items.length?order.map(k=>`<section class="lgroup"><h3>${esc(k)} · ${groups.get(k).length}</h3><div class="rows">`+
+    groups.get(k).map(a=>{const i=ALL.indexOf(a);return `<div class="row">${swatch(a)}<div class="rname"><b>${hl(a.ru)}</b><small>${a.en?hl(a.en)+" · ":""}<span class="rzh" lang="zh">${hl(a.zh)}</span>${groupBy==="type"?" · "+hl(a.district):""}</small></div>
+      <div class="ract">${a.ll?`<button type="button" data-show="${i}">На карте</button>`:""}<a href="${a.amap}" target="_blank" rel="noopener">Amap</a></div></div>`;}).join("")+`</div></section>`).join("")
+    :`<p class="hint">Ничего не нашлось. Попробуйте английское или китайское название, или район.</p>`;
+}
+function showOnMap(a){
+  const rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  if(a.kind==="mine"){sel=null;select(a.ref.n,false);}
+  else{
+    const btn=document.getElementById(KINDS[a.kind].layerBtn);
+    if(btn.getAttribute("aria-pressed")!=="true")toggleLayer(btn,KINDS[a.kind].layer);
+    const mk=extMarkers.get(a.ref);
+    map.once("moveend",()=>mk&&mk.openPopup());
+    map.flyTo([a.ll[1],a.ll[0]],Math.max(map.getZoom(),16),{duration:rm?0:0.8});
+  }
+  document.getElementById("map").scrollIntoView({block:"center",behavior:rm?"auto":"smooth"});
+}
+document.getElementById("list").addEventListener("click",e=>{const b=e.target.closest("[data-show]");if(b)showOnMap(ALL[+b.dataset.show]);});
+function setListView(v){
+  const list=v==="list";
+  document.getElementById("vw-cards").setAttribute("aria-pressed",!list);
+  document.getElementById("vw-list").setAttribute("aria-pressed",list);
+  document.getElementById("listbox").hidden=!list;
+  document.getElementById("groups").hidden=list;
+  drawList();
+}
+document.getElementById("vw-cards").onclick=()=>setListView("cards");
+document.getElementById("vw-list").onclick=()=>setListView("list");
+function setGroup(g){
+  groupBy=g;
+  document.getElementById("gb-type").setAttribute("aria-pressed",g==="type");
+  document.getElementById("gb-district").setAttribute("aria-pressed",g==="district");
+  drawList();
+}
+document.getElementById("gb-type").onclick=()=>setGroup("type");
+document.getElementById("gb-district").onclick=()=>setGroup("district");
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();if(query)setListView("list");else drawList();});
+
 render();
 </script>
 
