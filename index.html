@@ -489,7 +489,7 @@ function showOnMap(a){
     const btn=document.getElementById(KINDS[a.kind].layerBtn);
     if(btn.getAttribute("aria-pressed")!=="true")toggleLayer(btn,KINDS[a.kind].layer);
     const mk=extMarkers.get(a.ref);
-    map.once("moveend",()=>mk&&mk.openPopup());
+    let opened=false;const open=()=>{if(!opened&&mk){opened=true;mk.openPopup();}};map.once("moveend",open);setTimeout(open,1300);
     map.flyTo([a.ll[1],a.ll[0]],Math.max(map.getZoom(),16),{duration:rm?0:0.8});
   }
   document.getElementById("map").scrollIntoView({block:"center",behavior:rm?"auto":"smooth"});
