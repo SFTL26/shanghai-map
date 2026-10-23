@@ -151,12 +151,17 @@ footer{color:var(--muted);font-size:13px;max-width:70ch}
 .ract a{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;border-radius:2px}
 @media (max-width:520px){.row{grid-template-columns:22px 1fr}.ract{grid-column:2;justify-content:flex-start}}
+
+:root{--c-sushi:#E35D12}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-sushi:#FF8A4C}}
+:root[data-theme="dark"]{--c-sushi:#FF8A4C}
+.sushi{width:22px;height:22px;border-radius:50%;background:var(--c-sushi);color:#fff;display:flex;align-items:center;justify-content:center;font:700 11px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
 </style>
 
 <div class="wrap">
   <header>
     <h1>Шанхай по-местному<span>上海</span></h1>
-    <p class="lede">25 мест, которые лежат у вас в избранном Amap. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «★ Классика», «Районы», «ТЦ» и «Uniqlo» добавляют слои. Ниже — все места списком и поиск.</p>
+    <p class="lede">25 мест, которые лежат у вас в избранном Amap. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «★ Классика», «Районы», «ТЦ», «Uniqlo» и «Sushiro» добавляют слои. Ниже — все места списком и поиск.</p>
   </header>
 
   <div class="controls">
@@ -170,6 +175,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
       <button id="l-districts" aria-pressed="false">Районы</button>
       <button id="l-malls" aria-pressed="false">ТЦ</button>
       <button id="l-uniqlo" aria-pressed="false">Uniqlo</button>
+      <button id="l-sushi" aria-pressed="false">Sushiro</button>
     </div>
     <div class="seg" role="group" aria-label="Подписи на карте">
       <button id="lang-en" aria-pressed="true">English</button>
@@ -417,6 +423,17 @@ UNIQLO.forEach(u=>{
   mk.bindPopup(popupHtml(u.flag?"Uniqlo · главный флагман":"Uniqlo",u,amapLink(u.ll,u.zh)));
   uqLayer.addLayer(mk); extMarkers.set(u,mk);
 });
+
+// Слой «Sushiro» (адреса из поиска Amap, координаты — геокодер Amap, GCJ-02)
+const SUSHIRO=[{"zh": "寿司郎(上海来福士店)", "en": "Sushiro · Raffles City", "ll": [121.47664, 31.23244], "what": "Около ¥144 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(苏河湾万象天地店)", "en": "Sushiro · Suhe MixC World", "ll": [121.47652, 31.24298], "what": "Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(陆家嘴中心店)", "en": "Sushiro · Lujiazui Center L+Mall", "ll": [121.51619, 31.23134], "what": "Около ¥131 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(瑞虹天地店)", "en": "Sushiro · Ruihong Tiandi", "ll": [121.49916, 31.26495], "what": "Около ¥128 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(凯德虹口商业中心店)", "en": "Sushiro · CapitaLand Hongkou Plaza", "ll": [121.47823, 31.27063], "what": "Около ¥150 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(世纪汇店)", "en": "Sushiro · Century Link", "ll": [121.5272, 31.22746], "what": "Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(长宁龙之梦城市生活中心店)", "en": "Sushiro · Changning Cloud Nine", "ll": [121.41504, 31.21637], "what": "Около ¥158 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(上海月星环球港店)", "en": "Sushiro · Global Harbor", "ll": [121.41153, 31.23149], "what": "Около ¥150 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(晶耀虹桥店)", "en": "Sushiro · Jingyao Hongqiao", "ll": [121.39938, 31.21244], "what": "Около ¥127 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(LCM置汇旭辉广场店)", "en": "Sushiro · LCM Plaza", "ll": [121.55527, 31.24234], "what": "Около ¥135 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(上海五角场店)", "en": "Sushiro · Wujiaochang Wanda Plaza", "ll": [121.51363, 31.30129], "what": "Около ¥118 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(长泰广场店)", "en": "Sushiro · Changtai Plaza, Zhangjiang", "ll": [121.60115, 31.20631], "what": "Около ¥92 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(啦啦宝都店)", "en": "Sushiro · LaLaport Jinqiao", "ll": [121.60365, 31.25273], "what": "Около ¥104 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(虹桥新天地购物中心店)", "en": "Sushiro · Hongqiao Xintiandi", "ll": [121.31539, 31.19274], "what": "Около ¥147 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}, {"zh": "寿司郎(上海南翔印象城MEGA店)", "en": "Sushiro · Nanxiang InCity MEGA", "ll": [121.30534, 31.30512], "what": "Около ¥122 на человека. Очереди 1–3 часа: номерок берут онлайн в мини-приложении Sushiro в WeChat или у входа к открытию в 10:00."}];
+const sushiLayer=L.layerGroup();
+SUSHIRO.forEach(x=>{
+  const mk=L.marker([x.ll[1],x.ll[0]],{icon:L.divIcon({className:"",iconSize:[22,22],iconAnchor:[11,11],html:'<div class="sushi" lang="zh">寿</div>'}),title:x.en,keyboard:true});
+  mk.bindTooltip(x.en,{className:"nm",direction:"top",offset:[0,-12]});
+  mk.bindPopup(popupHtml("Sushiro · кайтен-суши",x,amapLink(x.ll,x.zh)));
+  sushiLayer.addLayer(mk); extMarkers.set(x,mk);
+});
+document.getElementById("l-sushi").onclick=e=>{toggleLayer(e.currentTarget,sushiLayer);drawList();};
 SIGHTS.forEach((s0,i)=>{const mk=sightLayer.getLayers()[i];if(mk){mk.setTooltipContent(s0.ru+" · "+s0.en);extMarkers.set(s0,mk);}});
 document.getElementById("l-malls").onclick=e=>{toggleLayer(e.currentTarget,mallLayer);drawList();};
 document.getElementById("l-uniqlo").onclick=e=>{toggleLayer(e.currentTarget,uqLayer);drawList();};
@@ -437,18 +454,20 @@ const KINDS={
   mine:{name:"Мои места",layerBtn:null},
   sight:{name:"Классика",layerBtn:"l-sights",layer:sightLayer},
   mall:{name:"Торговые центры",layerBtn:"l-malls",layer:mallLayer},
-  uq:{name:"Uniqlo",layerBtn:"l-uniqlo",layer:uqLayer}
+  uq:{name:"Uniqlo",layerBtn:"l-uniqlo",layer:uqLayer},
+  sushi:{name:"Sushiro",layerBtn:"l-sushi",layer:sushiLayer}
 };
 const ALL=[
   ...P.map(p=>({kind:"mine",ref:p,zh:p.zh,ru:p.ru,en:p.en,what:p.what,ll:p.ll,cat:p.cat,amap:`https://www.amap.com/place/${p.id}`})),
   ...SIGHTS.map(x=>({kind:"sight",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...MALLS.map(x=>({kind:"mall",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
-  ...UNIQLO.map(x=>({kind:"uq",ref:x,zh:x.zh,ru:x.en,en:"",what:x.flag?"Главный флагман Uniqlo на Хуайхай-лу.":"",ll:x.ll,amap:amapLink(x.ll,x.zh)}))
+  ...UNIQLO.map(x=>({kind:"uq",ref:x,zh:x.zh,ru:x.en,en:"",what:x.flag?"Главный флагман Uniqlo на Хуайхай-лу.":"",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...SUSHIRO.map(x=>({kind:"sushi",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)}))
 ];
 ALL.forEach(a=>{
   a.district=districtOf(a.ll);
   a.hay=[a.zh,a.ru,a.en,a.what,a.district,KINDS[a.kind].name,a.cat?CATS[a.cat].name:"",
-    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":""].join(" ").toLowerCase();
+    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":""].join(" ").toLowerCase();
 });
 
 let groupBy="type", query="";
@@ -463,6 +482,7 @@ function swatch(a){
   if(a.kind==="mine")return `<span class="sw" style="--c:var(${CATS[a.cat].c})"></span>`;
   if(a.kind==="sight")return `<span class="sw dia"></span>`;
   if(a.kind==="mall")return `<span class="sw sq" style="--c:var(--c-mall)"></span>`;
+  if(a.kind==="sushi")return `<span class="sw" style="--c:var(--c-sushi)"></span>`;
   return `<span class="sw sq" style="--c:var(--c-uq)"></span>`;
 }
 function drawList(){
@@ -471,7 +491,7 @@ function drawList(){
   const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
-    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «★ Классика», «ТЦ», «Uniqlo».`;
+    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «★ Классика», «ТЦ», «Uniqlo», «Sushiro».`;
   const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
