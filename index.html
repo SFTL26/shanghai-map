@@ -200,6 +200,10 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 .ferry{width:24px;height:24px;border-radius:50%;background:var(--c-ferry);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);cursor:pointer}
 .ferry-line{stroke:var(--c-ferry)}
 .odd{width:22px;height:22px;border-radius:6px;background:var(--c-odd);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
+:root{--c-lz:#2E7D32;--c-sx:#546E7A}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-lz:#7BD389;--c-sx:#B0BEC5}}
+:root[data-theme="dark"]{--c-lz:#7BD389;--c-sx:#B0BEC5}
+.ndl{width:22px;height:22px;border-radius:50%;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
 .pp-addr{font:13px/1.4 var(--f-cjk);margin:0 0 8px}
 .pp-tip{margin:0 0 6px;font-size:13px}
 .pp-tip b{font-weight:600}
@@ -208,7 +212,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 <div class="wrap">
   <header>
     <h1>Шанхай по-местному<span>上海</span></h1>
-    <p class="lede">30 мест: 25 из вашего избранного Amap и 5 из видео Lais «5 Days in Shanghai». Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «Маршруты», «★ Классика», «Районы», «ТЦ», «Uniqlo», «Sushiro» и «Micun» добавляют слои. Ниже — все места списком и поиск.</p>
+    <p class="lede">31 место: 25 из вашего избранного Amap и 6 из видео на YouTube. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «Маршруты», «★ Классика», «Районы», «ТЦ», «Uniqlo», «Sushiro» и «Micun» добавляют слои. Ниже — все места списком и поиск.</p>
   </header>
 
   <div class="controls">
@@ -227,6 +231,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
       <button id="l-micun" aria-pressed="false">Micun</button>
       <button id="l-ferry" aria-pressed="false">Паромы</button>
       <button id="l-odd" aria-pressed="false">Необычное</button>
+      <button id="l-ndl" aria-pressed="false">Лапша и Шасянь</button>
     </div>
     <div class="seg" role="group" aria-label="Подписи на карте">
       <button id="lang-en" aria-pressed="true">English</button>
@@ -306,6 +311,7 @@ const P=[
  {cat:"art",zh:"龙美术馆(西岸馆)",en:"Long Museum West Bund",ru:"Long Museum, Вест-Бунд",what:"Бетонные своды у реки. Пн выходной.",id:"B0FFF2YL75",ll:[121.4648,31.1838],tips:[["Когда", "с 1 ноября зимнее расписание: вт–чт 10:00–17:30 (вход до 16:30), пт–вс 10:00–20:00 (вход до 19:00). В понедельник 23.11 закрыто. Вечер пятницы 20.11 или выходные удобнее всего."], ["Билет", "только в кассе на месте, бронировать не нужно. Цена зависит от выставки: до 25.10.2026 было 180 юаней в будни и 220 в выходные, прошлой зимой — 200. Цену на ноябрь найти не удалось. Младшие школьники и малыши — бесплатно со взрослым."], ["Как добраться", "Longteng Avenue, 3398. Метро до Longhua Middle Road (линии 7/12), около 10 минут пешком."], ["Рядом", "по той же набережной Вест-Банд пешком доходят до Tank Shanghai, Музея Вест-Банд и START Museum — их тоже нельзя посещать в понедельник."]],img:"img/places/p17.webp",credit:"Supanut Arunoprayote · CC BY 4.0",src:"https://commons.wikimedia.org/wiki/File:20251129_Long_Museum_West_Bund.jpg"},
  {cat:"art",zh:"上海油罐艺术中心",en:"Tank Shanghai",ru:"Tank Shanghai",what:"Выставки внутри бывших топливных резервуаров.",id:"B0FFHUD4BQ",ll:[121.4646,31.1646],tips:[["Когда", "понедельник 23.11 — выходной. По данным управления культуры Шанхая (апрель 2026) открыто 12:00–18:00, вход до 17:30. По картам в выходные открываются уже в 10:00. Удобнее всего суббота 21.11 или воскресенье 22.11."], ["Билет", "отдельно на каждую выставку: весной 2026 года стоил 50 юаней. Нынешняя выставка заканчивается 25.10, программу на ноябрь найти не удалось — проверьте на tankshanghai.com или в WeChat музея ближе к поездке."], ["Как добраться", "Longteng Avenue, 2380. Метро линия 11 до Yunjin Road, выход 2, около 850 м пешком."], ["Рядом", "это часть одного пешего маршрута по набережной Вест-Банд с Long Museum, Музеем Вест-Банд и START Museum."]],img:"img/places/p18.webp",credit:"Lcsun · CC BY-SA 4.0",src:"https://commons.wikimedia.org/wiki/File:Appearance_of_Tank_Shanghai,Jul_2020.jpg"},
  {cat:"art",zh:"恒基·旭辉天地",en:"The Roof (Henderson CIFI Tiandi)",ru:"The Roof, «Красный дом»",what:"Комплекс Жана Нувеля: внутри двухэтажная улица под красной крышей, красные галереи, мостики и сотни красных кашпо с растениями. Это тот самый «Красный дом» из видео, который любят фотографы.",id:"B0FFLHVECS",ll:[121.47492, 31.21215],tips:[["Когда", "вход свободный. Кафе и магазины работают примерно с 10:00 до 22:00, общего расписания у комплекса нет."], ["Как добраться", "3–5 минут пешком от станции Madang Road (линии 9 и 13)."], ["Лайфхак", "снаружи здание серо-бежевое — весь красный цвет внутри атриума. Заходите с Мадан-лу и поднимайтесь на галереи."], ["Рядом", "Синьтяньди в 5 минутах, лапша Вэйсянчжай в 10. Удобно обойти всё за полдня."]],img:"img/places/vid2.webp",credit:"钉钉 · CC BY-SA 4.0",src:"https://commons.wikimedia.org/wiki/File:%E6%81%92%E5%9F%BA%C2%B7%E6%97%AD%E8%BE%89%E5%A4%A9%E5%9C%B0_1.jpg"},
+ {cat:"art",zh:"集雅GATHERING手作(乌鲁木齐中路店)",en:"Gathering Ceramics (Urumqi Middle Rd)",ru:"Керамика Gathering",what:"Магазин авторской керамики во Французской концессии: гайвани, пиалы, тарелки ручной росписи и дровяного обжига от разных мастеров.",id:null,ll:[121.44565, 31.21315],tips:[["Когда", "ежедневно 11:00–20:00 (по Apple Maps, свежих данных нет — проверьте в Dianping или Amap)."], ["Как добраться", "乌鲁木齐中路198–200号, около 6 минут пешком от выхода 8 станции Changshu Road (линии 1 и 7)."], ["Деньги", "вещи авторские и недешёвые. Если покупаете домой, попросите упаковать понадёжнее — 打包好一点 — впереди ещё перелёт через Пхукет."], ["Рядом", "у того же бренда есть кофейня с керамикой на Укан-лу, 137 (集雅GATHERING咖啡, примерно 9:00–19:00) — по дороге к Дому Укан."]]},
  {cat:"other",zh:"朵云书院·旗舰店",en:"Duoyun Books (Shanghai Tower)",ru:"Книжный Duoyun, 52-й этаж",what:"Вид почти как со смотровой по цене кофе. Запись через WeChat.",id:"B0G0P9FUWI",ll:[121.5054,31.2336],tips:[["Когда", "по данным Ctrip открыто каждый день 10:30–20:00. Вход бесплатный, но только по предварительной записи: купить что-то вместо записи или записаться на месте нельзя."], ["Билет", "запись в WeChat: аккаунт «世纪朵云» → мини-программа 佰朋 → «门店预约» → «朵云书院·旗舰店», выберите время. Один телефон — одна запись в день, повторно только через 3 дня. Одного ребёнка до 14 лет пропускают по записи родителя. Скриншот брони не принимают."], ["Важно", "слоты разбирают быстро: по данным 2024 года запись открывается в 7:00, по другим — в полночь на 5–7 дней вперёд. Записывайтесь заранее. Не проверила, примут ли иностранный номер телефона."], ["Как найти", "Shanghai Tower, 52-й этаж. Метро линии 2/14, Lujiazui, выход 9A. Вход через боковую дверь у южных ворот (ворота 2), там отдельный лифт. По отзыву мая 2026 года, к смотровой зоне пускают после покупки напитка в кафе."]],img:"img/places/p19.webp",credit:"Stefan Fussan · CC BY-SA 3.0",src:"https://commons.wikimedia.org/wiki/File:Shanghai_-_Shanghai_Tower_-_0002.jpg"},
  {cat:"other",zh:"汤连得(118店)",en:"Tang Lian De Spa",ru:"Баня Tang Lian De",what:"Купальни, сауны, еда и лежаки, можно на полдня.",id:"B0FFH82IJR",ll:null,tips:[["Когда", "Ctrip пишет «круглосуточно», а свежий гайд (сентябрь 2026) — 10:00–01:00 и без ночёвки в этом филиале. После 19:00 много людей, лучше приходить к открытию. Часы уточните по телефону 021-52689666."], ["Билет", "на Ctrip от 104 юаней. По свежему гайду: только купальни в будни 128–158 юаней, с буфетом 188–228, в выходные на 50–70 дороже. Пакет с буфетом выгоднее, чем заказывать еду отдельно."], ["С ребёнком", "есть детская игровая зона, бесплатная. Детей ниже 1,2 м в зону купален пускают только со взрослым, в части бассейнов для малышей есть ограничения по температуре. Свою еду приносить нельзя."], ["Как добраться", "Boshi Road, 57, напротив 118 Plaza. Метро линия 13 до Zhenbei Road, около 700 м или 11 минут пешком. Для открытых бассейнов возьмите купальник, полотенца и косметика есть на месте."]]},
  {cat:"other",zh:"上海温室花园",en:"Shanghai Greenhouse Garden",ru:"Оранжерея в парке Expo Culture",what:"Огромные стеклянные оранжереи с тропическими и пустынными растениями в новом парке на месте Экспо-2010. Сам парк бесплатный: холмы, озеро, мост с одиннадцатью арками.",id:"B0IU15ZN3L",ll:[121.47506, 31.17839],tips:[["Когда", "9:00–17:00, вход до 16:30, билеты на двухчасовые слоты. В понедельник закрыто — для вас 19–22.11."], ["Билет", "взрослый ¥98 в будни и ¥128 в выходные. Семейный (взрослый и ребёнок ростом 1,0–1,4 м) ¥142 и ¥187. Дети ниже 1 м бесплатно. Покупать в мини-программе «上海世博文化公园» в WeChat или на Trip.com."], ["Как добраться", "метро 13 до Expo Avenue (世博大道) или 7 до Houtan (后滩), выход 4, дальше 10–15 минут пешком по парку. Таксисту говорите 世博文化公园南区."], ["С ребёнком", "в холодный или дождливый день это тёплое место на полдня, а в парке вокруг есть где побегать."]],img:"img/places/vid5.webp",credit:"Supanut Arunoprayote · CC BY 4.0",src:"https://commons.wikimedia.org/wiki/File:Expo_Cultural_Park_Greenhouse_20251129_(II).jpg"},
@@ -639,6 +645,34 @@ ODD.forEach(x=>{
   oddLayer.addLayer(mk); extMarkers.set(x,mk);
 });
 document.getElementById("l-odd").onclick=e=>{toggleLayer(e.currentTarget,oddLayer);drawList();};
+
+// Слой «Лапша и Шасянь»: поиск Amap в радиусе 1 км от районов карты, лучшая по рейтингу точка на район (GCJ-02).
+// Адреса из выдачи Amap зашумлены защитой от парсинга, поэтому точный адрес — по ссылке на карточку Amap.
+const NOODLES=[{"t": "sx", "an": "Бунд · Нанкин-лу", "id": "B0KA1HKWNO", "zh": "沙县小吃(中怡公寓店)", "rating": 4, "reviews": 10, "price": 24, "ll": [121.48175, 31.23438]}, {"t": "lz", "an": "Народная площадь", "id": "B0L1C966GY", "zh": "(清真)德元兰州纯汤牛肉面(福州路店)", "rating": 4.4, "reviews": 65, "price": 26, "ll": [121.48413, 31.23438]}, {"t": "sx", "an": "Народная площадь", "id": "B0KA2GFCA7", "zh": "沙县小吃(修德新村店)", "rating": 3.9, "reviews": 19, "price": 20, "ll": [121.46638, 31.23174]}, {"t": "lz", "an": "Юйюань", "id": "B0K0HMDTYK", "zh": "西北美食兰州牛肉面", "rating": 4.3, "reviews": 40, "price": 32, "ll": [121.48926, 31.23274]}, {"t": "sx", "an": "Юйюань", "id": "B0FFJD47RT", "zh": "沙县小吃(上海第138店)", "rating": 4, "reviews": 14, "price": 26, "ll": [121.48104, 31.22478]}, {"t": "lz", "an": "Синьтяньди", "id": "B0H1ULYXDN", "zh": "马记永·兰州牛肉面(无限极荟购物中心店)", "rating": 4, "reviews": 20, "price": 34, "ll": [121.47714, 31.22124]}, {"t": "lz", "an": "Цзинъань", "id": "B0K0XYF4WV", "zh": "兰甄亭兰州牛肉面(林邨店)", "rating": 4.2, "reviews": 8, "price": 30, "ll": [121.45541, 31.22524]}, {"t": "lz", "an": "Укан-лу", "id": "B0LA9O1JAL", "zh": "蒜苗王子兰州牛肉面(番禺路店)", "rating": 4.3, "reviews": 3, "price": 29, "ll": [121.42824, 31.20558]}, {"t": "sx", "an": "Укан-лу", "id": "B0K1P1UFP4", "zh": "沙县小吃(华敏世纪广场店)", "rating": 3.8, "reviews": 5, "price": 25, "ll": [121.43539, 31.21498]}, {"t": "lz", "an": "Сюйцзяхуэй", "id": "B0ID6OAD9R", "zh": "中国兰州牛肉拉面(徐家汇青年创业孵化园区店)", "rating": 4.3, "reviews": 23, "price": 18, "ll": [121.44359, 31.19064]}, {"t": "lz", "an": "Луцзяцзуй", "id": "B0GKA6WJ7K", "zh": "陈香贵·兰州牛肉面(上海中心店)", "rating": 4.4, "reviews": 58, "price": 37, "ll": [121.5059, 31.23334]}, {"t": "lz", "an": "Хункоу · Долунь", "id": "B0LR6GFR3E", "zh": "德元兰州纯汤牛肉面-四川北路店(清真)", "rating": 4.3, "reviews": 44, "price": 35, "ll": [121.48462, 31.26218]}, {"t": "sx", "an": "Хункоу · Долунь", "id": "B0LUM9E2UT", "zh": "沙县小吃(宝安支路店)", "rating": 3.8, "reviews": 20, "price": 25, "ll": [121.48976, 31.26355]}, {"t": "lz", "an": "Сучжоу-крик · M50", "id": "B0I66ZAGZG", "zh": "陈香贵·兰州牛肉面(上海普陀天安千树店)", "rating": 4.7, "reviews": 47, "price": 32, "ll": [121.44388, 31.24807]}, {"t": "sx", "an": "Сучжоу-крик · M50", "id": "B0J17OJHQ5", "zh": "沙县小吃(上海站店)", "rating": 3.9, "reviews": 13, "price": 30, "ll": [121.45274, 31.24979]}, {"t": "lz", "an": "Тяньцзыфан", "id": "B0J6APURZY", "zh": "马记永·兰州牛肉面(上海日月光店)", "rating": 4.4, "reviews": 79, "price": 35, "ll": [121.46679, 31.20787]}, {"t": "sx", "an": "Тяньцзыфан", "id": "B0FFHHDTMY", "zh": "沙县营养小吃(永嘉路店)", "rating": 4.3, "reviews": 27, "price": 20, "ll": [121.45981, 31.20905]}, {"t": "lz", "an": "Вест-Бунд", "id": "B0LD4U23O8", "zh": "1915兰州牛肉面涮肉烧烤(清真餐厅)", "rating": 4.6, "reviews": 26, "price": 37, "ll": [121.45671, 31.18242]}, {"t": "lz", "an": "Юйюань-лу", "id": "B0IAVBACCN", "zh": "中国兰州牛肉拉面(江苏路店)", "rating": 4.6, "reviews": 38, "price": 23, "ll": [121.42842, 31.2224]}, {"t": "sx", "an": "Юйюань-лу", "id": "B0LDGA2Z2P", "zh": "樟荣·沙县手工小吃(江苏路店)", "rating": 3.8, "reviews": 3, "price": 22, "ll": [121.4329, 31.21544]}, {"t": "lz", "an": "Синьхуа-лу", "id": "B0LD77WMUK", "zh": "昆仑唐府·兰州纯汤牛肉面·现熬骨汤·清真(延安西路店)", "rating": 4.4, "reviews": 23, "price": 31, "ll": [121.42056, 31.2082]}, {"t": "lz", "an": "Северный Бунд", "id": "B0KURHXGFJ", "zh": "兰城亭兰州牛肉面", "rating": 4.3, "reviews": 21, "price": 31, "ll": [121.49753, 31.25291]}];
+const NDL_TYPE={
+  lz:{name:"Ланьчжоу-лапша",glyph:"拉",c:"--c-lz",
+    what:"Суп с говядиной и лапшой, которую тянут руками прямо при вас. Обычно держат мусульмане-хуэй: кухня халяльная, свинины нет.",
+    tips:[["Что заказать","牛肉面 — суп с говядиной и лапшой. Сначала назовите толщину: 细 — тонкая, 二细 — средняя (самая ходовая), 宽 — широкая лента. Можно добавить 加肉 — больше мяса."],
+      ["Острота","красное масло с перцем часто кладут сразу. Для Майи скажите 不要辣 — «без остроты», а себе добавьте из баночки на столе."]]},
+  sx:{name:"Шасянь",glyph:"沙",c:"--c-sx",
+    what:"Фуцзяньские закуски из уезда Шасянь: очень дёшево и быстро, такие закусочные на каждом углу.",
+    tips:[["Что заказать","拌面 — лапша с арахисовым соусом, 扁肉 — мелкие вонтоны в бульоне, 炖罐 — бульон из глиняного горшочка, 蒸饺 — паровые пельмени."],
+      ["С ребёнком","扁肉 и 炖罐 мягкие и неострые. В 拌面 и многих соусах арахис — учитывайте при аллергии."]]}
+};
+const NDL_CHAIN=/陈香贵|马记永/;
+const ndlLayer=L.layerGroup();
+NOODLES.forEach(x=>{
+  const t=NDL_TYPE[x.t];
+  x.ru=t.name;x.en="";x.what=t.what;
+  const mk=L.marker([x.ll[1],x.ll[0]],{icon:L.divIcon({className:"",iconSize:[22,22],iconAnchor:[11,11],html:`<div class="ndl" style="--c:var(${t.c})" lang="zh">${t.glyph}</div>`}),title:x.zh,keyboard:true});
+  mk.bindTooltip(`${t.name} · ${x.rating.toFixed(1)}`,{className:"nm",direction:"top",offset:[0,-12]});
+  const meta=[`рейтинг Amap ${x.rating.toFixed(1)} (${x.reviews} отз.)`,x.price?`средний чек около ¥${x.price}`:""].filter(Boolean).join(", ");
+  const extra=NDL_CHAIN.test(x.zh)?[["Сеть","это современная сеть в торговом центре: чище и чуть дороже уличных лапшичных, вкус ровный."]]:[];
+  mk.bindPopup(`<div class="pp"><div class="pp-kind">${t.name} · рядом: ${x.an}</div><div class="pp-zh" lang="zh">${x.zh}</div><p class="pp-what">${t.what}</p><p class="pp-tip"><b>Здесь:</b> ${meta}.</p>`+
+    tipsHtml([...t.tips,...extra])+`<a href="https://www.amap.com/place/${x.id}" target="_blank" rel="noopener">Открыть в Amap</a></div>`,{minWidth:240,maxWidth:300});
+  ndlLayer.addLayer(mk); extMarkers.set(x,mk);
+});
+document.getElementById("l-ndl").onclick=e=>{toggleLayer(e.currentTarget,ndlLayer);drawList();};
 SIGHTS.forEach((s0,i)=>{const mk=sightLayer.getLayers()[i];if(mk){mk.setTooltipContent(s0.ru+" · "+s0.en);extMarkers.set(s0,mk);}});
 document.getElementById("l-malls").onclick=e=>{toggleLayer(e.currentTarget,mallLayer);drawList();};
 document.getElementById("l-uniqlo").onclick=e=>{toggleLayer(e.currentTarget,uqLayer);drawList();};
@@ -660,6 +694,7 @@ const KINDS={
   micun:{name:"Micun Banfan",layerBtn:"l-micun",layer:micunLayer},
   ferry:{name:"Паромы через Хуанпу",layerBtn:"l-ferry",layer:ferryLayer},
   odd:{name:"Необычное",layerBtn:"l-odd",layer:oddLayer},
+  ndl:{name:"Лапша и Шасянь",layerBtn:"l-ndl",layer:ndlLayer},
   mine:{name:"Мои места",layerBtn:null},
   sight:{name:"Классика",layerBtn:"l-sights",layer:sightLayer},
   mall:{name:"Торговые центры",layerBtn:"l-malls",layer:mallLayer},
@@ -674,13 +709,14 @@ const ALL=[
   ...SUSHIRO.map(x=>({kind:"sushi",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...MICUN.map(x=>({kind:"micun",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
   ...FERRY.map(x=>({kind:"ferry",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what+" Билет ¥2.",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...NOODLES.map(x=>({kind:"ndl",ref:x,zh:x.zh,ru:x.ru,en:"",what:`${x.what} Рейтинг Amap ${x.rating.toFixed(1)}${x.price?`, около ¥${x.price}`:""}.`,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
   ...ODD.map(x=>({kind:"odd",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what+" "+x.tips[0][0]+": "+x.tips[0][1],ll:x.ll,amap:oddAmap(x)})),
   ...ROUTES.flatMap((r,ri)=>r.stops.map(s=>({kind:"route",ref:s,ri,zh:s.zh,ru:s.ru,en:s.en===s.ru?"":s.en,what:[s.what,s.tip,s.buy].filter(Boolean).join(" "),ll:s.ll,amap:amapLink(s.ll,s.zh)})))
 ];
 ALL.forEach(a=>{
   a.district=districtOf(a.ll);
   a.hay=[a.zh,a.ru,a.en,a.what,(a.ref.tips||[]).map(t=>t.join(" ")).join(" "),a.district,KINDS[a.kind].name,a.cat?CATS[a.cat].name:"",
-    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="odd"?"необычное нишевое музей рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
+    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="ndl"?"лапша ланьчжоу lanzhou 兰州 拉面 牛肉面 шасянь shaxian 沙县 小吃 дешёвая еда":"",a.kind==="odd"?"необычное нишевое музей рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
 });
 
 let groupBy="type", query="";
@@ -699,6 +735,7 @@ function swatch(a){
   if(a.kind==="micun")return `<span class="sw sq" style="--c:var(--c-micun)"></span>`;
   if(a.kind==="sushi")return `<span class="sw" style="--c:var(--c-sushi)"></span>`;
   if(a.kind==="ferry")return `<span class="sw" style="--c:var(--c-ferry)"></span>`;
+  if(a.kind==="ndl")return `<span class="sw" style="--c:var(${a.ref.t==="lz"?"--c-lz":"--c-sx"})"></span>`;
   if(a.kind==="odd")return `<span class="sw sq" style="--c:var(--c-odd)"></span>`;
   return `<span class="sw sq" style="--c:var(--c-uq)"></span>`;
 }
@@ -708,7 +745,7 @@ function drawList(){
   const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
-    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun», «Паромы», «Необычное».`;
+    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun», «Паромы», «Необычное», «Лапша и Шасянь».`;
   const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
