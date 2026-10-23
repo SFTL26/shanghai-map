@@ -187,6 +187,12 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-micun:#FF5A6E}}
 :root[data-theme="dark"]{--c-micun:#FF5A6E}
 .micun{width:22px;height:22px;border-radius:6px;background:#fff;color:var(--c-micun);border:2px solid var(--c-micun);display:flex;align-items:center;justify-content:center;font:800 12px var(--f-cjk);box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
+:root{--c-ferry:#1F5FAD;--c-odd:#7B3F98}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-ferry:#7FB2FF;--c-odd:#C893E8}}
+:root[data-theme="dark"]{--c-ferry:#7FB2FF;--c-odd:#C893E8}
+.ferry{width:24px;height:24px;border-radius:50%;background:var(--c-ferry);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);cursor:pointer}
+.ferry-line{stroke:var(--c-ferry)}
+.odd{width:22px;height:22px;border-radius:6px;background:var(--c-odd);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
 .pp-addr{font:13px/1.4 var(--f-cjk);margin:0 0 8px}
 .pp-tip{margin:0 0 6px;font-size:13px}
 .pp-tip b{font-weight:600}
@@ -212,6 +218,8 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
       <button id="l-uniqlo" aria-pressed="false">Uniqlo</button>
       <button id="l-sushi" aria-pressed="false">Sushiro</button>
       <button id="l-micun" aria-pressed="false">Micun</button>
+      <button id="l-ferry" aria-pressed="false">Паромы</button>
+      <button id="l-odd" aria-pressed="false">Необычное</button>
     </div>
     <div class="seg" role="group" aria-label="Подписи на карте">
       <button id="lang-en" aria-pressed="true">English</button>
@@ -541,6 +549,74 @@ MICUN.forEach(x=>{
   micunLayer.addLayer(mk); extMarkers.set(x,mk);
 });
 document.getElementById("l-micun").onclick=e=>{toggleLayer(e.currentTarget,micunLayer);drawList();};
+
+// Слой «Паромы»: городские переправы через Хуанпу за ¥2 (причалы — POI Amap, GCJ-02)
+const FERRY_PAY="¥2 за переправу в одну сторону, дети ниже 1,3 м бесплатно. Отдельный билет заранее не нужен: платите прямо на турникете при входе на причал. Подходит QR-код транспорта в Alipay (Transport → шанхайский 乘车码, тот же, что в метро) или в WeChat, транспортная карта Шанхая. Наличные принимают в окошке 售票处 у входа, сдачи часто нет — держите купюры и монеты по 1–2 ¥. Паспорт лучше взять с собой.";
+const FERRY_TRAP="Рядом продают билеты на туристические круизы (游览船), они в десятки раз дороже. Вам нужен вход с надписью 轮渡 или 渡口.";
+const FERRY_LINES=[
+  {zh:"东金线",ru:"Линия Дунцзинь",from:0,to:1,hours:"Примерно 7:00–18:30, днём каждые ~15 минут, плыть ~5 минут. Только пешеходы, паром с кондиционером"},
+  {zh:"东复线",ru:"Линия Дунфу",from:2,to:1,hours:"Примерно 7:00–21:00 (летом до 22:00), каждые 10–15 минут, плыть ~5 минут. Работает на пару часов дольше Дунцзиня, поэтому подходит для вечерней подсветки"}
+];
+const FERRY=[
+  {zh:"金陵东路渡口",ru:"Причал Цзиньлин-дун-лу",en:"Jinling East Rd Ferry Pier",ll:[121.49321,31.23232],addr:"中山东二路141号（外滩）",
+   what:"Причал прямо на Бунде. Отсюда паром идёт в Пудун к причалу Дунчан-лу: за пять минут на воде видно и Бунд, и небоскрёбы Луцзяцзуя.",lines:[0]},
+  {zh:"东昌路渡口",ru:"Причал Дунчан-лу",en:"Dongchang Rd Ferry Pier",ll:[121.50325,31.23007],addr:"浦东 东昌路渡口（滨江大道）",
+   what:"Пудунский берег, в 10 минутах пешком от «Восточной жемчужины» по набережной. Отсюда ходят обе линии: на Бунд (Цзиньлин-дун-лу) и на юг Бунда (Фусин-дун-лу).",lines:[0,1]},
+  {zh:"复兴东路渡口",ru:"Причал Фусин-дун-лу",en:"Fuxing East Rd Ferry Pier",ll:[121.50395,31.22306],addr:"中山南路 复兴东路渡口",
+   what:"Южный край Бунда, около километра до Юйюаня и старого города. Удобный вечерний сценарий: днём уплыть в Пудун с Цзиньлин-дун-лу, а после заката вернуться сюда и идти ужинать в старый город.",lines:[1]}
+];
+const ferryLayer=L.layerGroup();
+function ferryPopup(x){
+  const lines=x.lines.map(i=>{const l=FERRY_LINES[i],o=FERRY[l.from===FERRY.indexOf(x)?l.to:l.from];
+    return `<p class="pp-tip"><b>${l.ru} <span lang="zh">${l.zh}</span> → ${o.ru}.</b> ${l.hours}.</p>`;}).join("");
+  return `<div class="pp"><div class="pp-kind">Городской паром · ¥2</div><div class="pp-zh" lang="zh">${x.zh}</div><div class="pp-ru">${x.ru}</div><div class="en">${x.en}</div><p class="pp-what">${x.what}</p>`+
+    lines+`<p class="pp-tip"><b>Билет и оплата.</b> ${FERRY_PAY}</p><p class="pp-tip"><b>Не перепутать.</b> ${FERRY_TRAP}</p>`+
+    `<p class="pp-tip">Часы по разным источникам расходятся — актуальное расписание в WeChat-аккаунте <span lang="zh">上海轮渡</span>.</p>`+
+    `<p class="pp-addr" lang="zh">${x.addr}</p><a href="${amapLink(x.ll,x.zh)}" target="_blank" rel="noopener">Открыть в Amap</a></div>`;
+}
+FERRY_LINES.forEach(l=>{
+  const a=FERRY[l.from].ll,b=FERRY[l.to].ll;
+  L.polyline([[a[1],a[0]],[b[1],b[0]]],{className:"ferry-line",weight:3,dashArray:"6 6",opacity:.9,interactive:false}).addTo(ferryLayer);
+});
+FERRY.forEach(x=>{
+  const mk=L.marker([x.ll[1],x.ll[0]],{icon:L.divIcon({className:"",iconSize:[24,24],iconAnchor:[12,12],html:'<div class="ferry" lang="zh">渡</div>'}),title:x.en,keyboard:true,zIndexOffset:300});
+  mk.bindTooltip(x.ru,{className:"nm",direction:"top",offset:[0,-13]});
+  mk.bindPopup(ferryPopup(x));
+  ferryLayer.addLayer(mk); extMarkers.set(x,mk);
+});
+document.getElementById("l-ferry").onclick=e=>{toggleLayer(e.currentTarget,ferryLayer);drawList();};
+
+// Слой «Необычное»: камерные места не из путеводителей (координаты — Amap, GCJ-02)
+const ODD=[
+  {zh:"上海杨培明宣传画收藏艺术馆",ru:"Музей агитплакатов",en:"Propaganda Poster Art Centre",ll:[121.43376,31.21536],id:"B0HAP5TTY6",glyph:"画",kind:"Музей",
+   what:"Частная коллекция Ян Пэймина: больше 6000 оригинальных агитплакатов середины XX века, в основном эпохи Мао и культурной революции. Владелец хорошо говорит по-английски — если застанете его, расскажет историю плакатов.",
+   tips:[["Когда","ежедневно 10:00–17:00, последний вход в 16:30."],["Билет","¥25 для взрослых и детей, покупается на входе."],
+     ["Как найти","офисное здание 华敏·翰尊国际 без вывесок: заходите в лифт восточной башни и поднимайтесь на 7-й этаж, первая табличка будет там. Google Maps ставит точку неправильно — ориентируйтесь на эту карту или Amap."],
+     ["Важно","фотографировать нельзя. В лавке при музее продают оригиналы и копии плакатов."]],
+   addr:"延安西路726号 华敏·翰尊国际 东楼7楼"},
+  {zh:"杨浦公园花鸟市场",ru:"Блошиный рынок Янпу",en:"Yangpu Flea Market",ll:[121.53737,31.28213],id:"B0FFF9RWQ0",glyph:"市",kind:"Блошиный рынок",
+   what:"Самый настоящий блошиный рынок города при птичьем и цветочном рынке у парка Янпу. Плёночные фотоаппараты, фарфоровые чашки, цитатники Мао, старые шанхайские номера и газеты, нефритовые безделушки, винтажная бижутерия.",
+   tips:[["Когда","только среда, суббота и воскресенье, 6:00–12:00. К 11 часам продавцы уже сворачиваются, приходите к 7–9 утра. Для вас это суббота 21.11 или воскресенье 22.11."],
+     ["Деньги","многие принимают Alipay и WeChat, но пожилые продавцы любят наличные — возьмите мелкими купюрами. Торговаться нужно."],
+     ["Рядом","сам цветочно-птичий рынок работает каждый день с 6:00 до 21:00, а за ним парк Янпу."]],
+   addr:"隆昌路701号（近控江路）"},
+  {zh:"云洲古玩城",ru:"Антикварный рынок Юньчжоу",en:"Yunzhou Curio Town",ll:[121.46085,31.20098],glyph:"古",kind:"Антикварный рынок",
+   what:"Антикварные лавки в здании и уличные развалы по выходным. Жестяные коробки, военные фуражки, эмалированные миски, оперные маски, чайники, плакаты, монеты. Ближе к центру, чем Янпу, и работает каждый день.",
+   tips:[["Когда","в здании ежедневно 10:00–18:00, уличные развалы — по субботам и воскресеньям, сворачиваются около 17:00."],
+     ["Как добраться","у выхода 4 станции метро Цзяшань-лу (嘉善路, линии 9 и 12)."],["Деньги","цен на товарах нет, торгуются все."]],
+   addr:"大木桥路88号（近斜土路）"}
+];
+const oddLayer=L.layerGroup();
+const oddAmap=x=>x.id?`https://www.amap.com/place/${x.id}`:amapLink(x.ll,x.zh);
+ODD.forEach(x=>{
+  const mk=L.marker([x.ll[1],x.ll[0]],{icon:L.divIcon({className:"",iconSize:[22,22],iconAnchor:[11,11],html:`<div class="odd" lang="zh">${x.glyph}</div>`}),title:x.en,keyboard:true});
+  mk.bindTooltip(x.ru,{className:"nm",direction:"top",offset:[0,-12]});
+  mk.bindPopup(`<div class="pp"><div class="pp-kind">${x.kind}</div><div class="pp-zh" lang="zh">${x.zh}</div><div class="pp-ru">${x.ru}</div><div class="en">${x.en}</div><p class="pp-what">${x.what}</p>`+
+    x.tips.map(([k,v])=>`<p class="pp-tip"><b>${k}:</b> ${v}</p>`).join("")+
+    `<p class="pp-addr" lang="zh">${x.addr}</p><a href="${oddAmap(x)}" target="_blank" rel="noopener">Открыть в Amap</a></div>`);
+  oddLayer.addLayer(mk); extMarkers.set(x,mk);
+});
+document.getElementById("l-odd").onclick=e=>{toggleLayer(e.currentTarget,oddLayer);drawList();};
 SIGHTS.forEach((s0,i)=>{const mk=sightLayer.getLayers()[i];if(mk){mk.setTooltipContent(s0.ru+" · "+s0.en);extMarkers.set(s0,mk);}});
 document.getElementById("l-malls").onclick=e=>{toggleLayer(e.currentTarget,mallLayer);drawList();};
 document.getElementById("l-uniqlo").onclick=e=>{toggleLayer(e.currentTarget,uqLayer);drawList();};
@@ -560,6 +636,8 @@ function districtOf(ll){
 const KINDS={
   route:{name:"Маршруты",layerBtn:"l-routes",layer:routeLayer},
   micun:{name:"Micun Banfan",layerBtn:"l-micun",layer:micunLayer},
+  ferry:{name:"Паромы через Хуанпу",layerBtn:"l-ferry",layer:ferryLayer},
+  odd:{name:"Необычное",layerBtn:"l-odd",layer:oddLayer},
   mine:{name:"Мои места",layerBtn:null},
   sight:{name:"Классика",layerBtn:"l-sights",layer:sightLayer},
   mall:{name:"Торговые центры",layerBtn:"l-malls",layer:mallLayer},
@@ -573,12 +651,14 @@ const ALL=[
   ...UNIQLO.map(x=>({kind:"uq",ref:x,zh:x.zh,ru:x.en,en:"",what:x.flag?"Главный флагман Uniqlo на Хуайхай-лу.":"",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...SUSHIRO.map(x=>({kind:"sushi",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...MICUN.map(x=>({kind:"micun",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
+  ...FERRY.map(x=>({kind:"ferry",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what+" Билет ¥2.",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...ODD.map(x=>({kind:"odd",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what+" "+x.tips[0][0]+": "+x.tips[0][1],ll:x.ll,amap:oddAmap(x)})),
   ...ROUTES.flatMap((r,ri)=>r.stops.map(s=>({kind:"route",ref:s,ri,zh:s.zh,ru:s.ru,en:s.en===s.ru?"":s.en,what:[s.what,s.tip,s.buy].filter(Boolean).join(" "),ll:s.ll,amap:amapLink(s.ll,s.zh)})))
 ];
 ALL.forEach(a=>{
   a.district=districtOf(a.ll);
   a.hay=[a.zh,a.ru,a.en,a.what,a.district,KINDS[a.kind].name,a.cat?CATS[a.cat].name:"",
-    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":""].join(" ").toLowerCase();
+    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="odd"?"необычное нишевое музей рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
 });
 
 let groupBy="type", query="";
@@ -596,6 +676,8 @@ function swatch(a){
   if(a.kind==="mall")return `<span class="sw sq" style="--c:var(--c-mall)"></span>`;
   if(a.kind==="micun")return `<span class="sw sq" style="--c:var(--c-micun)"></span>`;
   if(a.kind==="sushi")return `<span class="sw" style="--c:var(--c-sushi)"></span>`;
+  if(a.kind==="ferry")return `<span class="sw" style="--c:var(--c-ferry)"></span>`;
+  if(a.kind==="odd")return `<span class="sw sq" style="--c:var(--c-odd)"></span>`;
   return `<span class="sw sq" style="--c:var(--c-uq)"></span>`;
 }
 function drawList(){
@@ -604,7 +686,7 @@ function drawList(){
   const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
-    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun».`;
+    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun», «Паромы», «Необычное».`;
   const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
