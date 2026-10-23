@@ -156,6 +156,14 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--c-sushi:#FF8A4C}}
 :root[data-theme="dark"]{--c-sushi:#FF8A4C}
 .sushi{width:22px;height:22px;border-radius:50%;background:var(--c-sushi);color:#fff;display:flex;align-items:center;justify-content:center;font:700 11px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
+
+.viewseg{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:3px}
+.viewseg span{font-size:13px;color:var(--muted);padding:0 10px 0 8px}
+.viewseg button{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--muted);font:600 14px/1 var(--f-body);padding:10px 14px;border-radius:7px;cursor:pointer}
+.viewseg button i{font-style:normal;font-size:15px}
+.viewseg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.rwhat{color:var(--muted);font-size:13px;margin-top:2px}
+@media (max-width:520px){.viewseg{width:100%}.viewseg span{display:none}.viewseg button{flex:1;justify-content:center}}
 </style>
 
 <div class="wrap">
@@ -188,9 +196,10 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
   </div>
 
   <div class="listhead">
-    <div class="seg" role="group" aria-label="Вид списка">
-      <button id="vw-cards" aria-pressed="true">Карточки</button>
-      <button id="vw-list" aria-pressed="false">Все места списком</button>
+    <div class="viewseg" role="group" aria-label="Как показывать места">
+      <span>Показывать</span>
+      <button id="vw-cards" aria-pressed="true"><i aria-hidden="true">▦</i>Карточки</button>
+      <button id="vw-list" aria-pressed="false"><i aria-hidden="true">☰</i>Списком</button>
     </div>
     <label class="search" for="q"><span>Поиск</span><input id="q" type="search" placeholder="Название, район, Uniqlo, tea…" autocomplete="off"></label>
   </div>
@@ -498,8 +507,8 @@ function drawList(){
   let order=[...groups.keys()];
   if(groupBy==="district")order.sort((x,y)=>groups.get(y).length-groups.get(x).length);
   box.innerHTML=items.length?order.map(k=>`<section class="lgroup"><h3>${esc(k)} · ${groups.get(k).length}</h3><div class="rows">`+
-    groups.get(k).map(a=>{const i=ALL.indexOf(a);return `<div class="row">${swatch(a)}<div class="rname"><b>${hl(a.ru)}</b><small>${a.en?hl(a.en)+" · ":""}<span class="rzh" lang="zh">${hl(a.zh)}</span>${groupBy==="type"?" · "+hl(a.district):""}</small></div>
-      <div class="ract">${a.ll?`<button type="button" data-show="${i}">На карте</button>`:""}<a href="${a.amap}" target="_blank" rel="noopener">Amap</a></div></div>`;}).join("")+`</div></section>`).join("")
+    groups.get(k).map(a=>{const i=ALL.indexOf(a);return `<div class="row">${swatch(a)}<div class="rname"><b>${hl(a.ru)}</b><small>${a.en?hl(a.en)+" · ":""}<span class="rzh" lang="zh">${hl(a.zh)}</span>${groupBy==="type"?" · "+hl(a.district):""}</small>${a.what?`<span class="rwhat">${hl(a.what)}</span>`:""}</div>
+      <div class="ract">${a.ll?`<button type="button" data-show="${i}">На карте</button>`:""}<button type="button" data-taxiall="${i}">Для такси</button><a href="${a.amap}" target="_blank" rel="noopener">Amap</a></div></div>`;}).join("")+`</div></section>`).join("")
     :`<p class="hint">Ничего не нашлось. Попробуйте английское или китайское название, или район.</p>`;
 }
 function showOnMap(a){
@@ -514,17 +523,26 @@ function showOnMap(a){
   }
   document.getElementById("map").scrollIntoView({block:"center",behavior:rm?"auto":"smooth"});
 }
-document.getElementById("list").addEventListener("click",e=>{const b=e.target.closest("[data-show]");if(b)showOnMap(ALL[+b.dataset.show]);});
+document.getElementById("list").addEventListener("click",e=>{
+  const t=e.target.closest("[data-taxiall]");
+  if(t){const a=ALL[+t.dataset.taxiall];
+    document.getElementById("taxi-zh").textContent=a.zh;
+    document.getElementById("taxi-ru").textContent=a.en?`${a.ru} · ${a.en}`:a.ru;
+    document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();return;}
+  const b=e.target.closest("[data-show]");if(b)showOnMap(ALL[+b.dataset.show]);
+});
 function setListView(v){
   const list=v==="list";
   document.getElementById("vw-cards").setAttribute("aria-pressed",!list);
   document.getElementById("vw-list").setAttribute("aria-pressed",list);
   document.getElementById("listbox").hidden=!list;
   document.getElementById("groups").hidden=list;
+  try{localStorage.setItem("view",v);}catch(e){}
   drawList();
 }
 document.getElementById("vw-cards").onclick=()=>setListView("cards");
 document.getElementById("vw-list").onclick=()=>setListView("list");
+try{if(localStorage.getItem("view")==="list")setTimeout(()=>setListView("list"));}catch(e){}
 function setGroup(g){
   groupBy=g;
   document.getElementById("gb-type").setAttribute("aria-pressed",g==="type");
