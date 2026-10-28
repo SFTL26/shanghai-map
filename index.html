@@ -209,6 +209,9 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 :root[data-theme="dark"]{--c-cer:#E3B35F}
 .cer{width:22px;height:22px;border-radius:6px;background:var(--c-cer);color:#fff;display:flex;align-items:center;justify-content:center;font:700 12px var(--f-cjk);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
 .pp-addr{font:13px/1.4 var(--f-cjk);margin:0 0 8px}
+.hotel{width:22px;height:22px;border-radius:6px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;font:800 12px var(--f-body);border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35);cursor:pointer}
+.pp-price{font-weight:600;margin:0 0 6px}
+.pp-btns{display:flex;gap:6px;flex-wrap:wrap}
 .pp-tip{margin:0 0 6px;font-size:13px}
 .pp-tip b{font-weight:600}
 </style>
@@ -216,7 +219,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 <div class="wrap">
   <header>
     <h1>Шанхай по-местному<span>上海</span></h1>
-    <p class="lede">30 мест: 25 из вашего избранного Amap и 5 из видео на YouTube. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «Маршруты», «★ Классика», «Районы», «ТЦ», «Uniqlo», «Sushiro» и «Micun» добавляют слои. Ниже — все места списком и поиск.</p>
+    <p class="lede">30 мест: 25 из вашего избранного Amap и 5 из видео на YouTube. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «Маршруты», «★ Классика», «Районы», «ТЦ», «Uniqlo», «Sushiro», «Micun» и «Отели» добавляют слои. Ниже — все места списком и поиск.</p>
   </header>
 
   <div class="controls">
@@ -233,6 +236,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
       <button id="l-uniqlo" aria-pressed="false">Uniqlo</button>
       <button id="l-sushi" aria-pressed="false">Sushiro</button>
       <button id="l-micun" aria-pressed="false">Micun</button>
+      <button id="l-hotels" aria-pressed="false">Отели</button>
       <button id="l-ferry" aria-pressed="false">Паромы</button>
       <button id="l-odd" aria-pressed="false">Необычное</button>
       <button id="l-ndl" aria-pressed="false">Лапша и Шасянь</button>
@@ -582,6 +586,19 @@ MICUN.forEach(x=>{
 });
 document.getElementById("l-micun").onclick=e=>{toggleLayer(e.currentTarget,micunLayer);drawList();};
 
+// Слой «Отели»: подборка у Синьтяньди под бюджет 25–45 тыс. ₽ за 4 ночи (цены Trip.com на 19–23.11 от 29.10, 2 взрослых)
+const HOTELS=[{"zh": "锦江都城(上海新天地田子坊店)", "en": "Jinjiang Metropolo Xintiandi", "ll": [121.47603, 31.20763], "id": "B0FFJKWGTB", "trip": 640500, "addr": "蒙自路120号", "price": "≈ ¥1 978 за 4 ночи ≈ 24 тыс. ₽", "what": "Trip.com 9,6 (5,5 тыс. отзывов). 180 м до метро «Мадан-лу» (линии 9 и 13), 10 минут пешком до Тяньцзыфана. Есть номер с двумя кроватями."}, {"zh": "全季酒店(上海新天地店)", "en": "JI Hotel Xintiandi", "ll": [121.47436, 31.20969], "id": "B0KKFCL9FL", "trip": 449907, "addr": "重庆南路283号", "price": "≈ ¥2 228 за 4 ночи ≈ 27 тыс. ₽", "what": "Trip.com 9,6 (2,6 тыс. отзывов). Аккуратная сеть Ji. 360 м до метро «Мадан-лу» (9, 13). Номера обычно небольшие."}, {"zh": "美利居酒店(上海城市中心人民广场店)", "en": "Meta Tree Hotel, People's Square", "ll": [121.46746, 31.22793], "id": "B0KABB6VC3", "trip": 431900, "addr": "威海路155弄20号", "price": "≈ ¥2 430 за 4 ночи ≈ 29 тыс. ₽", "what": "Trip.com 9,5 (8,3 тыс. отзывов). За Народной площадью, минут 10 пешком до метро (1, 2, 8 — по 2-й без пересадок до Хунцяо и Пудуна). Номер с двумя кроватями, шведский завтрак."}, {"zh": "建国璞隐酒店(上海外滩金陵东路店)", "en": "Jianguo Hidden Hotel, Jinling East Rd", "ll": [121.4818, 31.22647], "id": "B0MD1CUAK8", "trip": 135010581, "addr": "金陵东路531号", "price": "≈ ¥3 119 за 4 ночи ≈ 38 тыс. ₽", "what": "Trip.com 9,6 (750 отзывов). Открылся в 2026 году. Между Синьтяньди и Бундом, рядом метро «Дашицзе» (8, 14)."}, {"zh": "亚朵轻居(上海外滩大世界地铁站店)", "en": "Atour Light, Dashijie", "ll": [121.47977, 31.22793], "id": "B0K1R74QQ4", "trip": 123258240, "addr": "云南南路118号3层", "price": "≈ ¥3 456 за 4 ночи ≈ 42 тыс. ₽", "what": "Trip.com 9,6 (2,7 тыс. отзывов). Облегчённая версия Atour у метро «Дашицзе» (8, 14). До Бунда минут 15 пешком."}, {"zh": "长河国际公寓·新天地", "en": "Riverdale Residence Xintiandi", "ll": [121.48122, 31.22452], "id": "B0HAZK6C7E", "trip": 439749, "addr": "寿宁路98号", "price": "≈ ¥3 507 за 4 ночи ≈ 42 тыс. ₽", "what": "Trip.com 9,2 (1,5 тыс. отзывов). Апарт-отель: места больше, чем в обычном номере, — удобно с ребёнком. 400 м до метро «Дашицзе»."}, {"zh": "上海人民广场大世界地铁站亚朵酒店", "en": "Atour Hotel, Dashijie (Great World)", "ll": [121.48109, 31.22667], "id": "B0KKGH7LWC", "trip": 124978061, "addr": "金陵东路500号7层", "price": "≈ ¥3 540 за 4 ночи ≈ 43 тыс. ₽", "what": "Trip.com 9,6 (2,1 тыс. отзывов). Открылся в 2025 году, 7-й этаж Yalong Plaza у метро «Дашицзе» (8, 14)."}, {"zh": "上海黄浦新天地地铁站亚朵酒店", "en": "Atour Hotel, Xintiandi Metro Station", "ll": [121.47726, 31.21521], "id": "B0J3XCAAX2", "trip": 114516981, "addr": "合肥路199号7幢", "price": "≈ ¥3 729 за 4 ночи ≈ 45 тыс. ₽", "what": "Trip.com 9,5 (3,5 тыс. отзывов). Ближе всех к Синьтяньди: 280 м до метро «Синьтяньди» (10 и 13, по 10-й без пересадок до Хунцяо). На верхней границе бюджета."}];
+const hotelLayer=L.layerGroup();
+const tripLink=h=>`https://www.trip.com/hotels/detail/?hotelId=${h.trip}&checkIn=2026-11-19&checkOut=2026-11-23&adult=2&crn=1&curr=CNY`;
+HOTELS.forEach(h=>{
+  const mk=L.marker([h.ll[1],h.ll[0]],{icon:L.divIcon({className:"",iconSize:[22,22],iconAnchor:[11,11],html:'<div class="hotel">H</div>'}),title:h.en,keyboard:true,zIndexOffset:300});
+  mk.bindTooltip(h.en,{className:"nm",direction:"top",offset:[0,-12]});
+  mk.bindPopup(`<div class="pp"><div class="pp-kind">Отель</div><div class="pp-zh" lang="zh">${h.zh}</div><div class="pp-ru">${h.en}</div><p class="pp-price">${h.price}</p><p class="pp-what">${h.what}</p><p class="pp-addr" lang="zh">${h.addr}</p>`+
+    `<div class="pp-btns"><a href="${tripLink(h)}" target="_blank" rel="noopener">Trip.com</a><a href="https://www.amap.com/place/${h.id}" target="_blank" rel="noopener">Amap</a></div></div>`,{minWidth:240,maxWidth:300});
+  hotelLayer.addLayer(mk); extMarkers.set(h,mk);
+});
+document.getElementById("l-hotels").onclick=e=>{toggleLayer(e.currentTarget,hotelLayer);drawList();};
+
 // Слой «Паромы»: городские переправы через Хуанпу за ¥2 (причалы — POI Amap, GCJ-02)
 const FERRY_PAY="¥2 за переправу в одну сторону, дети ниже 1,3 м бесплатно. Отдельный билет заранее не нужен: платите прямо на турникете при входе на причал. Подходит QR-код транспорта в Alipay (Transport → шанхайский 乘车码, тот же, что в метро) или в WeChat, транспортная карта Шанхая. Наличные принимают в окошке 售票处 у входа, сдачи часто нет — держите купюры и монеты по 1–2 ¥. Паспорт лучше взять с собой.";
 const FERRY_TRAP="Рядом продают билеты на туристические круизы (游览船), они в десятки раз дороже. Вам нужен вход с надписью 轮渡 или 渡口.";
@@ -708,6 +725,7 @@ function districtOf(ll){
 const KINDS={
   route:{name:"Маршруты",layerBtn:"l-routes",layer:routeLayer},
   micun:{name:"Micun Banfan",layerBtn:"l-micun",layer:micunLayer},
+  hotel:{name:"Отели",layerBtn:"l-hotels",layer:hotelLayer},
   ferry:{name:"Паромы через Хуанпу",layerBtn:"l-ferry",layer:ferryLayer},
   odd:{name:"Необычное",layerBtn:"l-odd",layer:oddLayer},
   ndl:{name:"Лапша и Шасянь",layerBtn:"l-ndl",layer:ndlLayer},
@@ -724,6 +742,7 @@ const ALL=[
   ...MALLS.map(x=>({kind:"mall",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...UNIQLO.map(x=>({kind:"uq",ref:x,zh:x.zh,ru:x.en,en:"",what:x.flag?"Главный флагман Uniqlo на Хуайхай-лу.":"",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...SUSHIRO.map(x=>({kind:"sushi",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...HOTELS.map(x=>({kind:"hotel",ref:x,zh:x.zh,ru:x.en,en:"",what:x.price+". "+x.what,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
   ...MICUN.map(x=>({kind:"micun",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
   ...FERRY.map(x=>({kind:"ferry",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what+" Билет ¥2.",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...CERAMICS.map(x=>({kind:"cer",ref:x,zh:x.zh,ru:x.ru,en:x.en===x.ru?"":x.en,what:x.what,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
@@ -734,7 +753,7 @@ const ALL=[
 ALL.forEach(a=>{
   a.district=districtOf(a.ll);
   a.hay=[a.zh,a.ru,a.en,a.what,(a.ref.tips||[]).map(t=>t.join(" ")).join(" "),a.district,KINDS[a.kind].name,a.cat?CATS[a.cat].name:"",
-    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="cer"?"керамика посуда фарфор чашки ceramics pottery 陶瓷 瓷 器物 магазин подарки":"",a.kind==="ndl"?"лапша ланьчжоу lanzhou 兰州 拉面 牛肉面 шасянь shaxian 沙县 小吃 дешёвая еда":"",a.kind==="odd"?"необычное нишевое музей рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
+    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="hotel"?"отель гостиница hotel жильё ночёвка trip.com":"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="cer"?"керамика посуда фарфор чашки ceramics pottery 陶瓷 瓷 器物 магазин подарки":"",a.kind==="ndl"?"лапша ланьчжоу lanzhou 兰州 拉面 牛肉面 шасянь shaxian 沙县 小吃 дешёвая еда":"",a.kind==="odd"?"необычное нишевое музей рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
 });
 
 let groupBy="type", query="";
@@ -750,6 +769,7 @@ function swatch(a){
   if(a.kind==="mine")return `<span class="sw" style="--c:var(${CATS[a.cat].c})"></span>`;
   if(a.kind==="sight")return `<span class="sw dia"></span>`;
   if(a.kind==="mall")return `<span class="sw sq" style="--c:var(--c-mall)"></span>`;
+  if(a.kind==="hotel")return `<span class="sw sq" style="--c:var(--ink)"></span>`;
   if(a.kind==="micun")return `<span class="sw sq" style="--c:var(--c-micun)"></span>`;
   if(a.kind==="sushi")return `<span class="sw" style="--c:var(--c-sushi)"></span>`;
   if(a.kind==="ferry")return `<span class="sw" style="--c:var(--c-ferry)"></span>`;
@@ -764,7 +784,7 @@ function drawList(){
   const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
-    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun», «Паромы», «Необычное», «Лапша и Шасянь», «Керамика».`;
+    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun», «Паромы», «Необычное», «Лапша и Шасянь», «Керамика», «Отели».`;
   const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
