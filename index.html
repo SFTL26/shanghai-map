@@ -237,6 +237,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 .chip .mine-tag{margin-left:2px}
 .pfoot{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding-top:10px}
 .legend-note{margin:0;font-size:13px;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
 .preset{border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px/1 var(--f-body);padding:8px 12px;border-radius:6px;cursor:pointer}
 .maptools{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;margin-bottom:-10px}
 @media (max-width:620px){.pgroup{grid-template-columns:1fr;gap:5px;padding:7px 0}.pgroup h2{padding-top:0;font-size:11px}.panel{padding:2px 12px 10px}.pchips,.pchips .slot{flex-wrap:nowrap}.pchips{overflow-x:auto;scrollbar-width:none;margin-inline:-12px;padding-inline:12px}.pchips::-webkit-scrollbar{display:none}.lchip,.panel .chip{flex:none;white-space:nowrap;padding:7px 11px}.legend-note,.lede-more{display:none}.pfoot{padding-top:8px}}
@@ -278,7 +279,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
     </div></div>
     <div class="pfoot">
       <p class="legend-note"><span class="mine-tag">мои</span> — ваши места из Amap и видео, на карте с номерами. Остальное — подборки.</p>
-      <button type="button" class="preset" id="p-reset">Только мои места</button>
+      <div class="presets"><button type="button" class="preset" id="p-mine">Только мои места</button><button type="button" class="preset" id="p-reset">Сбросить</button></div>
     </div>
   </div>
 
@@ -381,7 +382,7 @@ const VIEWS={
   region:[[30.84,120.86],[31.56,121.99]]
 };
 let view="city";
-const on=Object.fromEntries(Object.keys(CATS).map(k=>[k,true]));
+const on=Object.fromEntries(Object.keys(CATS).map(k=>[k,false]));
 let sel=null;
 
 // Живые тайлы Amap (GCJ-02, схема XYZ)
@@ -488,6 +489,7 @@ function drawCards(){
           ${p.approx?'<span class="flag">точка примерная</span>':""}${p.ll?"":'<span class="flag">нет на карте</span>'}
         </div>
       </article>`).join("")+`</div></section>`).join("");
+  if(!Object.values(on).some(Boolean))document.getElementById("groups").innerHTML='<p class="hint">Ваши места сейчас скрыты. Включите кнопки с пометкой «мои» над картой или нажмите «Только мои места».</p>';
 }
 
 function render(){drawChips();drawMarkers();drawCards();}
@@ -895,13 +897,20 @@ document.getElementById("q").addEventListener("input",e=>{query=e.target.value.t
 // Число мест на кнопках слоёв
 const LAYER_DATA={ROUTES,FERRY,SIGHTS,ODD,NOODLES,MICUN,SUSHIRO,MALLS,UNIQLO,CERAMICS,HOTELS};
 document.querySelectorAll("#panel b[data-n]").forEach(b=>{b.textContent=LAYER_DATA[b.dataset.n]?.length??"";});
-document.getElementById("p-reset").onclick=()=>{
-  document.querySelectorAll("#panel .lchip[aria-pressed='true']").forEach(b=>b.click());
-  Object.keys(on).forEach(k=>on[k]=true);
+// Пресеты: «Сбросить» возвращает исходный вид — только «Классика»
+function applyPreset(layerIds,mine){
+  document.querySelectorAll("#panel .lchip").forEach(b=>{
+    if((b.getAttribute("aria-pressed")==="true")!==layerIds.includes(b.id))b.click();
+  });
+  Object.keys(on).forEach(k=>on[k]=mine);
+  sel=null;map.closePopup();
   render();drawList();
-};
+}
+document.getElementById("p-mine").onclick=()=>applyPreset([],true);
+document.getElementById("p-reset").onclick=()=>applyPreset(["l-sights"],false);
 
 render();
+document.getElementById("l-sights").click();
 </script>
 
 </html>
