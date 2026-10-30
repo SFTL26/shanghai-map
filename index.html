@@ -214,33 +214,78 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 .pp-btns{display:flex;gap:6px;flex-wrap:wrap}
 .pp-tip{margin:0 0 6px;font-size:13px}
 .pp-tip b{font-weight:600}
+.panel{display:flex;flex-direction:column;gap:2px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:6px 14px 12px}
+.pgroup{display:grid;grid-template-columns:150px 1fr;gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}
+.pgroup h2{margin:0;padding-top:7px;font:500 13px/1.2 var(--f-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pchips,.slot{display:flex;flex-wrap:wrap;gap:6px}
+.slot:empty{display:none}
+.lchip,.panel .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px/1 var(--f-body);padding:8px 12px;border-radius:999px;cursor:pointer;opacity:1}
+.lchip i,.panel .chip i{width:10px;height:10px;border-radius:50%;flex:none;display:block;background:transparent;box-shadow:inset 0 0 0 1.5px var(--c)}
+.lchip b,.panel .chip b{font-weight:500;font-variant-numeric:tabular-nums;color:var(--muted)}
+.lchip[aria-pressed="true"],.panel .chip[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 13%,var(--paper))}
+.lchip[aria-pressed="true"] i,.panel .chip[aria-pressed="true"] i{background:var(--c);box-shadow:none}
+.panel .chip[aria-pressed="false"]{opacity:1}
+.panel .chip[aria-pressed="false"] i{background:transparent;box-shadow:inset 0 0 0 1.5px var(--c)}
+.lchip i.ic-sq{border-radius:3px}
+.lchip i.ic-dia{border-radius:2px;width:9px;height:9px;transform:rotate(45deg)}
+.lchip i.ic-dash{border-radius:2px;box-shadow:none;border:1.5px dashed var(--c);background:transparent!important}
+.lchip i.ic-line{width:14px;height:4px;border-radius:2px}
+.lchip i.ic-split{box-shadow:inset 0 0 0 1.5px var(--c-lz)}
+.lchip[aria-pressed="true"] i.ic-split{background:linear-gradient(90deg,var(--c-lz) 50%,var(--c-sx) 50%)}
+.lchip[aria-pressed="true"] i.ic-ring{background:#fff;box-shadow:inset 0 0 0 2px var(--c)}
+.mine-tag{display:inline-block;font:600 10px/1 var(--f-body);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:3px 4px}
+.chip .mine-tag{margin-left:2px}
+.pfoot{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding-top:10px}
+.legend-note{margin:0;font-size:13px;color:var(--muted)}
+.preset{border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px/1 var(--f-body);padding:8px 12px;border-radius:6px;cursor:pointer}
+.maptools{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;margin-bottom:-10px}
+@media (max-width:620px){.pgroup{grid-template-columns:1fr;gap:5px;padding:7px 0}.pgroup h2{padding-top:0;font-size:11px}.panel{padding:2px 12px 10px}.pchips,.pchips .slot{flex-wrap:nowrap}.pchips{overflow-x:auto;scrollbar-width:none;margin-inline:-12px;padding-inline:12px}.pchips::-webkit-scrollbar{display:none}.lchip,.panel .chip{flex:none;white-space:nowrap;padding:7px 11px}.legend-note,.lede-more{display:none}.pfoot{padding-top:8px}}
 </style>
 
 <div class="wrap">
   <header>
     <h1>Шанхай по-местному<span>上海</span></h1>
-    <p class="lede">30 мест: 25 из вашего избранного Amap и 5 из видео на YouTube. Цвет точки показывает тип места. Карту можно приближать до отдельных домов и двигать. Нажмите на точку или карточку, чтобы связать их. «Для такси» выводит название по-китайски крупно. Кнопки «Маршруты», «★ Классика», «Районы», «ТЦ», «Uniqlo», «Sushiro», «Micun» и «Отели» добавляют слои. Ниже — все места списком и поиск.</p>
+    <p class="lede">Карта для поездки 19–23 ноября. Над картой — что показать, по задачам: гулять, посмотреть, поесть, купить, где жить. <span class="lede-more">Точки с номерами — ваши места из Amap и видео, остальное — подборки. </span>Нажмите на точку, чтобы открыть описание; «Для такси» выводит название по-китайски крупно.</p>
   </header>
 
-  <div class="controls">
-    <div class="chips" id="chips"></div>
+  <div class="panel" id="panel" aria-label="Что показать на карте">
+    <div class="pgroup"><h2>Гулять</h2><div class="pchips">
+      <button class="lchip" id="l-routes" aria-pressed="false" style="--c:#B5452B"><i class="ic-line"></i>Маршруты <b data-n="ROUTES"></b></button>
+      <span class="slot" data-slot="walk"></span>
+      <button class="lchip" id="l-ferry" aria-pressed="false" style="--c:var(--c-ferry)"><i></i>Паромы <b data-n="FERRY"></b></button>
+      <button class="lchip" id="l-districts" aria-pressed="false" style="--c:var(--c-art)"><i class="ic-dash"></i>Районы</button>
+    </div></div>
+    <div class="pgroup"><h2>Посмотреть</h2><div class="pchips">
+      <button class="lchip" id="l-sights" aria-pressed="false" style="--c:var(--ink)"><i class="ic-dia"></i>Классика <b data-n="SIGHTS"></b></button>
+      <button class="lchip" id="l-odd" aria-pressed="false" style="--c:var(--c-odd)"><i class="ic-sq"></i>Необычное <b data-n="ODD"></b></button>
+      <span class="slot" data-slot="art"></span>
+      <span class="slot" data-slot="other"></span>
+    </div></div>
+    <div class="pgroup"><h2>Поесть</h2><div class="pchips">
+      <span class="slot" data-slot="food"></span>
+      <button class="lchip" id="l-ndl" aria-pressed="false" style="--c:var(--c-lz)"><i class="ic-split"></i>Лапша и Шасянь <b data-n="NOODLES"></b></button>
+      <button class="lchip" id="l-micun" aria-pressed="false" style="--c:var(--c-micun)"><i class="ic-sq ic-ring"></i>Micun <b data-n="MICUN"></b></button>
+      <button class="lchip" id="l-sushi" aria-pressed="false" style="--c:var(--c-sushi)"><i></i>Sushiro <b data-n="SUSHIRO"></b></button>
+    </div></div>
+    <div class="pgroup"><h2>Купить</h2><div class="pchips">
+      <button class="lchip" id="l-malls" aria-pressed="false" style="--c:var(--c-mall)"><i class="ic-sq"></i>ТЦ <b data-n="MALLS"></b></button>
+      <button class="lchip" id="l-uniqlo" aria-pressed="false" style="--c:var(--c-uq)"><i class="ic-sq"></i>Uniqlo <b data-n="UNIQLO"></b></button>
+      <button class="lchip" id="l-cer" aria-pressed="false" style="--c:var(--c-cer)"><i class="ic-sq"></i>Керамика <b data-n="CERAMICS"></b></button>
+    </div></div>
+    <div class="pgroup"><h2>Жильё и&nbsp;выезды</h2><div class="pchips">
+      <button class="lchip" id="l-hotels" aria-pressed="false" style="--c:var(--ink)"><i class="ic-sq"></i>Отели <b data-n="HOTELS"></b></button>
+      <span class="slot" data-slot="out"></span>
+    </div></div>
+    <div class="pfoot">
+      <p class="legend-note"><span class="mine-tag">мои</span> — ваши места из Amap и видео, на карте с номерами. Остальное — подборки.</p>
+      <button type="button" class="preset" id="p-reset">Только мои места</button>
+    </div>
+  </div>
+
+  <div class="maptools">
     <div class="seg" role="group" aria-label="Показать">
       <button id="v-city" aria-pressed="true">Центр</button>
       <button id="v-region" aria-pressed="false">Весь Шанхай</button>
-    </div>
-    <div class="seg" role="group" aria-label="Слои карты">
-      <button id="l-routes" aria-pressed="false">Маршруты</button>
-      <button id="l-sights" aria-pressed="false">★ Классика</button>
-      <button id="l-districts" aria-pressed="false">Районы</button>
-      <button id="l-malls" aria-pressed="false">ТЦ</button>
-      <button id="l-uniqlo" aria-pressed="false">Uniqlo</button>
-      <button id="l-sushi" aria-pressed="false">Sushiro</button>
-      <button id="l-micun" aria-pressed="false">Micun</button>
-      <button id="l-hotels" aria-pressed="false">Отели</button>
-      <button id="l-ferry" aria-pressed="false">Паромы</button>
-      <button id="l-odd" aria-pressed="false">Необычное</button>
-      <button id="l-ndl" aria-pressed="false">Лапша и Шасянь</button>
-      <button id="l-cer" aria-pressed="false">Керамика</button>
     </div>
     <div class="seg" role="group" aria-label="Подписи на карте">
       <button id="lang-en" aria-pressed="true">English</button>
@@ -260,8 +305,8 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
   <div class="listhead">
     <div class="viewseg" role="group" aria-label="Как показывать места">
       <span>Показывать</span>
-      <button id="vw-cards" aria-pressed="true"><i aria-hidden="true">▦</i>Карточки</button>
-      <button id="vw-list" aria-pressed="false"><i aria-hidden="true">☰</i>Списком</button>
+      <button id="vw-cards" aria-pressed="true"><i aria-hidden="true">▦</i>Мои места</button>
+      <button id="vw-list" aria-pressed="false"><i aria-hidden="true">☰</i>Всё списком</button>
     </div>
     <label class="search" for="q"><span>Поиск</span><input id="q" type="search" placeholder="Название, район, Uniqlo, tea…" autocomplete="off"></label>
   </div>
@@ -422,8 +467,10 @@ function drawMarkers(){
 }
 
 function drawChips(){
-  document.getElementById("chips").innerHTML=Object.entries(CATS).map(([k,c])=>
-    `<button class="chip" style="--c:var(${c.c})" data-cat="${k}" aria-pressed="${on[k]}"><i></i>${c.name} <b>${P.filter(p=>p.cat===k).length}</b></button>`).join("");
+  Object.entries(CATS).forEach(([k,c])=>{
+    const slot=document.querySelector(`[data-slot="${k}"]`);
+    if(slot)slot.innerHTML=`<button class="chip" style="--c:var(${c.c})" data-cat="${k}" aria-pressed="${on[k]}"><i></i>${c.name} <b>${P.filter(p=>p.cat===k).length}</b><span class="mine-tag">мои</span></button>`;
+  });
 }
 
 function drawCards(){
@@ -464,10 +511,9 @@ function setView(v){
   map.flyToBounds(VIEWS[v],{duration:matchMedia("(prefers-reduced-motion:reduce)").matches?0:0.8});
 }
 
-document.getElementById("chips").addEventListener("click",e=>{
+document.getElementById("panel").addEventListener("click",e=>{
   const b=e.target.closest("[data-cat]");if(!b)return;
   on[b.dataset.cat]=!on[b.dataset.cat];
-  if(!Object.values(on).some(Boolean))on[b.dataset.cat]=true;
   render();drawList();
 });
 document.getElementById("v-city").onclick=()=>setView("city");
@@ -792,7 +838,7 @@ function drawList(){
   const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
-    :`Показано: ${items.length}. Сюда попадают ваши места по фильтрам сверху и включённые слои «Маршруты», «★ Классика», «ТЦ», «Uniqlo», «Sushiro», «Micun», «Паромы», «Необычное», «Лапша и Шасянь», «Керамика», «Отели».`;
+    :`Показано: ${items.length}. Здесь всё, что сейчас включено над картой.`;
   const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
@@ -845,6 +891,15 @@ function setGroup(g){
 document.getElementById("gb-type").onclick=()=>setGroup("type");
 document.getElementById("gb-district").onclick=()=>setGroup("district");
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();if(query)setListView("list");else drawList();});
+
+// Число мест на кнопках слоёв
+const LAYER_DATA={ROUTES,FERRY,SIGHTS,ODD,NOODLES,MICUN,SUSHIRO,MALLS,UNIQLO,CERAMICS,HOTELS};
+document.querySelectorAll("#panel b[data-n]").forEach(b=>{b.textContent=LAYER_DATA[b.dataset.n]?.length??"";});
+document.getElementById("p-reset").onclick=()=>{
+  document.querySelectorAll("#panel .lchip[aria-pressed='true']").forEach(b=>b.click());
+  Object.keys(on).forEach(k=>on[k]=true);
+  render();drawList();
+};
 
 render();
 </script>
