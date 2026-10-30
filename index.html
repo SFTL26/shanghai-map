@@ -241,6 +241,15 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 .preset{border:1px solid var(--line);background:transparent;color:var(--ink);font:500 13px/1 var(--f-body);padding:8px 12px;border-radius:6px;cursor:pointer}
 .maptools{display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:space-between;margin-bottom:-10px}
 @media (max-width:620px){.pgroup{grid-template-columns:1fr;gap:5px;padding:7px 0}.pgroup h2{padding-top:0;font-size:11px}.panel{padding:2px 12px 10px}.pchips,.pchips .slot{flex-wrap:nowrap}.pchips{overflow-x:auto;scrollbar-width:none;margin-inline:-12px;padding-inline:12px}.pchips::-webkit-scrollbar{display:none}.lchip,.panel .chip{flex:none;white-space:nowrap;padding:7px 11px}.legend-note,.lede-more{display:none}.pfoot{padding-top:8px}}
+/* Длинные карточки на компьютере прокручиваются внутри, а не вылезают за карту */
+.leaflet-popup-content{max-height:calc(min(70vh,620px) - 90px);overflow-y:auto;overscroll-behavior:contain}
+/* На телефоне описание места — шторка снизу экрана: карта перехватывает касания, внутри неё карточку не пролистать */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:1000;background:var(--paper);color:var(--ink);border-radius:16px 16px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.28);max-height:60vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:14px 16px calc(18px + env(safe-area-inset-bottom,0px));font:15px/1.45 var(--f-body)}
+.sheet-x{position:sticky;top:0;float:right;width:40px;height:40px;margin:-4px -6px 4px 10px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:400 24px/1 var(--f-body);cursor:pointer;z-index:1}
+.sheet .pp a{display:inline-block;background:var(--ink);color:var(--paper);text-decoration:none;font:500 14px var(--f-body);padding:10px 14px;border-radius:8px;margin-top:4px}
+.sheet .pp .pp-cr a{display:inline;background:none;color:inherit;padding:0;margin:0;font:inherit;text-decoration:underline}
+.sheet .pp-img{border-radius:8px}
+@media (max-width:620px){.leaflet-popup-pane{display:none}}
 </style>
 
 <div class="wrap">
@@ -323,6 +332,8 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 
   <footer>Подложка — живая карта Amap, приближается до уровня домов; нужен интернет. Подписи переключаются между английским и китайским. Точки стоят по координатам из Amap; у 大壶春 положение приблизительное, у 汤连得 точки нет. Кнопка «Открыть в Amap» ведёт на точную карточку места. 阿娘面馆 в Amap не нашлась, поэтому её здесь нет.</footer>
 </div>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-label="Описание места"><button type="button" class="sheet-x" id="sheet-x" aria-label="Закрыть">×</button><div id="sheet-body"></div></div>
 
 <div class="taxi" id="taxi" hidden>
   <div class="big" id="taxi-zh"></div>
@@ -908,6 +919,20 @@ function applyPreset(layerIds,mine){
 }
 document.getElementById("p-mine").onclick=()=>applyPreset([],true);
 document.getElementById("p-reset").onclick=()=>applyPreset(["l-sights"],false);
+
+// На телефоне карточка места открывается шторкой снизу, сам попап Leaflet скрыт
+const isPhone=()=>matchMedia("(max-width:620px)").matches;
+const sheet=document.getElementById("sheet"), sheetBody=document.getElementById("sheet-body");
+if(isPhone())L.Popup.prototype.options.autoPan=false;
+map.on("popupopen",e=>{
+  if(!isPhone())return;
+  const c=e.popup.getContent();
+  sheetBody.innerHTML=typeof c==="string"?c:(c&&c.outerHTML)||"";
+  sheet.hidden=false;sheet.scrollTop=0;
+});
+map.on("popupclose",()=>{if(isPhone())sheet.hidden=true;});
+document.getElementById("sheet-x").onclick=()=>{map.closePopup();sheet.hidden=true;};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden){map.closePopup();sheet.hidden=true;}});
 
 render();
 document.getElementById("l-sights").click();
