@@ -137,6 +137,7 @@ footer{color:var(--muted);font-size:13px;max-width:70ch}
 .en{font-size:13px;color:var(--muted)}
 .mall{width:26px;height:22px;border-radius:6px;background:var(--c-mall);color:#fff;display:flex;align-items:center;justify-content:center;font:700 10px var(--f-body);letter-spacing:.02em;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
 .uq{width:18px;height:18px;background:var(--c-uq);color:#fff;display:flex;align-items:center;justify-content:center;font:800 11px var(--f-body);border:1.5px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
+.rtmart{width:28px;height:22px;background:#c8272d;color:#fff;display:flex;align-items:center;justify-content:center;font:800 10px var(--f-body);border:1.5px solid #fff;border-radius:5px;box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:pointer}
 .uq.big{width:24px;height:24px;font-size:14px}
 .listhead{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
 .search{display:flex;align-items:center;gap:8px;flex:1 1 260px;max-width:420px}
@@ -296,6 +297,7 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
     </div></div>
     <div class="pgroup"><h2>Купить</h2><div class="pchips">
       <button class="lchip" id="l-malls" aria-pressed="false" style="--c:var(--c-mall)"><i class="ic-sq"></i>ТЦ <b data-n="MALLS"></b></button>
+      <button class="lchip" id="l-rtmart" aria-pressed="false" style="--c:#c8272d"><i class="ic-sq"></i>RT-Mart <b data-n="RTMART"></b></button>
       <button class="lchip" id="l-uniqlo" aria-pressed="false" style="--c:var(--c-uq)"><i class="ic-sq"></i>Uniqlo <b data-n="UNIQLO"></b></button>
       <button class="lchip" id="l-cer" aria-pressed="false" style="--c:var(--c-cer)"><i class="ic-sq"></i>Керамика <b data-n="CERAMICS"></b></button>
       <button class="lchip" id="l-kids" aria-pressed="false" style="--c:var(--c-kids)"><i></i>Детям <b data-n="KIDS"></b></button>
@@ -855,6 +857,122 @@ document.getElementById("l-malls").onclick=e=>{toggleLayer(e.currentTarget,mallL
 document.getElementById("l-uniqlo").onclick=e=>{toggleLayer(e.currentTarget,uqLayer);drawList();};
 document.getElementById("l-sights").onclick=e=>{toggleLayer(e.currentTarget,sightLayer);drawList();};
 
+// RT-Mart: official store addresses/hours; Amap POIs and GCJ-02 coordinates, checked 2026-11-09.
+const RTMART=[
+  {
+    "zh": "大润发(平型关店)",
+    "en": "RT-Mart · Pingxingguan",
+    "id": "B00155MQ8D",
+    "ll": [
+      121.466473,
+      31.266769
+    ],
+    "addr": "静安区俞泾港路11号B1层",
+    "what": "Большой супермаркет: продукты, китайские снеки, напитки и товары для дома.",
+    "tips": [
+      [
+        "Когда",
+        "07:30–21:30 ежедневно; часы по сайту сети, проверено 09.11.2026."
+      ],
+      [
+        "Как добраться",
+        "Метро Xizang North Road / 西藏北路, линия 8, выход 4; около 440 м пешком."
+      ],
+      [
+        "Что купить",
+        "Снеки и сладости в подарок, чай, соусы и продукты в дорогу."
+      ]
+    ],
+    "source": "https://www.rt-mart.com.cn/stores/store-info?storeId=1055"
+  },
+  {
+    "zh": "大润发(长阳店)",
+    "en": "RT-Mart · Changyang",
+    "id": "B00155HJ05",
+    "ll": [
+      121.538045,
+      31.270178
+    ],
+    "addr": "杨浦区长阳路1750号",
+    "what": "Большой супермаркет: продукты, китайские снеки, напитки и товары для дома.",
+    "tips": [
+      [
+        "Когда",
+        "07:30–22:00 ежедневно; часы по сайту сети, проверено 09.11.2026."
+      ],
+      [
+        "Как добраться",
+        "Метро Ningguo Road / 宁国路, линия 12, выход 3; около 480 м пешком."
+      ],
+      [
+        "Что купить",
+        "Снеки и сладости в подарок, чай, соусы и продукты в дорогу."
+      ]
+    ],
+    "source": "https://www.rt-mart.com.cn/stores/store-info?storeId=1701"
+  },
+  {
+    "zh": "大润发(杨浦店)",
+    "en": "RT-Mart · Yangpu",
+    "id": "B0I36N90YO",
+    "ll": [
+      121.522422,
+      31.288995
+    ],
+    "addr": "杨浦区黄兴路1618号",
+    "what": "Большой супермаркет: продукты, китайские снеки, напитки и товары для дома.",
+    "tips": [
+      [
+        "Когда",
+        "07:30–22:00 ежедневно; часы по сайту сети, проверено 09.11.2026."
+      ],
+      [
+        "Как добраться",
+        "Адрес для такси: 黄兴路1618号. Ищите именно филиал 杨浦店."
+      ],
+      [
+        "Что купить",
+        "Снеки и сладости в подарок, чай, соусы и продукты в дорогу."
+      ]
+    ],
+    "source": "https://www.rt-mart.com.cn/stores/store-info?storeId=1002"
+  },
+  {
+    "zh": "大润发(闸北店)",
+    "en": "RT-Mart · Zhabei",
+    "id": "B00156CVM5",
+    "ll": [
+      121.447359,
+      31.297629
+    ],
+    "addr": "静安区共和新路3318号",
+    "what": "Большой супермаркет: продукты, китайские снеки, напитки и товары для дома.",
+    "tips": [
+      [
+        "Когда",
+        "07:30–22:00 ежедневно; часы по сайту сети, проверено 09.11.2026."
+      ],
+      [
+        "Как добраться",
+        "Адрес для такси: 共和新路3318号. Название филиала сохранилось от бывшего района Чжабэй."
+      ],
+      [
+        "Что купить",
+        "Снеки и сладости в подарок, чай, соусы и продукты в дорогу."
+      ]
+    ],
+    "source": "https://www.rt-mart.com.cn/stores/store-info?storeId=1001"
+  }
+];
+const rtmartLayer=L.layerGroup();
+RTMART.forEach(x=>{
+  const mk=L.marker([x.ll[1],x.ll[0]],{icon:L.divIcon({className:"",iconSize:[30,24],iconAnchor:[15,12],html:'<div class="rtmart">RT</div>'}),title:x.en,keyboard:true});
+  mk.bindTooltip(x.en,{className:"nm",direction:"top",offset:[0,-12]});
+  mk.bindPopup(popupHtml("RT-Mart · супермаркет",x,`https://www.amap.com/place/${x.id}`));
+  rtmartLayer.addLayer(mk);extMarkers.set(x,mk);
+});
+document.getElementById("l-rtmart").onclick=e=>{toggleLayer(e.currentTarget,rtmartLayer);drawList();};
+
 // Район по точке (границы DBOUNDS)
 function inRing([x,y],ring){let c=false;for(let i=0,j=ring.length-1;i<ring.length;j=i++){const [xi,yi]=ring[i],[xj,yj]=ring[j];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c;}return c;}
 function districtOf(ll){
@@ -882,6 +1000,7 @@ const KINDS={
   mine:{name:"Мои места",layerBtn:null},
   sight:{name:"Классика",layerBtn:"l-sights",layer:sightLayer},
   mall:{name:"Торговые центры",layerBtn:"l-malls",layer:mallLayer},
+  rtmart:{name:"RT-Mart",layerBtn:"l-rtmart",layer:rtmartLayer},
   uq:{name:"Uniqlo",layerBtn:"l-uniqlo",layer:uqLayer},
   sushi:{name:"Sushiro",layerBtn:"l-sushi",layer:sushiLayer}
 };
@@ -889,6 +1008,7 @@ const ALL=[
   ...P.map(p=>({kind:"mine",ref:p,zh:p.zh,ru:p.ru,en:p.en,what:p.what,ll:p.ll,cat:p.cat,amap:p.id?`https://www.amap.com/place/${p.id}`:amapLink(p.ll,p.zh)})),
   ...SIGHTS.map(x=>({kind:"sight",ref:x,zh:x.zh,ru:x.ru,en:x.en,what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...MALLS.map(x=>({kind:"mall",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
+  ...RTMART.map(x=>({kind:"rtmart",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:`https://www.amap.com/place/${x.id}`})),
   ...UNIQLO.map(x=>({kind:"uq",ref:x,zh:x.zh,ru:x.en,en:"",what:x.flag?"Главный флагман Uniqlo на Хуайхай-лу.":"",ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...SUSHIRO.map(x=>({kind:"sushi",ref:x,zh:x.zh,ru:x.en,en:"",what:x.what,ll:x.ll,amap:amapLink(x.ll,x.zh)})),
   ...HOTELS.map(x=>({kind:"hotel",ref:x,zh:x.zh,ru:x.en,en:"",what:x.price+". "+x.what,ll:x.ll,amap:x.id?`https://www.amap.com/place/${x.id}`:amapLink(x.ll,x.zh)})),
@@ -905,7 +1025,7 @@ const ALL=[
 ALL.forEach(a=>{
   a.district=districtOf(a.ll);
   a.hay=[a.zh,a.ru,a.en,a.what,(a.ref.tips||[]).map(t=>t.join(" ")).join(" "),a.district,KINDS[a.kind].name,a.cat?CATS[a.cat].name:"",
-    a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="hotel"?"отель гостиница hotel жильё ночёвка trip.com":"",a.kind==="xjd"?"dumpling xi 喜家德 xijiade пельмени цзяоцзы 饺子 水饺 креветка еда":"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="cer"?"керамика посуда фарфор чашки ceramics pottery 陶瓷 瓷 器物 магазин подарки":"",a.kind==="ndl"?"лапша ланьчжоу lanzhou 兰州 拉面 牛肉面 шасянь shaxian 沙县 小吃 дешёвая еда":"",/^m(star|bib|sel)$/.test(a.kind)?"мишлен michelin ресторан звезда "+a.ref.cu+" "+a.ref.kind:"",a.kind==="kids"?"детям дети игрушки магазин disney дисней lego лего pop mart gundam pokemon покемон":"",a.kind==="odd"?"необычное нишевое музей выставка искусство ремесла архитектура город планирование почта еврейский история рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
+    a.kind==="rtmart"?"rt mart rt-mart рт март рт-март 大润发 даруньфа супермаркет продукты снеки покупки магазин":"",a.kind==="uq"?"uniqlo юникло юникло одежда":"",a.kind==="mall"?"тц торговый центр mall шопинг магазин":"",a.kind==="route"?"маршрут прогулка пешком "+ROUTES[a.ri].name:"",a.kind==="hotel"?"отель гостиница hotel жильё ночёвка trip.com":"",a.kind==="xjd"?"dumpling xi 喜家德 xijiade пельмени цзяоцзы 饺子 水饺 креветка еда":"",a.kind==="micun"?"micun мицунь 米村 拌饭 пибимпаб бибимбап корейская кухня кафе еда":"",a.kind==="sushi"?"суши sushi sushiro суширо 寿司 японская кухня ресторан еда":"",a.kind==="ferry"?"паром переправа ferry 轮渡 渡口 река хуанпу huangpu бунд пудун":"",a.kind==="cer"?"керамика посуда фарфор чашки ceramics pottery 陶瓷 瓷 器物 магазин подарки":"",a.kind==="ndl"?"лапша ланьчжоу lanzhou 兰州 拉面 牛肉面 шасянь shaxian 沙县 小吃 дешёвая еда":"",/^m(star|bib|sel)$/.test(a.kind)?"мишлен michelin ресторан звезда "+a.ref.cu+" "+a.ref.kind:"",a.kind==="kids"?"детям дети игрушки магазин disney дисней lego лего pop mart gundam pokemon покемон":"",a.kind==="odd"?"необычное нишевое музей выставка искусство ремесла архитектура город планирование почта еврейский история рынок блошиный барахолка антиквариат плакаты":""].join(" ").toLowerCase();
 });
 
 let groupBy="type", query="";
@@ -994,7 +1114,7 @@ document.getElementById("gb-district").onclick=()=>setGroup("district");
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();if(query)setListView("list");else drawList();});
 
 // Число мест на кнопках слоёв
-const LAYER_DATA={KIDS,MSTAR,MBIB,MSEL,ROUTES,FERRY,SIGHTS,ODD,NOODLES,MICUN,XIJIADE,SUSHIRO,MALLS,UNIQLO,CERAMICS,HOTELS};
+const LAYER_DATA={RTMART,KIDS,MSTAR,MBIB,MSEL,ROUTES,FERRY,SIGHTS,ODD,NOODLES,MICUN,XIJIADE,SUSHIRO,MALLS,UNIQLO,CERAMICS,HOTELS};
 document.querySelectorAll("#panel b[data-n]").forEach(b=>{b.textContent=LAYER_DATA[b.dataset.n]?.length??"";});
 // Пресеты: «Сбросить» возвращает исходный вид — только «Классика»
 function applyPreset(layerIds,mine){
