@@ -324,6 +324,18 @@ body{padding:0;overflow:hidden}
 .me-dot{width:18px;height:18px;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-shadow:0 0 0 2px rgba(26,115,232,.35),0 1px 4px rgba(0,0,0,.4)}
 .leaflet-interactive.me-acc{fill:#1A73E8;fill-opacity:.12;stroke:#1A73E8;stroke-opacity:.4}
 .sheet{z-index:1005}
+.mt-home{width:auto;min-width:42px;padding:0 10px;gap:6px;background:var(--ink);color:var(--paper);border-color:var(--ink);font:600 13px/1 var(--f-body)}
+.taxi-addr{font:600 clamp(20px,5.5vw,34px)/1.3 var(--f-cjk)!important;color:var(--ink)!important}
+.pp-act{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px;padding:10px 0;border-block:1px solid var(--line)}
+.pp-dist{font-size:13px;color:var(--ink)}
+.pp-dist b{font-weight:600}
+.pp-go{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.pp-go>span{font-size:13px;color:var(--muted);margin-right:2px}
+.sheet .pp .pp-go a,.pp-share{display:inline-flex;align-items:center;gap:5px;background:transparent;color:var(--ink);border:1px solid var(--line);font:500 13px/1 var(--f-body);padding:8px 11px;border-radius:999px;text-decoration:none;margin:0;cursor:pointer}
+.sheet .pp .pp-go a:hover,.pp-share:hover{border-color:var(--ink)}
+.pp-share{align-self:flex-start}
+.rdist{font-weight:600;color:var(--ink)}
+@media (max-width:620px){.mt-home span{display:none}.mt-home{width:42px;padding:0}}
 @media (min-width:621px){
   .sheet{left:auto;right:10px;top:10px;bottom:10px;width:min(390px,calc(100vw - 20px));max-height:none;border-radius:14px;box-shadow:var(--shd-lg)}
 }
@@ -414,6 +426,7 @@ body{padding:0;overflow:hidden}
 
   <div class="mtools" role="group" aria-label="Инструменты карты">
     <button type="button" class="mt" id="locate" aria-pressed="false" aria-label="Показать, где я" title="Где я"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <button type="button" class="mt mt-home" id="home-taxi" aria-label="Домой: показать таксисту адрес отеля" title="Домой: показать таксисту"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3.5 11.5L12 4l8.5 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9.5h4.5v-5h3v5H18V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Домой</span></button>
     <button type="button" class="mt mt-h" id="go-hotel" aria-label="Показать отель" title="К отелю">H</button>
     <button type="button" class="mt" id="info-open" aria-expanded="false" aria-controls="infopop" aria-label="Вид карты и справка" title="Вид и справка"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.3" fill="currentColor"/></svg></button>
   </div>
@@ -443,6 +456,7 @@ body{padding:0;overflow:hidden}
       <div class="seg" role="group" aria-label="Группировка">
         <button id="gb-type" aria-pressed="true">По типу</button>
         <button id="gb-district" aria-pressed="false">По районам</button>
+        <button id="gb-near" aria-pressed="false">Рядом со мной</button>
       </div>
       <p class="hint" id="listhint"></p>
       <div id="list"></div>
@@ -455,6 +469,7 @@ body{padding:0;overflow:hidden}
 
 <div class="taxi" id="taxi" hidden>
   <div class="big" id="taxi-zh"></div>
+  <p class="taxi-addr" id="taxi-addr" lang="zh" hidden></p>
   <p id="taxi-ru"></p>
   <p>请带我去这里，谢谢！</p>
   <button id="taxi-close">Закрыть</button>
@@ -628,7 +643,7 @@ function render(){drawChips();drawMarkers();drawCards();}
 
 function select(n,fromMap){
   sel=sel===n?null:n;
-  if(!sel){const sh=document.getElementById("sheet");if(sh.dataset.mine){sh.hidden=true;delete sh.dataset.mine;}}
+  if(!sel){const sh=document.getElementById("sheet");if(sh.dataset.mine){sh.hidden=true;delete sh.dataset.mine;setHash(null);}}
   const p=P.find(x=>x.n===n);
   drawMarkers();drawCards();
   if(!sel)return;
@@ -647,6 +662,7 @@ function showMineSheet(p){
   map.closePopup();
   const sh=document.getElementById("sheet");
   document.getElementById("sheet-body").innerHTML=mineSheetHtml(p);
+  addActions(p.ll,"mine-"+p.n);
   sh.dataset.mine=p.n;sh.hidden=false;sh.scrollTop=0;
   if(isPhoneW())closeDrawer();
 }
@@ -679,7 +695,7 @@ document.getElementById("groups").addEventListener("click",e=>{
   const c=e.target.closest(".card");
   if(c){sel=null;select(+c.dataset.n,false);}
 });
-document.getElementById("taxi-close").onclick=()=>{document.getElementById("taxi").hidden=true;};
+document.getElementById("taxi-close").onclick=()=>{document.getElementById("taxi").hidden=true;document.getElementById("taxi-addr").hidden=true;};
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("taxi").hidden=true;});
 
 // Слои «ТЦ» и «Uniqlo» (OpenStreetMap → GCJ-02)
@@ -1200,13 +1216,17 @@ function drawList(){
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
     :`Показано: ${items.length}. Здесь всё, что сейчас включено в категориях на карте.`;
-  const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
+  const near=groupBy==="near"&&meLL;
+  if(near)items.sort((x,y)=>distTo(x.ll)-distTo(y.ll));
+  if(groupBy==="near"&&!meLL)document.getElementById("listhint").textContent="Определяю, где вы… Разрешите доступ к геолокации, если браузер спросит.";
+  const bucket=d=>d<=500?"До 500 м":d<=1000?"До 1 км":d<=2000?"До 2 км":d<=5000?"До 5 км":"Дальше 5 км";
+  const key=a=>groupBy==="near"?(near&&a.ll?bucket(distTo(a.ll)):"Без точки на карте"):groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
   let order=[...groups.keys()];
   if(groupBy==="district")order.sort((x,y)=>groups.get(y).length-groups.get(x).length);
   box.innerHTML=items.length?order.map(k=>`<section class="lgroup"><h3>${esc(k)} · ${groups.get(k).length}</h3><div class="rows">`+
-    groups.get(k).map(a=>{const i=ALL.indexOf(a);return `<div class="row">${swatch(a)}<div class="rname"><b>${hl(a.ru)}</b><small>${a.en?hl(a.en)+" · ":""}<span class="rzh" lang="zh">${hl(a.zh)}</span>${groupBy==="type"?" · "+hl(a.district):""}</small>${a.what?`<span class="rwhat">${hl(a.what)}</span>`:""}</div>
+    groups.get(k).map(a=>{const i=ALL.indexOf(a);return `<div class="row">${swatch(a)}<div class="rname"><b>${hl(a.ru)}</b><small>${a.en?hl(a.en)+" · ":""}<span class="rzh" lang="zh">${hl(a.zh)}</span>${groupBy==="type"?" · "+hl(a.district):""}${meLL&&a.ll?` · <span class="rdist">${fmtDist(distTo(a.ll))}</span>`:""}</small>${a.what?`<span class="rwhat">${hl(a.what)}</span>`:""}</div>
       <div class="ract">${a.ll?`<button type="button" data-show="${i}">На карте</button>`:""}<button type="button" data-taxiall="${i}">Для такси</button><a href="${a.amap}" target="_blank" rel="noopener">Amap</a></div></div>`;}).join("")+`</div></section>`).join("")
     :`<p class="hint">Ничего не нашлось. Попробуйте английское или китайское название, или район.</p>`;
 }
@@ -1245,10 +1265,11 @@ document.getElementById("vw-list").onclick=()=>setListView("list");
 try{if(localStorage.getItem("view")==="list")setTimeout(()=>setListView("list"));}catch(e){}
 function setGroup(g){
   groupBy=g;
-  document.getElementById("gb-type").setAttribute("aria-pressed",g==="type");
-  document.getElementById("gb-district").setAttribute("aria-pressed",g==="district");
+  ["type","district","near"].forEach(k=>document.getElementById("gb-"+k).setAttribute("aria-pressed",g===k));
+  if(g==="near"&&watchId===null)document.getElementById("locate").click();
   drawList();
 }
+document.getElementById("gb-near").onclick=()=>setGroup("near");
 document.getElementById("gb-type").onclick=()=>setGroup("type");
 document.getElementById("gb-district").onclick=()=>setGroup("district");
 document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();if(query){openDrawer();setListView("list");}else drawList();});
@@ -1277,11 +1298,14 @@ map.on("popupopen",e=>{
   delete sheet.dataset.mine;
   const c=e.popup.getContent();
   sheetBody.innerHTML=typeof c==="string"?c:(c&&c.outerHTML)||"";
+  const src=e.popup._source, ref=src&&refOfMarker(src);
+  const ll=src&&src.getLatLng?src.getLatLng():null;
+  addActions(ll?[ll.lng,ll.lat]:null, ref?keyOfRef.get(ref):null);
   sheet.hidden=false;sheet.scrollTop=0;
 });
-map.on("popupclose",()=>{if(!sheet.dataset.mine)sheet.hidden=true;});
+map.on("popupclose",()=>{if(!sheet.dataset.mine){sheet.hidden=true;setHash(null);}});
 function closeSheet(){
-  map.closePopup();sheet.hidden=true;
+  map.closePopup();sheet.hidden=true;setHash(null);
   if(sheet.dataset.mine){delete sheet.dataset.mine;sel=null;drawMarkers();drawCards();}
 }
 document.getElementById("sheet-x").onclick=closeSheet;
@@ -1361,11 +1385,12 @@ function wgs2gcj(lat,lng){
   dLat=dLat*180/((a*(1-ee))/(m*sm)*PI);dLng=dLng*180/(a/sm*Math.cos(rad)*PI);
   return [lat+dLat,lng+dLng];
 }
-let watchId=null,meMk=null,meAcc=null,firstFix=true;
+let watchId=null,meMk=null,meAcc=null,firstFix=true,meLL=null,lastListAt=0;
 function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,4500);}
 function stopLocate(){
   if(watchId!==null)navigator.geolocation.clearWatch(watchId);
-  watchId=null;if(meMk)meMk.remove();if(meAcc)meAcc.remove();meMk=meAcc=null;
+  watchId=null;meLL=null;if(meMk)meMk.remove();if(meAcc)meAcc.remove();meMk=meAcc=null;
+  if(groupBy==="near")drawList();
   document.getElementById("locate").setAttribute("aria-pressed","false");
 }
 document.getElementById("locate").onclick=()=>{
@@ -1374,6 +1399,8 @@ document.getElementById("locate").onclick=()=>{
   firstFix=true;document.getElementById("locate").setAttribute("aria-pressed","true");
   watchId=navigator.geolocation.watchPosition(pos=>{
     const [la,ln]=wgs2gcj(pos.coords.latitude,pos.coords.longitude);
+    const had=!!meLL;meLL=[ln,la];
+    if(!drawer.hidden&&(!had||Date.now()-lastListAt>15000)){lastListAt=Date.now();drawList();}
     if(!meMk){
       meAcc=L.circle([la,ln],{radius:pos.coords.accuracy,className:"me-acc",interactive:false,weight:1}).addTo(map);
       meMk=L.marker([la,ln],{icon:L.divIcon({className:"",iconSize:[18,18],iconAnchor:[9,9],html:'<div class="me-dot"></div>'}),zIndexOffset:1000,keyboard:false,title:"Вы здесь"}).addTo(map);
@@ -1389,6 +1416,67 @@ render();
 document.getElementById("l-sights").click();
 document.getElementById("l-hotels").click();
 updateCounts();
+
+// ===== Домой: адрес отеля крупно для таксиста =====
+document.getElementById("home-taxi").onclick=()=>{
+  const h=HOTELS[0];
+  document.getElementById("taxi-zh").textContent=h.zh;
+  const ad=document.getElementById("taxi-addr");ad.textContent="上海市黄浦区"+h.addr;ad.hidden=false;
+  document.getElementById("taxi-ru").textContent="Отель: "+h.en;
+  document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();
+};
+
+// ===== Расстояния =====
+function distTo(ll){ // ll = [lng,lat], GCJ-02
+  if(!meLL||!ll)return Infinity;
+  const k=Math.PI/180,dx=(ll[0]-meLL[0])*k*Math.cos((ll[1]+meLL[1])/2*k),dy=(ll[1]-meLL[1])*k;
+  return 6371000*Math.hypot(dx,dy);
+}
+function fmtDist(d){return d<1000?`${Math.max(10,Math.round(d/10)*10)} м`:`${(d/1000).toFixed(d<10000?1:0).replace(".",",")} км`;}
+function walkText(d){const m=Math.round(d*1.3/75);return m<=40?`пешком около ${Math.max(1,m)} мин`:"пешком далеко — лучше метро или такси";}
+
+// ===== Ключи мест для ссылок =====
+const keyOfRef=new Map(), allOfKey=new Map();
+{const seen=new Set();ALL.forEach((a,i)=>{
+  let k=a.kind==="mine"?"mine-"+a.ref.n:a.kind+"-"+(a.ref.id||i);
+  if(seen.has(k))k=a.kind+"-"+i;seen.add(k);keyOfRef.set(a.ref,k);allOfKey.set(k,a);
+});}
+function refOfMarker(mk){for(const [ref,m] of extMarkers)if(m===mk)return ref;return null;}
+function setHash(k){try{history.replaceState(null,"",k?"#"+encodeURIComponent(k):location.pathname+location.search);}catch(e){}}
+
+// ===== Блок действий в карточке =====
+const amapGo=(ll,name,mode)=>`https://uri.amap.com/navigation?to=${ll[0]},${ll[1]},${encodeURIComponent(name)}&mode=${mode}&coordinate=gaode&callnative=1`;
+function addActions(ll,key){
+  const card=sheetBody.querySelector(".pp");if(!card)return;
+  setHash(key);
+  if(!ll&&!key)return;
+  const name=(card.querySelector(".pp-zh")||card.querySelector(".pp-ru")||{}).textContent||"";
+  const box=document.createElement("div");box.className="pp-act";
+  box.innerHTML=(ll&&meLL?`<span class="pp-dist">Отсюда <b>${fmtDist(distTo(ll))}</b> по прямой, ${walkText(distTo(ll))}</span>`:"")+
+    (ll?`<div class="pp-go"><span>Как добраться:</span><a href="${amapGo(ll,name,"walk")}" target="_blank" rel="noopener">Пешком</a><a href="${amapGo(ll,name,"bus")}" target="_blank" rel="noopener">Метро</a><a href="${amapGo(ll,name,"car")}" target="_blank" rel="noopener">Такси</a></div>`:"")+
+    (key?`<button type="button" class="pp-share" data-share="${key}">Поделиться ссылкой</button>`:"");
+  const before=card.querySelector(".pp-img,.pp-what");
+  if(before)card.insertBefore(box,before);else card.appendChild(box);
+}
+sheetBody.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-share]");if(!b)return;
+  const url=location.origin+location.pathname+"#"+encodeURIComponent(b.dataset.share);
+  const title=(sheetBody.querySelector(".pp-ru")||sheetBody.querySelector(".pp-zh")||{}).textContent||"Шанхай";
+  if(navigator.share){try{await navigator.share({title,url});return;}catch(err){if(err&&err.name==="AbortError")return;}}
+  try{await navigator.clipboard.writeText(url);toast("Ссылка скопирована — можно вставить в Telegram.");}
+  catch(err){toast(url);}
+});
+
+// ===== Открыть место по ссылке =====
+function openFromHash(){
+  const k=decodeURIComponent(location.hash.slice(1));if(!k)return;
+  const a=allOfKey.get(k);if(!a)return;
+  fitted=true;
+  if(a.kind==="mine"){if(!on[a.cat]){on[a.cat]=true;render();}sel=null;select(a.ref.n,false);}
+  else showOnMap(a);
+}
+setTimeout(openFromHash,400);
+window.addEventListener("hashchange",openFromHash);
 </script>
 
 </html>
