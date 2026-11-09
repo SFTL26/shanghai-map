@@ -269,23 +269,113 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
 .sheet .pp .pp-cr a{display:inline;background:none;color:inherit;padding:0;margin:0;font:inherit;text-decoration:underline}
 .sheet .pp-img{border-radius:8px}
 @media (max-width:620px){.leaflet-popup-pane{display:none}}
+
+/* ===== Карта на весь экран: управление плавает поверх неё ===== */
+:root{--shd:0 1px 4px rgba(0,0,0,.18);--shd-lg:0 6px 24px rgba(0,0,0,.22)}
+html,body{height:100%}
+body{padding:0;overflow:hidden}
+.app{position:fixed;inset:0;background:var(--land)}
+#map{position:absolute;inset:0;height:auto;min-height:0}
+.leaflet-popup-pane{display:none}
+.topbar{position:absolute;z-index:1001;top:calc(env(safe-area-inset-top,0px) + 10px);left:10px;right:10px;max-width:860px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;pointer-events:none}
+.topbar>*{pointer-events:auto}
+.tb-row{display:flex;gap:8px;width:min(100%,480px)}
+.tb-search{flex:1;display:flex;align-items:center;gap:8px;background:var(--paper);color:var(--muted);border:1px solid var(--line);border-radius:10px;padding:0 12px;box-shadow:var(--shd)}
+.tb-search input{flex:1;min-width:0;border:0;background:transparent;font:15px var(--f-body);color:var(--ink);padding:11px 0;outline:none}
+.tb-search:focus-within{outline:2px solid var(--focus);outline-offset:1px}
+.tb-btn,.mt{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shd);cursor:pointer;font:500 14px/1 var(--f-body)}
+.tb-btn{padding:0 14px}
+.tb-btn[aria-expanded="true"],.mt[aria-pressed="true"],.mt[aria-expanded="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cats{display:flex;gap:6px;flex-wrap:wrap;max-width:100%}
+.cat{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:500 13px/1 var(--f-body);padding:9px 13px;border-radius:999px;cursor:pointer;box-shadow:var(--shd);white-space:nowrap}
+.cat b{min-width:18px;height:18px;border-radius:9px;background:var(--ink);color:var(--paper);font:600 11px/18px var(--f-body);text-align:center;padding:0 5px;font-variant-numeric:tabular-nums}
+.cat b:empty{display:none}
+.cat[aria-expanded="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cat[aria-expanded="true"] b{background:var(--paper);color:var(--ink)}
+.cat-mine{color:var(--muted)}
+.cat-icon{padding:9px 11px;font-size:15px}
+.panel.catpop{display:block;width:min(100%,560px);max-height:min(60vh,520px);overflow:auto;overscroll-behavior:contain;padding:12px 14px;box-shadow:var(--shd-lg)}
+.catpop .pgroup{display:none;border:0;padding:0}
+.catpop .pgroup.on{display:block}
+.catpop .pgroup h2{display:none}
+.catpop .pchips,.catpop .pchips .slot{flex-wrap:wrap!important;overflow:visible!important;margin:0!important;padding:0!important}
+.pscen{margin:0 0 10px}
+.scen{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:1px dashed var(--ink);background:transparent;color:var(--ink);font:500 13px/1.3 var(--f-body);padding:9px 12px;border-radius:10px;cursor:pointer}
+.mtools{position:absolute;z-index:1000;right:10px;bottom:118px;display:flex;flex-direction:column;gap:8px}
+.mt{width:42px;height:42px;padding:0}
+.mt-h{font:800 15px var(--f-body)}
+.infopop{position:absolute;z-index:1002;right:60px;bottom:90px;width:min(340px,calc(100vw - 80px));max-height:70vh;overflow:auto;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shd-lg);padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.ip-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ip-row>span{font-size:13px;color:var(--muted)}
+.infopop .legend-note{font-size:12.5px;line-height:1.45}
+.toast{position:absolute;z-index:1004;left:50%;bottom:24px;transform:translateX(-50%);max-width:min(420px,calc(100vw - 32px));background:var(--ink);color:var(--paper);font:500 14px/1.4 var(--f-body);padding:10px 14px;border-radius:10px;box-shadow:var(--shd-lg)}
+.routes{position:absolute;z-index:1000;left:10px;bottom:24px;width:min(400px,calc(100% - 80px));max-height:42vh;overflow:auto;overscroll-behavior:contain;margin:0;box-shadow:var(--shd-lg)}
+.routes-x{float:right;width:30px;height:30px;margin:-4px -6px 4px 8px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font:400 20px/1 var(--f-body);cursor:pointer}
+.drawer{position:absolute;z-index:1003;top:0;bottom:0;left:0;width:min(460px,100vw);background:var(--ground);border-right:1px solid var(--line);box-shadow:var(--shd-lg);overflow:auto;overscroll-behavior:contain;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 40px;display:flex;flex-direction:column;gap:14px}
+.dr-head{display:flex;align-items:center;justify-content:space-between}
+.dr-head h2{margin:0;font:700 20px var(--f-display)}
+.dr-head .sheet-x{position:static;float:none;margin:0}
+.drawer .cards{grid-template-columns:1fr}
+.drawer .row{grid-template-columns:22px 1fr}
+.drawer .ract{grid-column:2;justify-content:flex-start}
+.drawer .viewseg{width:100%}.drawer .viewseg button{flex:1;justify-content:center}
+.app.drawer-open .topbar{left:470px}
+.app.drawer-open .routes{left:470px}
+.me-dot{width:18px;height:18px;border-radius:50%;background:#1A73E8;border:3px solid #fff;box-shadow:0 0 0 2px rgba(26,115,232,.35),0 1px 4px rgba(0,0,0,.4)}
+.leaflet-interactive.me-acc{fill:#1A73E8;fill-opacity:.12;stroke:#1A73E8;stroke-opacity:.4}
+.sheet{z-index:1005}
+@media (min-width:621px){
+  .sheet{left:auto;right:10px;top:10px;bottom:10px;width:min(390px,calc(100vw - 20px));max-height:none;border-radius:14px;box-shadow:var(--shd-lg)}
+}
+@media (max-width:620px){
+  .topbar{left:8px;right:8px;top:calc(env(safe-area-inset-top,0px) + 8px)}
+  .tb-row{width:100%}
+  .tb-btn span{display:none}
+  .tb-btn{width:46px;padding:0}
+  .cats{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;width:calc(100% + 16px);margin-inline:-8px;padding:2px 8px 6px}
+  .cats::-webkit-scrollbar{display:none}
+  .panel.catpop{width:100%;max-height:58vh}
+  .mtools{bottom:96px;right:8px}
+  .routes{left:8px;right:8px;width:auto;bottom:8px;max-height:36vh}
+  .drawer{top:calc(env(safe-area-inset-top,0px) + 62px);width:100vw;border-right:0;padding-top:12px}
+  .app.drawer-open .cats,.app.drawer-open .catpop{display:none!important}
+  .app.drawer-open .topbar{left:8px}
+  .infopop{right:58px;bottom:70px}
+}
 </style>
 
-<div class="wrap">
-  <div class="panel" id="panel" aria-label="Что показать на карте">
-    <div class="pgroup"><h2>Гулять</h2><div class="pchips">
+<div class="app" id="app">
+  <div id="map" role="region" aria-label="Карта Шанхая с отмеченными местами"></div>
+
+  <div class="topbar" id="topbar">
+    <div class="tb-row">
+      <label class="tb-search" for="q"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input id="q" type="search" placeholder="Поиск: название, район, Uniqlo…" autocomplete="off" aria-label="Поиск по всем местам"></label>
+      <button type="button" class="tb-btn" id="list-open" aria-expanded="false" aria-controls="drawer"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="4" cy="6" r="1.4" fill="currentColor"/><circle cx="4" cy="12" r="1.4" fill="currentColor"/><circle cx="4" cy="18" r="1.4" fill="currentColor"/></svg><span>Список</span></button>
+    </div>
+    <div class="cats" id="cats" role="group" aria-label="Что показать на карте">
+      <button type="button" class="cat" data-pg="walk" aria-expanded="false" aria-controls="panel">Гулять<b></b></button>
+      <button type="button" class="cat" data-pg="see" aria-expanded="false" aria-controls="panel">Посмотреть<b></b></button>
+      <button type="button" class="cat" data-pg="eat" aria-expanded="false" aria-controls="panel">Поесть<b></b></button>
+      <button type="button" class="cat" data-pg="buy" aria-expanded="false" aria-controls="panel">Купить<b></b></button>
+      <button type="button" class="cat" data-pg="sm" aria-expanded="false" aria-controls="panel">Супермаркеты<b></b></button>
+      <button type="button" class="cat" data-pg="stay" aria-expanded="false" aria-controls="panel">Жильё<b></b></button>
+      <button type="button" class="cat cat-mine" id="p-mine">Только мои места</button>
+      <button type="button" class="cat cat-icon" id="p-reset" aria-label="Сбросить слои" title="Сбросить слои">↺</button>
+    </div>
+    <div class="panel catpop" id="panel" aria-label="Слои на карте" hidden>
+    <div class="pgroup" data-pg="walk"><h2>Гулять</h2><div class="pchips">
       <button class="lchip" id="l-routes" aria-pressed="false" style="--c:#B5452B"><i class="ic-line"></i>Маршруты <b data-n="ROUTES"></b></button>
       <span class="slot" data-slot="walk"></span>
       <button class="lchip" id="l-ferry" aria-pressed="false" style="--c:var(--c-ferry)"><i></i>Паромы <b data-n="FERRY"></b></button>
       <button class="lchip" id="l-districts" aria-pressed="false" style="--c:var(--c-art)"><i class="ic-dash"></i>Районы</button>
     </div></div>
-    <div class="pgroup"><h2>Посмотреть</h2><div class="pchips">
+    <div class="pgroup" data-pg="see"><h2>Посмотреть</h2><div class="pchips">
       <button class="lchip" id="l-sights" aria-pressed="false" style="--c:var(--ink)"><i class="ic-dia"></i>Классика <b data-n="SIGHTS"></b></button>
       <button class="lchip" id="l-odd" aria-pressed="false" style="--c:var(--c-odd)"><i class="ic-sq"></i>Необычное <b data-n="ODD"></b></button>
       <span class="slot" data-slot="art"></span>
       <span class="slot" data-slot="other"></span>
     </div></div>
-    <div class="pgroup"><h2>Поесть</h2><div class="pchips">
+    <div class="pgroup" data-pg="eat"><h2>Поесть</h2><div class="pscen"><button type="button" class="scen" id="sc-eat"><span aria-hidden="true">⚡</span>Быстро поесть у отеля: Dumpling Xi, лапша, Bib Gourmand</button></div><div class="pchips">
       <span class="slot" data-slot="food"></span>
       <button class="lchip" id="l-ndl" aria-pressed="false" style="--c:var(--c-lz)"><i class="ic-split"></i>Лапша и Шасянь <b data-n="NOODLES"></b></button>
       <button class="lchip" id="l-mstar" aria-pressed="false" style="--c:var(--c-mstar)"><i></i>Мишлен ★ <b data-n="MSTAR"></b></button>
@@ -295,13 +385,13 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
       <button class="lchip" id="l-micun" aria-pressed="false" style="--c:var(--c-micun)"><i class="ic-sq ic-ring"></i>Micun <b data-n="MICUN"></b></button>
       <button class="lchip" id="l-sushi" aria-pressed="false" style="--c:var(--c-sushi)"><i></i>Sushiro <b data-n="SUSHIRO"></b></button>
     </div></div>
-    <div class="pgroup"><h2>Купить</h2><div class="pchips">
+    <div class="pgroup" data-pg="buy"><h2>Купить</h2><div class="pchips">
       <button class="lchip" id="l-malls" aria-pressed="false" style="--c:var(--c-mall)"><i class="ic-sq"></i>ТЦ <b data-n="MALLS"></b></button>
       <button class="lchip" id="l-uniqlo" aria-pressed="false" style="--c:var(--c-uq)"><i class="ic-sq"></i>Uniqlo <b data-n="UNIQLO"></b></button>
       <button class="lchip" id="l-cer" aria-pressed="false" style="--c:var(--c-cer)"><i class="ic-sq"></i>Керамика <b data-n="CERAMICS"></b></button>
       <button class="lchip" id="l-kids" aria-pressed="false" style="--c:var(--c-kids)"><i></i>Детям <b data-n="KIDS"></b></button>
     </div></div>
-    <div class="pgroup"><h2>Супермаркеты</h2><div class="pchips">
+    <div class="pgroup" data-pg="sm"><h2>Супермаркеты</h2><div class="pchips">
       <button class="lchip" id="l-sm-hema" aria-pressed="false" style="--c:var(--c-hema)"><i class="ic-sq ic-ring"></i>Hema <b data-n="SM_HEMA"></b></button>
       <button class="lchip" id="l-sm-aldi" aria-pressed="false" style="--c:var(--c-aldi)"><i class="ic-sq ic-ring"></i>Aldi <b data-n="SM_ALDI"></b></button>
       <button class="lchip" id="l-sm-ole" aria-pressed="false" style="--c:var(--c-ole)"><i class="ic-sq ic-ring"></i>Ole' <b data-n="SM_OLE"></b></button>
@@ -309,55 +399,56 @@ mark{background:color-mix(in srgb,var(--c-walk) 35%,transparent);color:inherit;b
       <button class="lchip" id="l-sm-blt" aria-pressed="false" style="--c:var(--c-blt)"><i class="ic-sq ic-ring"></i>BLT <b data-n="SM_BLT"></b></button>
       <button class="lchip" id="l-rtmart" aria-pressed="false" style="--c:var(--c-rt)"><i class="ic-sq ic-ring"></i>RT-Mart <b data-n="RTMART"></b></button>
     </div></div>
-    <div class="pgroup"><h2>Жильё и&nbsp;выезды</h2><div class="pchips">
+    <div class="pgroup" data-pg="stay"><h2>Жильё и&nbsp;выезды</h2><div class="pchips">
       <button class="lchip" id="l-hotels" aria-pressed="false" style="--c:var(--ink)"><i class="ic-sq"></i>Отель <b data-n="HOTELS"></b></button>
       <span class="slot" data-slot="out"></span>
     </div></div>
-    <div class="pfoot">
-      <p class="legend-note"><span class="mine-tag">мои</span> — ваши места из Amap и видео, на карте с номерами. Остальное — подборки.</p>
-      <div class="presets"><button type="button" class="preset" id="p-mine">Только мои места</button><button type="button" class="preset" id="p-reset">Сбросить</button></div>
-    </div>
-  </div>
-
-  <div class="maptools">
-    <div class="seg" role="group" aria-label="Показать">
-      <button id="v-city" aria-pressed="true">Центр</button>
-      <button id="v-region" aria-pressed="false">Весь Шанхай</button>
-    </div>
-    <div class="seg" role="group" aria-label="Подписи на карте">
-      <button id="lang-en" aria-pressed="true">English</button>
-      <button id="lang-zh" aria-pressed="false" lang="zh">中文</button>
     </div>
   </div>
 
   <div class="routes" id="routes" hidden>
+    <button type="button" class="routes-x" id="routes-x" aria-label="Скрыть маршруты">×</button>
     <div class="rtabs" id="rtabs" role="group" aria-label="Маршрут"></div>
     <div class="rinfo" id="rinfo"></div>
   </div>
 
-  <div class="mapbox">
-    <div id="map" role="region" aria-label="Карта Шанхая с отмеченными местами"></div>
+  <div class="mtools" role="group" aria-label="Инструменты карты">
+    <button type="button" class="mt" id="locate" aria-pressed="false" aria-label="Показать, где я" title="Где я"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+    <button type="button" class="mt mt-h" id="go-hotel" aria-label="Показать отель" title="К отелю">H</button>
+    <button type="button" class="mt" id="info-open" aria-expanded="false" aria-controls="infopop" aria-label="Вид карты и справка" title="Вид и справка"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7.6" r="1.3" fill="currentColor"/></svg></button>
   </div>
+  <div class="infopop" id="infopop" hidden>
+    <div class="ip-row"><span>Показать</span><div class="seg" role="group" aria-label="Показать">
+      <button id="v-city" aria-pressed="true">Центр</button>
+      <button id="v-region" aria-pressed="false">Весь Шанхай</button>
+    </div></div>
+    <div class="ip-row"><span>Подписи</span><div class="seg" role="group" aria-label="Подписи на карте">
+      <button id="lang-en" aria-pressed="true">English</button>
+      <button id="lang-zh" aria-pressed="false" lang="zh">中文</button>
+    </div></div>
+    <p class="legend-note"><span class="mine-tag">мои</span> — ваши места из Amap и видео, на карте с номерами. Остальное — подборки.</p>
+    <p class="legend-note">Подложка — живая карта Amap, приближается до уровня домов; нужен интернет. Подписи переключаются между английским и китайским. Точки стоят по координатам из Amap; у 大壶春 положение приблизительное, у 汤连得 точки нет. Кнопка «Открыть в Amap» ведёт на точную карточку места. 阿娘面馆 в Amap не нашлась, поэтому её здесь нет.</p>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
 
-  <div class="listhead">
-    <div class="viewseg" role="group" aria-label="Как показывать места">
-      <span>Показывать</span>
-      <button id="vw-cards" aria-pressed="true"><i aria-hidden="true">▦</i>Мои места</button>
-      <button id="vw-list" aria-pressed="false"><i aria-hidden="true">☰</i>Всё списком</button>
+  <aside class="drawer" id="drawer" aria-label="Список мест" hidden>
+    <div class="dr-head"><h2>Места</h2><button type="button" class="sheet-x" id="list-close" aria-label="Закрыть список">×</button></div>
+    <div class="listhead">
+      <div class="viewseg" role="group" aria-label="Как показывать места">
+        <button id="vw-cards" aria-pressed="true"><i aria-hidden="true">▦</i>Мои места</button>
+        <button id="vw-list" aria-pressed="false"><i aria-hidden="true">☰</i>Всё списком</button>
+      </div>
     </div>
-    <label class="search" for="q"><span>Поиск</span><input id="q" type="search" placeholder="Название, район, Uniqlo, tea…" autocomplete="off"></label>
-  </div>
-  <div class="listbox" id="listbox" hidden>
-    <div class="seg" role="group" aria-label="Группировка">
-      <button id="gb-type" aria-pressed="true">По типу</button>
-      <button id="gb-district" aria-pressed="false">По районам</button>
+    <div class="listbox" id="listbox" hidden>
+      <div class="seg" role="group" aria-label="Группировка">
+        <button id="gb-type" aria-pressed="true">По типу</button>
+        <button id="gb-district" aria-pressed="false">По районам</button>
+      </div>
+      <p class="hint" id="listhint"></p>
+      <div id="list"></div>
     </div>
-    <p class="hint" id="listhint"></p>
-    <div id="list"></div>
-  </div>
-<div class="groups" id="groups"></div>
-
-  <footer>Подложка — живая карта Amap, приближается до уровня домов; нужен интернет. Подписи переключаются между английским и китайским. Точки стоят по координатам из Amap; у 大壶春 положение приблизительное, у 汤连得 точки нет. Кнопка «Открыть в Amap» ведёт на точную карточку места. 阿娘面馆 в Amap не нашлась, поэтому её здесь нет.</footer>
+    <div class="groups" id="groups"></div>
+  </aside>
 </div>
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-label="Описание места"><button type="button" class="sheet-x" id="sheet-x" aria-label="Закрыть">×</button><div id="sheet-body"></div></div>
@@ -427,6 +518,7 @@ let sel=null;
 let lang="en";
 try{lang=localStorage.getItem("maplang")||"en";}catch(e){}
 const map=L.map("map",{minZoom:4,maxZoom:18,zoomSnap:1,attributionControl:true});
+map.zoomControl.setPosition("bottomright");
 const base=L.tileLayer("https://webrd0{s}.is.autonavi.com/appmaptile?lang={lang}&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
   {subdomains:"1234",minZoom:4,maxZoom:18,lang:lang==="zh"?"zh_cn":"en",attribution:"© AutoNavi / Amap"}).addTo(map);
 function setLang(l){
@@ -440,7 +532,9 @@ document.getElementById("lang-zh").onclick=()=>setLang("zh");
 setLang(lang);
 map.attributionControl.setPrefix('<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>');
 // Подгоняем вид, когда у контейнера уже есть реальный размер
-const fitNow=()=>{map.invalidateSize();map.fitBounds(VIEWS[view],{animate:false});};
+const fitNow=()=>{map.invalidateSize();map.fitBounds(VIEWS[view],{animate:false});
+  // на узком вытянутом экране центр вписывается по ширине и выходит слишком мелким
+  if(view==="city"&&innerWidth<=620&&map.getZoom()<12)map.setView(map.getBounds().getCenter(),12,{animate:false});};
 fitNow();
 requestAnimationFrame(fitNow);
 let fitted=false;
@@ -527,13 +621,14 @@ function drawCards(){
           ${p.approx?'<span class="flag">точка примерная</span>':""}${p.ll?"":'<span class="flag">нет на карте</span>'}
         </div>
       </article>`).join("")+`</div></section>`).join("");
-  if(!Object.values(on).some(Boolean))document.getElementById("groups").innerHTML='<p class="hint">Ваши места сейчас скрыты. Включите кнопки с пометкой «мои» над картой или нажмите «Только мои места».</p>';
+  if(!Object.values(on).some(Boolean))document.getElementById("groups").innerHTML='<p class="hint">Ваши места сейчас скрыты. Включите их в категориях на карте (кнопки с пометкой «мои») или нажмите «Только мои места».</p>';
 }
 
 function render(){drawChips();drawMarkers();drawCards();}
 
 function select(n,fromMap){
   sel=sel===n?null:n;
+  if(!sel){const sh=document.getElementById("sheet");if(sh.dataset.mine){sh.hidden=true;delete sh.dataset.mine;}}
   const p=P.find(x=>x.n===n);
   drawMarkers();drawCards();
   if(!sel)return;
@@ -542,7 +637,18 @@ function select(n,fromMap){
     if(!fromMap)map.flyTo(m.getLatLng(),Math.max(map.getZoom(),14),{duration:matchMedia("(prefers-reduced-motion:reduce)").matches?0:0.8});
     m.openTooltip();
   }
-  if(fromMap)document.getElementById("card-"+n)?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"center"});
+  showMineSheet(p);
+}
+function mineSheetHtml(p){
+  return `<div class="pp"><div class="pp-kind">${CATS[p.cat].name} · мои места · №${p.n}</div><div class="pp-zh" lang="zh">${p.zh}</div><div class="pp-ru">${p.ru}</div>${p.en?`<div class="en">${p.en}</div>`:""}${photoHtml(p,p.ru)}<p class="pp-what">${p.what}</p>${tipsHtml(p.tips)}`+
+    `${p.approx?'<p class="pp-tip">Точка на карте примерная.</p>':""}<div class="pp-btns"><a href="${p.id?`https://www.amap.com/place/${p.id}`:amapLink(p.ll,p.zh)}" target="_blank" rel="noopener">Открыть в Amap</a><button type="button" class="pp-taxi" data-taxi="${p.n}">Для такси</button></div></div>`;
+}
+function showMineSheet(p){
+  map.closePopup();
+  const sh=document.getElementById("sheet");
+  document.getElementById("sheet-body").innerHTML=mineSheetHtml(p);
+  sh.dataset.mine=p.n;sh.hidden=false;sh.scrollTop=0;
+  if(isPhoneW())closeDrawer();
 }
 function setView(v){
   view=v;
@@ -571,7 +677,7 @@ document.getElementById("groups").addEventListener("click",e=>{
   if(e.target.closest("a"))return;
   if(e.target.closest("details"))return;
   const c=e.target.closest(".card");
-  if(c){select(+c.dataset.n,false);document.getElementById("map").scrollIntoView({block:"nearest"});}
+  if(c){sel=null;select(+c.dataset.n,false);}
 });
 document.getElementById("taxi-close").onclick=()=>{document.getElementById("taxi").hidden=true;};
 document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("taxi").hidden=true;});
@@ -655,7 +761,6 @@ document.getElementById("rinfo").addEventListener("click",e=>{
   const s=ROUTES[curRoute].stops[+b.dataset.stop],mk=extMarkers.get(s);
   map.flyTo(llOf(s.ll),Math.max(map.getZoom(),16),{duration:matchMedia("(prefers-reduced-motion:reduce)").matches?0:0.6});
   map.once("moveend",()=>mk&&mk.openPopup());
-  document.getElementById("map").scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});
 });
 routeLayer.on("add",()=>{document.getElementById("routes").hidden=false;setTimeout(()=>selectRoute(curRoute??0,true),0);});
 routeLayer.on("remove",()=>{document.getElementById("routes").hidden=true;});
@@ -1094,7 +1199,7 @@ function drawList(){
   const items=ALL.filter(a=>query?a.hay.includes(query):(a.kind==="mine"?on[a.cat]:layerOn(a.kind)));
   document.getElementById("listhint").textContent=query
     ?`Найдено: ${items.length}. Поиск идёт по всем сохранённым местам, даже если слой выключен.`
-    :`Показано: ${items.length}. Здесь всё, что сейчас включено над картой.`;
+    :`Показано: ${items.length}. Здесь всё, что сейчас включено в категориях на карте.`;
   const key=a=>groupBy==="type"?(a.kind==="mine"?CATS[a.cat].name:a.kind==="route"?`Маршрут ${a.ri+1}. ${ROUTES[a.ri].name}`:KINDS[a.kind].name):a.district;
   const groups=new Map();
   items.forEach(a=>{const k=key(a);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(a);});
@@ -1116,7 +1221,7 @@ function showOnMap(a){
     let opened=false;const open=()=>{if(!opened&&mk){opened=true;mk.openPopup();}};map.once("moveend",open);setTimeout(open,1300);
     map.flyTo([a.ll[1],a.ll[0]],Math.max(map.getZoom(),16),{duration:rm?0:0.8});
   }
-  document.getElementById("map").scrollIntoView({block:"center",behavior:rm?"auto":"smooth"});
+  if(isPhoneW())closeDrawer();
 }
 document.getElementById("list").addEventListener("click",e=>{
   const t=e.target.closest("[data-taxiall]");
@@ -1146,7 +1251,7 @@ function setGroup(g){
 }
 document.getElementById("gb-type").onclick=()=>setGroup("type");
 document.getElementById("gb-district").onclick=()=>setGroup("district");
-document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();if(query)setListView("list");else drawList();});
+document.getElementById("q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();if(query){openDrawer();setListView("list");}else drawList();});
 
 // Число мест на кнопках слоёв
 const LAYER_DATA={RTMART,SM_HEMA,SM_ALDI,SM_OLE,SM_CS,SM_BLT,KIDS,MSTAR,MBIB,MSEL,ROUTES,FERRY,SIGHTS,ODD,NOODLES,MICUN,XIJIADE,SUSHIRO,MALLS,UNIQLO,CERAMICS,HOTELS};
@@ -1160,25 +1265,130 @@ function applyPreset(layerIds,mine){
   sel=null;map.closePopup();
   render();drawList();
 }
-document.getElementById("p-mine").onclick=()=>applyPreset([],true);
-document.getElementById("p-reset").onclick=()=>applyPreset(["l-sights"],false);
+document.getElementById("p-mine").onclick=()=>{closeCat();applyPreset(["l-hotels"],true);};
+document.getElementById("p-reset").onclick=()=>{closeCat();applyPreset(["l-sights","l-hotels"],false);};
 
 // На телефоне карточка места открывается шторкой снизу, сам попап Leaflet скрыт
 const isPhone=()=>matchMedia("(max-width:620px)").matches;
 const sheet=document.getElementById("sheet"), sheetBody=document.getElementById("sheet-body");
-if(isPhone())L.Popup.prototype.options.autoPan=false;
+L.Popup.prototype.options.autoPan=false;
 map.on("popupopen",e=>{
-  if(!isPhone())return;
+  if(sel){sel=null;drawMarkers();drawCards();}
+  delete sheet.dataset.mine;
   const c=e.popup.getContent();
   sheetBody.innerHTML=typeof c==="string"?c:(c&&c.outerHTML)||"";
   sheet.hidden=false;sheet.scrollTop=0;
 });
-map.on("popupclose",()=>{if(isPhone())sheet.hidden=true;});
-document.getElementById("sheet-x").onclick=()=>{map.closePopup();sheet.hidden=true;};
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!sheet.hidden){map.closePopup();sheet.hidden=true;}});
+map.on("popupclose",()=>{if(!sheet.dataset.mine)sheet.hidden=true;});
+function closeSheet(){
+  map.closePopup();sheet.hidden=true;
+  if(sheet.dataset.mine){delete sheet.dataset.mine;sel=null;drawMarkers();drawCards();}
+}
+document.getElementById("sheet-x").onclick=closeSheet;
+sheetBody.addEventListener("click",e=>{
+  const t=e.target.closest("[data-taxi]");if(!t)return;
+  const p=P.find(x=>x.n===+t.dataset.taxi);
+  document.getElementById("taxi-zh").textContent=p.zh;
+  document.getElementById("taxi-ru").textContent=p.ru;
+  document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();
+});
+
+// ===== Строка категорий: выпадающий список слоёв и счётчик включённых =====
+const appEl=document.getElementById("app"), catpop=document.getElementById("panel"), drawer=document.getElementById("drawer"), infopop=document.getElementById("infopop");
+function closeCat(){catpop.hidden=true;document.querySelectorAll("#cats .cat[data-pg]").forEach(b=>b.setAttribute("aria-expanded","false"));}
+function openCat(pg){
+  const same=!catpop.hidden&&catpop.dataset.pg===pg;
+  closeCat();closeInfo();if(same)return;
+  catpop.dataset.pg=pg;
+  catpop.querySelectorAll(".pgroup").forEach(g=>g.classList.toggle("on",g.dataset.pg===pg));
+  document.querySelector(`#cats .cat[data-pg="${pg}"]`).setAttribute("aria-expanded","true");
+  catpop.hidden=false;catpop.scrollTop=0;
+}
+document.getElementById("cats").addEventListener("click",e=>{const b=e.target.closest(".cat[data-pg]");if(b)openCat(b.dataset.pg);});
+function updateCounts(){
+  catpop.querySelectorAll(".pgroup").forEach(g=>{
+    const n=g.querySelectorAll('.lchip[aria-pressed="true"],.chip[aria-pressed="true"]').length;
+    document.querySelector(`#cats .cat[data-pg="${g.dataset.pg}"] b`).textContent=n||"";
+  });
+}
+new MutationObserver(updateCounts).observe(catpop,{subtree:true,childList:true,attributes:true,attributeFilter:["aria-pressed"]});
+
+// Сценарий «быстро поесть у отеля»
+function ensureOn(id){const b=document.getElementById(id);if(b.getAttribute("aria-pressed")!=="true")b.click();}
+document.getElementById("sc-eat").onclick=()=>{
+  ["l-xjd","l-ndl","l-mbib","l-hotels"].forEach(ensureOn);closeCat();
+  const h=HOTELS[0];map.flyTo([h.ll[1],h.ll[0]],15,{duration:matchMedia("(prefers-reduced-motion:reduce)").matches?0:0.8});
+};
+
+// Список — выдвижная панель
+const isPhoneW=()=>matchMedia("(max-width:620px)").matches;
+function openDrawer(){if(!drawer.hidden)return;closeCat();closeInfo();drawer.hidden=false;appEl.classList.add("drawer-open");document.getElementById("list-open").setAttribute("aria-expanded","true");drawList();}
+function closeDrawer(){if(drawer.hidden)return;drawer.hidden=true;appEl.classList.remove("drawer-open");document.getElementById("list-open").setAttribute("aria-expanded","false");}
+document.getElementById("list-open").onclick=()=>drawer.hidden?openDrawer():closeDrawer();
+document.getElementById("list-close").onclick=closeDrawer;
+
+// Вид и справка
+function closeInfo(){infopop.hidden=true;document.getElementById("info-open").setAttribute("aria-expanded","false");}
+document.getElementById("info-open").onclick=()=>{const show=infopop.hidden;closeCat();closeInfo();if(show){infopop.hidden=false;document.getElementById("info-open").setAttribute("aria-expanded","true");}};
+
+// Клик мимо всплывающих панелей закрывает их
+document.addEventListener("pointerdown",e=>{
+  if(!catpop.hidden&&!e.target.closest("#panel,#cats"))closeCat();
+  if(!infopop.hidden&&!e.target.closest("#infopop,#info-open"))closeInfo();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  if(!document.getElementById("taxi").hidden)return;
+  if(!catpop.hidden)closeCat();else if(!infopop.hidden)closeInfo();else if(!sheet.hidden)closeSheet();else closeDrawer();
+});
+document.getElementById("routes-x").onclick=()=>document.getElementById("l-routes").click();
+
+// К отелю
+document.getElementById("go-hotel").onclick=()=>{
+  ensureOn("l-hotels");const h=HOTELS[0],mk=extMarkers.get(h);
+  map.flyTo([h.ll[1],h.ll[0]],16,{duration:matchMedia("(prefers-reduced-motion:reduce)").matches?0:0.8});
+  setTimeout(()=>mk&&mk.openPopup(),matchMedia("(prefers-reduced-motion:reduce)").matches?0:850);
+};
+
+// Где я: GPS даёт WGS-84, подложка Amap — GCJ-02, поэтому координаты пересчитываются
+function wgs2gcj(lat,lng){
+  if(lng<72.004||lng>137.8347||lat<0.8293||lat>55.8271)return [lat,lng];
+  const a=6378245,ee=0.00669342162296594323,PI=Math.PI;
+  const tl=(x,y)=>{let r=-100+2*x+3*y+0.2*y*y+0.1*x*y+0.2*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(y*PI)+40*Math.sin(y/3*PI))*2/3;r+=(160*Math.sin(y/12*PI)+320*Math.sin(y*PI/30))*2/3;return r;};
+  const tg=(x,y)=>{let r=300+x+2*y+0.1*x*x+0.1*x*y+0.1*Math.sqrt(Math.abs(x));r+=(20*Math.sin(6*x*PI)+20*Math.sin(2*x*PI))*2/3;r+=(20*Math.sin(x*PI)+40*Math.sin(x/3*PI))*2/3;r+=(150*Math.sin(x/12*PI)+300*Math.sin(x/30*PI))*2/3;return r;};
+  let dLat=tl(lng-105,lat-35),dLng=tg(lng-105,lat-35);
+  const rad=lat/180*PI;let m=Math.sin(rad);m=1-ee*m*m;const sm=Math.sqrt(m);
+  dLat=dLat*180/((a*(1-ee))/(m*sm)*PI);dLng=dLng*180/(a/sm*Math.cos(rad)*PI);
+  return [lat+dLat,lng+dLng];
+}
+let watchId=null,meMk=null,meAcc=null,firstFix=true;
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,4500);}
+function stopLocate(){
+  if(watchId!==null)navigator.geolocation.clearWatch(watchId);
+  watchId=null;if(meMk)meMk.remove();if(meAcc)meAcc.remove();meMk=meAcc=null;
+  document.getElementById("locate").setAttribute("aria-pressed","false");
+}
+document.getElementById("locate").onclick=()=>{
+  if(watchId!==null){stopLocate();return;}
+  if(!navigator.geolocation){toast("Браузер не умеет определять местоположение.");return;}
+  firstFix=true;document.getElementById("locate").setAttribute("aria-pressed","true");
+  watchId=navigator.geolocation.watchPosition(pos=>{
+    const [la,ln]=wgs2gcj(pos.coords.latitude,pos.coords.longitude);
+    if(!meMk){
+      meAcc=L.circle([la,ln],{radius:pos.coords.accuracy,className:"me-acc",interactive:false,weight:1}).addTo(map);
+      meMk=L.marker([la,ln],{icon:L.divIcon({className:"",iconSize:[18,18],iconAnchor:[9,9],html:'<div class="me-dot"></div>'}),zIndexOffset:1000,keyboard:false,title:"Вы здесь"}).addTo(map);
+    }else{meMk.setLatLng([la,ln]);meAcc.setLatLng([la,ln]).setRadius(pos.coords.accuracy);}
+    if(firstFix){firstFix=false;fitted=true;map.flyTo([la,ln],Math.max(map.getZoom(),16),{duration:matchMedia("(prefers-reduced-motion:reduce)").matches?0:0.8});}
+  },err=>{
+    stopLocate();
+    toast(err.code===1?"Нет доступа к геолокации: разрешите его для этого сайта в настройках браузера.":"Не получилось определить, где вы. Попробуйте ещё раз на улице.");
+  },{enableHighAccuracy:true,maximumAge:15000,timeout:20000});
+};
 
 render();
 document.getElementById("l-sights").click();
+document.getElementById("l-hotels").click();
+updateCounts();
 </script>
 
 </html>
