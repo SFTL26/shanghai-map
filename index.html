@@ -443,6 +443,30 @@ body{padding:0;overflow:hidden}
 .mctl .mt.wide{width:auto;padding:0 10px;font-size:13px}
 .minfo{min-height:1.5em;margin:8px 2px 0;font-size:14px}
 .minfo b{font-weight:600}
+/* Памятка, часть 2: шесть вкладок сеткой 3×2, фразы, номера, калькулятор */
+.g-tabs .viewseg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.g-tabs .viewseg button{padding:10px 6px;font-size:13.5px}
+.g-phs{display:flex;flex-direction:column}
+.g-ph{display:flex;align-items:baseline;justify-content:space-between;gap:12px;text-align:left;background:transparent;border:0;border-top:1px solid var(--line);padding:11px 2px;color:var(--ink);font:400 15px/1.35 var(--f-body);cursor:pointer}
+.g-ph:first-child{border-top:0;padding-top:4px}
+.g-ph-zh{font:500 15px/1.35 var(--f-cjk);color:var(--muted);text-align:right;flex:0 1 auto}
+.g-ph:active,.g-ph:hover{background:var(--ground)}
+.g-calls{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.g-call{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--ink);background:var(--ground)}
+.g-call b{font:700 22px/1.1 var(--f-display)}
+.g-call span{font-size:13px;color:var(--muted)}
+.g-list{margin:4px 0 0;padding-left:18px}
+.g-list li{margin:6px 0}
+.g-hosp .g-big{margin-bottom:2px}
+.g-conv{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:10px}
+.g-conv label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);min-width:0}
+.g-conv input,.g-rate input{width:100%;min-width:0;font:600 22px/1.2 var(--f-body);color:var(--ink);background:var(--ground);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.g-eq{font:600 22px var(--f-body);color:var(--muted);padding-bottom:12px}
+.g-rate{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;margin-top:12px}
+.g-rate label{font-size:13px;color:var(--muted)}
+.g-rate input{width:7.5em;font-size:16px;padding:8px 10px}
+.g-quick{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px 12px;margin-top:10px;font-size:14px}
+.g-quick b{font-weight:600}
 </style>
 
 <div class="app" id="app">
@@ -570,7 +594,7 @@ body{padding:0;overflow:hidden}
   <div class="big" id="taxi-zh"></div>
   <p class="taxi-addr" id="taxi-addr" lang="zh" hidden></p>
   <p id="taxi-ru"></p>
-  <p>请带我去这里，谢谢！</p>
+  <p id="taxi-ask">请带我去这里，谢谢！</p>
   <button id="taxi-close">Закрыть</button>
 </div>
 <!-- Памятка: дорога от аэропорта и отель, схема метро, приложения. Открывается кнопкой «Памятка» в шапке. -->
@@ -580,6 +604,9 @@ body{padding:0;overflow:hidden}
   <div class="g-tabs"><div class="viewseg" role="group" aria-label="Раздел памятки">
     <button type="button" data-gt="road" aria-pressed="true">Дорога</button>
     <button type="button" data-gt="metro" aria-pressed="false">Метро</button>
+    <button type="button" data-gt="phrases" aria-pressed="false">Фразы</button>
+    <button type="button" data-gt="help" aria-pressed="false">Помощь</button>
+    <button type="button" data-gt="money" aria-pressed="false">Деньги</button>
     <button type="button" data-gt="apps" aria-pressed="false">Приложения</button>
   </div></div>
 
@@ -655,6 +682,129 @@ body{padding:0;overflow:hidden}
     </div>
     <p class="minfo" id="minfo">Нажмите на станцию — покажу название по-китайски и линии. Белые кружки — пересадки.</p>
     <p class="g-muted">Схема: Amap (<span lang="zh">高德地图</span>), ноябрь 2026. Пунктир — маглев.</p>
+   </div>
+  </section>
+
+  <section class="g-sec" data-gs="phrases" hidden>
+   <p class="g-muted">Нажмите на фразу — она откроется крупно на весь экран, покажите собеседнику. Работает без интернета.</p>
+   <div class="g-card"><h3>В кафе</h3><div class="g-phs" data-ph="cafe"></div></div>
+   <div class="g-card"><h3>В городе и в магазине</h3><div class="g-phs" data-ph="city"></div></div>
+   <div class="g-card"><h3>Помощь</h3><div class="g-phs" data-ph="help"></div></div>
+  </section>
+
+  <section class="g-sec" data-gs="help" hidden>
+   <div class="g-card">
+    <h3>Экстренные номера</h3>
+    <div class="g-calls">
+     <a class="g-call" href="tel:110"><b>110</b><span>Полиция</span></a>
+     <a class="g-call" href="tel:120"><b>120</b><span>Скорая</span></a>
+     <a class="g-call" href="tel:119"><b>119</b><span>Пожарные</span></a>
+     <a class="g-call" href="tel:962288"><b>962288</b><span>Справочная для иностранцев</span></a>
+    </div>
+    <p class="g-muted" style="margin-top:10px">По городским справочникам, 110 в Шанхае принимает звонки и на русском, 120 и 119 — на английском. 962288 работает круглосуточно: переводчик соединит с нужной службой (в меню нажать 1 — европейские языки).</p>
+   </div>
+
+   <div class="g-card">
+    <h3>Если ребёнку плохо</h3>
+    <ul class="g-list">
+     <li><b>Срочно, днём и ночью, с английским</b> — Shanghai United Family: круглосуточная скорая помощь, педиатр дежурит всегда. Частная клиника, дорого — сначала звоните в страховую.</li>
+     <li><b>Днём, без спешки</b> — Детская больница Шанхая, международный приём на английском (8–11 и 13–16).</li>
+     <li><b>Ближе всего к отелю</b> — Жуйцзинь, 1,5 км: большая городская больница, приёмный покой круглосуточно, говорят в основном по-китайски.</li>
+     <li>Скорая 120 при тяжёлом состоянии везёт в ближайшую подходящую больницу, а не туда, куда попросите.</li>
+    </ul>
+   </div>
+
+   <div class="g-card g-hosp">
+    <h3>Shanghai United Family Hospital</h3>
+    <p class="g-big" lang="zh">上海和睦家医院</p>
+    <dl class="g-kv">
+     <dt>Адрес</dt><dd><span class="g-zh" lang="zh">上海市长宁区仙霞路1139号</span><br><span class="g-muted">1139 Xianxia Rd, Changning — от отеля ~10 км, такси 30–40 мин</span></dd>
+     <dt>Скорая</dt><dd><a href="tel:+862122163999">+86 21 2216 3999</a> — круглосуточно, по-английски</dd>
+    </dl>
+    <div class="g-acts"><button type="button" class="g-btn" data-show="ufh">Показать таксисту</button><a class="g-btn ghost" href="https://uri.amap.com/search?keyword=上海和睦家医院&amp;city=310000" target="_blank" rel="noopener">Открыть в Amap</a></div>
+   </div>
+
+   <div class="g-card g-hosp">
+    <h3>Детская больница Шанхая</h3>
+    <p class="g-big" lang="zh">上海市儿童医院（北京西路院区）</p>
+    <dl class="g-kv">
+     <dt>Адрес</dt><dd><span class="g-zh" lang="zh">上海市静安区北京西路1400弄24号</span><br><span class="g-muted">Shanghai Children's Hospital, 1400 West Beijing Rd, Jing'an — ~3,5 км</span></dd>
+     <dt>Приём</dt><dd>Международный, на английском: каждый день 8–11 и 13–16. <a href="tel:+862152976370">+86 21 5297 6370</a></dd>
+    </dl>
+    <div class="g-acts"><button type="button" class="g-btn" data-show="sch">Показать таксисту</button><a class="g-btn ghost" href="https://uri.amap.com/search?keyword=上海市儿童医院北京西路院区&amp;city=310000" target="_blank" rel="noopener">Открыть в Amap</a></div>
+   </div>
+
+   <div class="g-card g-hosp">
+    <h3>Больница Жуйцзинь</h3>
+    <p class="g-big" lang="zh">瑞金医院</p>
+    <dl class="g-kv">
+     <dt>Адрес</dt><dd><span class="g-zh" lang="zh">上海市黄浦区瑞金二路197号</span><br><span class="g-muted">Ruijin Hospital, 197 Ruijin 2nd Rd — ~1,5 км, такси 5–10 мин</span></dd>
+     <dt>Скорая</dt><dd>Приёмный покой круглосуточно. Международное отделение — по будням, телефон по сторонним сайтам: <a href="tel:+862164370045">+86 21 6437 0045</a></dd>
+    </dl>
+    <div class="g-acts"><button type="button" class="g-btn" data-show="rj">Показать таксисту</button><a class="g-btn ghost" href="https://uri.amap.com/search?keyword=瑞金医院&amp;city=310000" target="_blank" rel="noopener">Открыть в Amap</a></div>
+   </div>
+
+   <div class="g-card g-hosp">
+    <h3>Генконсульство России</h3>
+    <p class="g-big" lang="zh">俄罗斯驻上海总领事馆</p>
+    <dl class="g-kv">
+     <dt>Адрес</dt><dd><span class="g-zh" lang="zh">上海市虹口区黄浦路20号</span><br><span class="g-muted">20 Huangpu Rd, у моста Вайбайду, напротив Astor House</span></dd>
+     <dt>Телефоны</dt><dd><a href="tel:+862163248383">+86 21 6324 8383</a>, <a href="tel:+862163242682">+86 21 6324 2682</a> — в рабочее время</dd>
+     <dt>Дежурный</dt><dd><a href="tel:+8613917745377">+86 139 1774 5377</a> — только при угрозе жизни и здоровью. Номер с неофициальных сайтов, на сайте МИД его не нашла.</dd>
+     <dt>Сайт</dt><dd>rusconshanghai.mid.ru, почта shanghai@mid.ru</dd>
+    </dl>
+    <div class="g-acts"><button type="button" class="g-btn" data-show="cons">Показать таксисту</button></div>
+   </div>
+
+   <div class="g-card">
+    <h3>Что держать под рукой</h3>
+    <ul class="g-list">
+     <li><b>Страховка:</b> номер полиса и телефон ассистанса — скриншотом в телефоне. При болезни сначала звоните им: они скажут, в какую клинику ехать и оплатят ли.</li>
+     <li><b>Паспорт</b> — с собой; без него не примут в больнице и не продадут билет на поезд.</li>
+     <li><b>Аптека</b> по-китайски <span class="g-zh" lang="zh">药店</span> — так и искать в Amap. Жаропонижающее и привычные лекарства для Майи лучше взять из дома.</li>
+     <li><b>Фразы</b> «ребёнку плохо», «вызовите скорую», «ребёнок потерялся» — во вкладке «Фразы».</li>
+    </ul>
+   </div>
+  </section>
+
+  <section class="g-sec" data-gs="money" hidden>
+   <div class="g-card">
+    <h3>Калькулятор</h3>
+    <div class="g-conv">
+     <label><span>Юани</span><input id="cv-cny" type="number" inputmode="decimal" min="0" step="any" placeholder="¥"></label>
+     <span class="g-eq" aria-hidden="true">=</span>
+     <label><span>Рубли</span><input id="cv-rub" type="number" inputmode="decimal" min="0" step="any" placeholder="₽"></label>
+    </div>
+    <div class="g-rate">
+     <label for="cv-rate">Курс, ₽ за ¥1</label>
+     <input id="cv-rate" type="number" inputmode="decimal" min="0" step="0.01">
+     <button type="button" class="g-btn ghost" id="cv-cbr">Курс ЦБ</button>
+    </div>
+    <p class="g-muted" id="cv-note"></p>
+    <div class="g-quick" id="cv-quick"></div>
+   </div>
+
+   <div class="g-card">
+    <h3>Как платить</h3>
+    <ul class="g-list">
+     <li><b>Чаевые не приняты</b> — ни в такси, ни в кафе. В дорогих ресторанах и отелях сервисный сбор бывает уже в счёте.</li>
+     <li><b>Наличные принимают по закону</b>, но у продавца может не найтись сдачи со ¥100 — держите купюры по 10–20 и мелочь.</li>
+     <li><b>Купюры:</b> ¥100, 50, 20, 10, 5, 1; монеты ¥1, 5 и 1 цзяо (¥0,5 и ¥0,1). Цена «¥12.5» — это 12 юаней 5 цзяо.</li>
+     <li><b>Карты российских банков не работают</b> — ни в Alipay, ни в банкоматах.</li>
+     <li><b>Залог в отеле</b> (<span class="g-zh" lang="zh">押金</span>) — при заселении часто просят депозит наличными или через Alipay, возвращают при выезде.</li>
+     <li><b>Торг</b> уместен на рынках и в сувенирных рядах (Юйюань); в магазинах и ТЦ цены фиксированные.</li>
+     <li><b>Tax Free</b> (<span class="g-zh" lang="zh">离境退税</span>) — в магазинах с такой табличкой при покупке от ¥200 можно вернуть часть НДС: попросите бланк, нужен паспорт.</li>
+    </ul>
+   </div>
+
+   <div class="g-card">
+    <h3>Как проверить ¥100</h3>
+    <p>Продавцы часто проверяют вашу сотню — это нормально. Сами проверяйте сдачу крупными купюрами:</p>
+    <ul class="g-list">
+     <li>цифра «100» в центре при наклоне меняет цвет с золотого на зелёный;</li>
+     <li>на просвет — водяной знак с портретом и цифрой 100;</li>
+     <li>защитная полоса меняет цвет при наклоне, портрет на ощупь рельефный.</li>
+    </ul>
    </div>
   </section>
 
@@ -1715,7 +1865,7 @@ document.getElementById("home-taxi").onclick=()=>{
   const h=HOTELS[0];
   document.getElementById("taxi-zh").textContent=h.zh;
   const ad=document.getElementById("taxi-addr");ad.textContent="上海市黄浦区"+h.addr;ad.hidden=false;
-  document.getElementById("taxi-ru").textContent="Отель: "+h.en;
+  document.getElementById("taxi-ru").textContent="Отель: "+h.en;document.getElementById("taxi-ask").hidden=false;
   document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();
 };
 
@@ -1934,6 +2084,101 @@ function pickSt(g){
   minfo.innerHTML=`<b>${esc(t[0])}</b> · <span class="g-zh" lang="zh">${esc(t[1])}</span> · ${esc(t[2])}`;
 }
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+})();
+
+// ===== Памятка: фразы, помощь, деньги =====
+(()=>{
+// Фраза крупно на весь экран — тот же экран, что «Показать таксисту»
+function bigCard(zh,ru,addr,ask){
+  document.getElementById("taxi-zh").textContent=zh;
+  const ad=document.getElementById("taxi-addr");ad.textContent=addr||"";ad.hidden=!addr;
+  document.getElementById("taxi-ru").textContent=ru;
+  document.getElementById("taxi-ask").hidden=!ask;
+  document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();
+}
+// [по-русски, по-китайски, пиньинь]
+const PH={
+ cafe:[
+  ["Без острого","不要辣","bú yào là"],
+  ["Чуть-чуть острого","微辣","wēi là"],
+  ["Без кинзы","不要香菜","bú yào xiāngcài"],
+  ["Это для ребёнка — совсем без острого, пожалуйста","这是给孩子吃的，请不要放辣","zhè shì gěi háizi chī de, qǐng bú yào fàng là"],
+  ["Нас трое","我们三个人","wǒmen sān ge rén"],
+  ["Есть меню на английском или с картинками?","有英文菜单或者图片菜单吗？","yǒu Yīngwén càidān huòzhě túpiàn càidān ma?"],
+  ["Вот это, пожалуйста","我要这个","wǒ yào zhège"],
+  ["Есть детский стульчик?","有儿童椅吗？","yǒu értóng yǐ ma?"],
+  ["Стакан тёплой воды, пожалуйста","请给我一杯温水","qǐng gěi wǒ yì bēi wēn shuǐ"],
+  ["У меня аллергия на арахис","我对花生过敏","wǒ duì huāshēng guòmǐn"],
+  ["У меня аллергия на морепродукты","我对海鲜过敏","wǒ duì hǎixiān guòmǐn"],
+  ["Упакуйте с собой, пожалуйста","打包，谢谢","dǎbāo, xièxie"],
+  ["Счёт, пожалуйста","买单，谢谢","mǎidān, xièxie"]
+ ],
+ city:[
+  ["Сколько стоит?","多少钱？","duōshao qián?"],
+  ["Можно оплатить наличными?","可以付现金吗？","kěyǐ fù xiànjīn ma?"],
+  ["Где туалет?","洗手间在哪里？","xǐshǒujiān zài nǎlǐ?"],
+  ["Где ближайшая аптека?","附近有药店吗？","fùjìn yǒu yàodiàn ma?"],
+  ["Где метро?","地铁站在哪里？","dìtiězhàn zài nǎlǐ?"],
+  ["Я не говорю по-китайски","我不会说中文","wǒ bú huì shuō Zhōngwén"],
+  ["Напишите, пожалуйста","请写下来","qǐng xiě xiàlai"],
+  ["Можно сфотографировать?","可以拍照吗？","kěyǐ pāizhào ma?"],
+  ["Мы из России","我们是俄罗斯人","wǒmen shì Éluósī rén"],
+  ["Спасибо!","谢谢！","xièxie"]
+ ],
+ help:[
+  ["Помогите, пожалуйста!","请帮帮我！","qǐng bāngbang wǒ!"],
+  ["Ребёнок заболел","孩子生病了","háizi shēngbìng le"],
+  ["У ребёнка температура","孩子发烧了","háizi fāshāo le"],
+  ["Вызовите скорую, пожалуйста","请叫救护车","qǐng jiào jiùhùchē"],
+  ["Отвезите нас в больницу","请带我们去医院","qǐng dài wǒmen qù yīyuàn"],
+  ["Мой ребёнок потерялся, помогите найти","我的孩子走丢了，请帮我找","wǒ de háizi zǒudiū le, qǐng bāng wǒ zhǎo"],
+  ["Вызовите полицию, пожалуйста","请报警","qǐng bàojǐng"],
+  ["Я потерял(а) паспорт","我的护照丢了","wǒ de hùzhào diū le"]
+ ]
+};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+document.querySelectorAll("#guide [data-ph]").forEach(box=>{
+  const list=PH[box.dataset.ph];
+  box.innerHTML=list.map((p,i)=>`<button type="button" class="g-ph" data-i="${i}"><span class="g-ph-ru">${esc(p[0])}</span><span class="g-ph-zh" lang="zh">${esc(p[1])}</span></button>`).join("");
+  box.onclick=e=>{const b=e.target.closest(".g-ph");if(!b)return;const p=list[+b.dataset.i];bigCard(p[1],p[0]+" · "+p[2],"",false);};
+});
+
+// Больницы и консульство: адрес крупно для таксиста
+const PLACES={
+  ufh:["上海和睦家医院","上海市长宁区仙霞路1139号","Shanghai United Family Hospital"],
+  sch:["上海市儿童医院（北京西路院区）","上海市静安区北京西路1400弄24号","Детская больница Шанхая"],
+  rj:["瑞金医院","上海市黄浦区瑞金二路197号","Больница Жуйцзинь"],
+  cons:["俄罗斯驻上海总领事馆","上海市虹口区黄浦路20号","Генконсульство России"]
+};
+document.querySelectorAll("#guide [data-show]").forEach(b=>b.onclick=()=>{const p=PLACES[b.dataset.show];bigCard(p[0],p[2],p[1],true);});
+
+// Калькулятор юани ↔ рубли. Курс ЦБ подтягиваем при интернете и запоминаем; свой курс можно вписать.
+const RATE0=12.3419,RATE0_DATE="18.11.2026";
+const cny=document.getElementById("cv-cny"),rub=document.getElementById("cv-rub"),rate=document.getElementById("cv-rate"),note=document.getElementById("cv-note"),quick=document.getElementById("cv-quick");
+let st={rate:RATE0,src:"cbr",date:RATE0_DATE};
+try{const s=JSON.parse(localStorage.getItem("cnyrate")||"null");if(s&&s.rate>0)st=s;}catch(e){}
+const save=()=>{try{localStorage.setItem("cnyrate",JSON.stringify(st));}catch(e){}};
+const fmt=(n,d)=>Number.isFinite(n)?n.toLocaleString("ru-RU",{maximumFractionDigits:d}):"";
+function showRate(keep){
+  if(!keep)rate.value=+st.rate.toFixed(4);
+  note.textContent=st.src==="cbr"?`Курс ЦБ на ${st.date}. Наличные в банке вы покупали дороже — впишите свой курс.`:"Ваш курс. Кнопка «Курс ЦБ» вернёт официальный.";
+  quick.innerHTML=[10,20,50,100,200,500,1000].map(v=>`<span><b>¥${v}</b> ≈ ${fmt(Math.round(v*st.rate),0)} ₽</span>`).join("");
+}
+cny.oninput=()=>{rub.value=cny.value===""?"":Math.round(+cny.value*st.rate);};
+rub.oninput=()=>{cny.value=rub.value===""?"":+(+rub.value/st.rate).toFixed(1);};
+rate.oninput=()=>{const r=+rate.value;if(!(r>0))return;st={rate:r,src:"own",date:""};save();showRate(true);cny.oninput();};
+rate.onblur=()=>showRate();
+async function loadCbr(force){
+  try{
+    const r=await fetch("https://www.cbr-xml-daily.ru/daily_json.js",{cache:"no-store"});
+    const d=await r.json(),v=d.Valute.CNY,val=v.Value/v.Nominal;
+    const date=new Date(d.Date).toLocaleDateString("ru-RU");
+    if(force||st.src==="cbr"){st={rate:val,src:"cbr",date};save();showRate();cny.oninput();}
+  }catch(e){if(force){st={rate:st.src==="cbr"?st.rate:RATE0,src:"cbr",date:st.src==="cbr"?st.date:RATE0_DATE};save();showRate();cny.oninput();}}
+}
+document.getElementById("cv-cbr").onclick=()=>loadCbr(true);
+showRate();
+document.getElementById("guide-open").addEventListener("click",()=>loadCbr(false),{once:true});
 })();
 </script>
 
