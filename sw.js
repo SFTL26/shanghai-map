@@ -29,13 +29,17 @@ async function cacheFirst(cacheName, key, init) {
   }
 }
 
-// страница: сразу из кэша, а свежую версию тихо подтягиваем на следующий запуск
+// страница: при интернете — свежая (мимо HTTP-кэша, ждём до 3 с), иначе — сохранённая копия.
+// Раньше было «сразу из кэша, свежая на следующий запуск»: обновления сайта на телефоне появлялись только со второго-третьего открытия.
+const PAGE_WAIT = 3000;
 async function page(req) {
   const c = await caches.open(SHELL);
   const hit = await c.match("./");
-  const net = fetch(req).then(r => { if (r.ok) c.put("./", r.clone()); return r; }).catch(() => null);
-  if (hit) { net; return hit; }
-  return (await net) || new Response("Нет интернета, а карта ещё не сохранена в телефон.", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  const net = fetch(new URL("./", self.registration.scope).href, { cache: "no-store" })
+    .then(r => { if (r.ok) { c.put("./", r.clone()); return r; } return null; }).catch(() => null);
+  if (!hit) return (await net) || new Response("Нет интернета, а карта ещё не сохранена в телефон.", { status: 503, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  const late = new Promise(res => setTimeout(() => res(null), PAGE_WAIT));
+  return (await Promise.race([net, late])) || hit;
 }
 
 self.addEventListener("fetch", e => {

@@ -1799,7 +1799,16 @@ window.addEventListener("hashchange",openFromHash);
 
 // ===== Офлайн: service worker и скачивание тайлов =====
 // Тайлы кладём в кэш «tiles» с ключом webrd01 — так же, как их ищет sw.js.
-if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("serviceWorker" in navigator){
+  // Новый sw.js взял управление (сайт обновился) — один раз перезагружаем, чтобы показать свежую страницу.
+  // При самой первой установке контроллера ещё нет — тогда не перезагружаем.
+  const hadSW=!!navigator.serviceWorker.controller;let swReloaded=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(hadSW&&!swReloaded){swReloaded=true;location.reload();}});
+  navigator.serviceWorker.register("sw.js").then(reg=>{
+    // приложение с экрана «Домой» часто не перезапускается, а возвращается из фона — проверяем обновление при возврате
+    document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")reg.update().catch(()=>{});});
+  }).catch(()=>{});
+}
 const OFF={reg:[120.85,30.68,122.0,31.55],city:[121.40,31.15,121.55,31.30],core:[121.455,31.205,121.515,31.25],r:0.006};
 const tileURL=(z,x,y)=>`https://webrd01.is.autonavi.com/appmaptile?lang=${lang==="zh"?"zh_cn":"en"}&size=1&scale=1&style=8&x=${x}&y=${y}&z=${z}`;
 function offTiles(){
