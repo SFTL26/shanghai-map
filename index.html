@@ -529,6 +529,7 @@ body{padding:0;overflow:hidden}
       <span class="slot" data-slot="zaraKids"></span>
       <span class="slot" data-slot="hm"></span>
       <span class="slot" data-slot="zaraAdult"></span>
+      <span class="slot" data-slot="outlets"></span>
       <button class="lchip" id="l-mkt" aria-pressed="false" style="--c:var(--c-mkt)"><i class="ic-sq"></i>Рынки и подарки <b data-n="MARKETS"></b></button>
       <button class="lchip" id="l-malls" aria-pressed="false" style="--c:var(--c-mall)"><i class="ic-sq"></i>ТЦ <b data-n="MALLS"></b></button>
       <button class="lchip" id="l-uniqlo" aria-pressed="false" style="--c:var(--c-uq)"><i class="ic-sq"></i>Uniqlo <b data-n="UNIQLO"></b></button>
@@ -904,7 +905,8 @@ const CATS={
   sneakers:{name:"Кроссовки",c:"--c-uq"},
   zaraKids:{name:"Zara Kids",c:"--c-kids"},
   hm:{name:"H&M",c:"--c-cer"},
-  zaraAdult:{name:"Zara · взрослым",c:"--c-uq"}
+  zaraAdult:{name:"Zara · взрослым",c:"--c-uq"},
+  outlets:{name:"Аутлеты",c:"--c-mall"}
 };
 // lng/lat — координаты Amap (GCJ-02); null — точки нет
 const P=[
@@ -979,6 +981,10 @@ const P=[
  {"cat":"hm","zh":"H&M(上海环球港店)","en":"Global Harbor","ru":"H&M · Global Harbor","ll":[121.41308,31.23429],"id":null,"addr":"上海市普陀区中山北路3300号上海环球港","what":"Есть в местных справочниках. Работа магазина и детский отдел не подтверждены.","approx":true,"tips":[["Адрес","上海市普陀区中山北路3300号上海环球港"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
  {"cat":"hm","zh":"H&M(仲盛世界商城店)","en":"Sky Mall","ru":"H&M · Sky Mall","ll":[121.38707,31.107101],"id":"B00155LJ5C","addr":"上海市闵行区都市路5001号仲盛世界商城","what":"Есть в местных справочниках. Работа магазина и детский отдел не подтверждены.","approx":true,"tips":[["Адрес","上海市闵行区都市路5001号仲盛世界商城"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
  {"cat":"hm","zh":"H&M(长宁龙之梦店)","en":"Cloud Nine","ru":"H&M · Cloud Nine","ll":[121.416666,31.219137],"id":"B001552NYO","addr":"上海市长宁区长宁路1018号龙之梦城市生活中心","what":"Есть в местных справочниках. Работа H&M и детский отдел не подтверждены. В этом же ТЦ есть Zara Kids.","approx":true,"tips":[["Адрес","上海市长宁区长宁路1018号龙之梦城市生活中心"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"outlets","zh":"百联奥特莱斯广场（上海·青浦）","en":"Bailian Outlets Qingpu","ru":"Bailian · Цинпу","addr":"上海市青浦区沪青平公路2888号","ll":[121.228683,31.156833],"id":"B001571JFR","what":"Крупный аутлет с ANTA, Li-Ning, Nike и Adidas. Из детских брендов есть FILA Kids, Champion Kids и Eland Kids.","tips":[["Адрес","上海市青浦区沪青平公路2888号"],["Как добраться","Линия 17 до 嘉松中路 (Middle Jiasong Road), затем местный автобус 嘉松线 или DiDi."]]},
+ {"cat":"outlets","zh":"上海佛罗伦萨小镇","en":"Florentia Village Shanghai","ru":"Florentia Village · Пудун","addr":"上海市浦东新区卓耀路58弄","ll":[121.764356,31.195953],"id":"B0FFK77SV4","what":"ANTA, ANTA Kids, Li-Ning, Li-Ning Kids, Adidas и ASICS. Удобно совместить с поездкой в аэропорт Пудун (PVG).","tips":[["Адрес","上海市浦东新区卓耀路58弄"],["Как добраться","Линия 2 до 远东大道 (Far East Avenue), затем бесплатный шаттл. До PVG, по данным аутлета, около 10 минут на машине."]]},
+ {"cat":"outlets","zh":"比斯特上海购物村","en":"Bicester Shanghai Village","ru":"Bicester · у Диснейленда","addr":"上海市浦东新区申迪东路88号","ll":[121.679498,31.140497],"id":"B0FFGNSTVR","what":"Аутлет у Диснейленда с Polo Ralph Lauren, Coach, Nike, Adidas Originals и New Balance Kids.","tips":[["Адрес","上海市浦东新区申迪东路88号"],["Как добраться","Линия 11 до 迪士尼 (Disney Resort), дальше на шаттле курортной зоны или на DiDi."]]},
+ {"cat":"outlets","zh":"汇金奥特莱斯","en":"Huijin Outlet","ru":"Huijin · Южный вокзал","addr":"上海市徐汇区沪闵路9001-3号","ll":[121.428085,31.15463],"id":"B0FFHIDJ5R","what":"Городской аутлет для короткого заезда. Adidas Outlet расположен в южной части комплекса, 石龙路750号.","tips":[["Адрес","上海市徐汇区沪闵路9001-3号"],["Как добраться","Метро до 上海南站 (Shanghai South Railway Station), выход 4."]]},
 ];
 P.forEach((p,i)=>p.n=i+1);
 
@@ -1138,6 +1144,10 @@ document.getElementById("panel").addEventListener("click",e=>{
   const b=e.target.closest("[data-cat]");if(!b)return;
   on[b.dataset.cat]=!on[b.dataset.cat];
   render();drawList();
+  if(b.dataset.cat==="outlets"&&on.outlets){
+    const bounds=P.filter(p=>p.cat==="outlets").map(p=>[p.ll[1],p.ll[0]]);
+    map.fitBounds(bounds,{padding:[24,64],animate:false});
+  }
 });
 document.getElementById("v-city").onclick=()=>setView("city");
 document.getElementById("v-region").onclick=()=>setView("region");
