@@ -526,6 +526,9 @@ body{padding:0;overflow:hidden}
     <div class="pgroup" data-pg="buy"><h2>Купить</h2><div class="pchips">
       <span class="slot" data-slot="football"></span>
       <span class="slot" data-slot="sneakers"></span>
+      <span class="slot" data-slot="zaraKids"></span>
+      <span class="slot" data-slot="hm"></span>
+      <span class="slot" data-slot="zaraAdult"></span>
       <button class="lchip" id="l-mkt" aria-pressed="false" style="--c:var(--c-mkt)"><i class="ic-sq"></i>Рынки и подарки <b data-n="MARKETS"></b></button>
       <button class="lchip" id="l-malls" aria-pressed="false" style="--c:var(--c-mall)"><i class="ic-sq"></i>ТЦ <b data-n="MALLS"></b></button>
       <button class="lchip" id="l-uniqlo" aria-pressed="false" style="--c:var(--c-uq)"><i class="ic-sq"></i>Uniqlo <b data-n="UNIQLO"></b></button>
@@ -898,7 +901,10 @@ const CATS={
   other:{name:"Отдых",c:"--c-other"},
   out:{name:"За городом",c:"--c-out"},
   football:{name:"Футбольная форма",c:"--c-uq"},
-  sneakers:{name:"Кроссовки",c:"--c-uq"}
+  sneakers:{name:"Кроссовки",c:"--c-uq"},
+  zaraKids:{name:"Zara Kids",c:"--c-kids"},
+  hm:{name:"H&M",c:"--c-cer"},
+  zaraAdult:{name:"Zara · взрослым",c:"--c-uq"}
 };
 // lng/lat — координаты Amap (GCJ-02); null — точки нет
 const P=[
@@ -949,7 +955,30 @@ const P=[
  {"cat":"sneakers","zh":"李宁(长宁龙之梦店)","en":"Cloud Nine Zhongshan Park · Li-Ning","ru":"Cloud Nine · Li-Ning","ll":[121.416666,31.219137],"id":"B001552NYO","addr":"长宁路1018号龙之梦城市生活中心","what":"Магазин Li-Ning в большом торговом центре у Zhongshan Park.","approx":false,"tips":[["Адрес","长宁路1018号龙之梦城市生活中心"],["Где искать","Этаж в справочниках расходится; уточнить на информационной стойке ТЦ."],["Навигация","Метка поставлена на торговый центр; конкретный павильон ищите по схеме внутри."],["Перед поездкой","Этажи и присутствие арендаторов могут меняться; наличие нужной модели и размера уточняйте в магазине."],["Источник","https://campus.51job.com/lining2024/station.html"]]},
  {"cat":"sneakers","zh":"安踏(南京东路旗舰店)","en":"ANTA Nanjing East Road Flagship","ru":"ANTA · флагман на Нанкинской","ll":[121.487,31.238],"id":null,"addr":"南京东路160–166号","what":"Основной ассортимент кроссовок, спортивной одежды и экипировки ANTA.","approx":true,"tips":[["Адрес","南京东路160–166号"],["Где искать","Флагман ANTA; вход с Нанкинской улицы."],["Навигация","Метка примерная: используйте точный адрес 南京东路160–166号."],["Перед поездкой","Этажи и присутствие арендаторов могут меняться; наличие нужной модели и размера уточняйте в магазине."],["Источник","https://sh.city8.com/shopping/8dakn07958a9b36dac"]]},
  {"cat":"sneakers","zh":"中国李宁(宏伊国际广场店)","en":"China Li-Ning · Hongyi Plaza","ru":"China Li-Ning · Hongyi Plaza","ll":[121.484529,31.236942],"id":"B001550C2J","addr":"南京东路299号宏伊国际广场","what":"Модная линейка China Li-Ning: кроссовки и одежда для повседневных образов.","approx":false,"tips":[["Адрес","南京东路299号宏伊国际广场"],["Где искать","Магазин China Li-Ning; этаж и вход уточнить по навигации ТЦ."],["Навигация","Метка поставлена на торговый центр; конкретный павильон ищите по схеме внутри."],["Перед поездкой","Этажи и присутствие арендаторов могут меняться; наличие нужной модели и размера уточняйте в магазине."],["Источник","https://www.sina.cn/news/detail/4849899256941509.html"]]},
- {"cat":"sneakers","zh":"ANTA SNEAKERVERSE安踏作品集(上海南京东路-幻巷店)","en":"ANTA SNEAKERVERSE · SV Huanxiang","ru":"ANTA SNEAKERVERSE · «幻巷»","ll":[121.480119,31.235817],"id":"B0L65AF9RG","addr":"南京东路546号","what":"Большая стена обуви и эффектный интерьер: первый выбор для необычных кроссовок ANTA.","approx":false,"tips":[["Адрес","南京东路546号"],["Где искать","Концептуальный магазин «幻巷» на Нанкинской пешеходной улице."],["Навигация","Метка магазина ANTA SNEAKERVERSE."],["Перед поездкой","Этажи и присутствие арендаторов могут меняться; наличие нужной модели и размера уточняйте в магазине."],["Источник","https://www.amap.com/place/B0L65AF9RG"]]}
+ {"cat":"sneakers","zh":"ANTA SNEAKERVERSE安踏作品集(上海南京东路-幻巷店)","en":"ANTA SNEAKERVERSE · SV Huanxiang","ru":"ANTA SNEAKERVERSE · «幻巷»","ll":[121.480119,31.235817],"id":"B0L65AF9RG","addr":"南京东路546号","what":"Большая стена обуви и эффектный интерьер: первый выбор для необычных кроссовок ANTA.","approx":false,"tips":[["Адрес","南京东路546号"],["Где искать","Концептуальный магазин «幻巷» на Нанкинской пешеходной улице."],["Навигация","Метка магазина ANTA SNEAKERVERSE."],["Перед поездкой","Этажи и присутствие арендаторов могут меняться; наличие нужной модели и размера уточняйте в магазине."],["Источник","https://www.amap.com/place/B0L65AF9RG"]]},
+ {"cat":"zaraKids","zh":"ZARA(上海瑞虹太阳宫店)","en":"Hall of the Sun","ru":"Zara Kids · Hall of the Sun","ll":[121.500531,31.262923],"id":"B0GU3UK6MZ","addr":"上海市虹口区瑞虹路181号瑞虹太阳宫","what":"Детский отдел Zara есть. В этом же ТЦ есть H&M.","approx":true,"tips":[["Адрес","上海市虹口区瑞虹路181号瑞虹太阳宫"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"zaraKids","zh":"ZARA(上海世纪汇店)","en":"Century Link","ru":"Zara Kids · Century Link","ll":[121.527198,31.22746],"id":"B0FFJRT3SW","addr":"上海市浦东新区世纪大道1192号世纪汇广场LG1-042/044/045","what":"Детский отдел Zara есть. Магазин на LG1. H&M указан на LG2-006.","approx":false,"tips":[["Адрес","上海市浦东新区世纪大道1192号世纪汇广场LG1-042/044/045"]]},
+ {"cat":"zaraKids","zh":"ZARA(上海长宁龙之梦店)","en":"Cloud Nine","ru":"Zara Kids · Cloud Nine","ll":[121.416666,31.219137],"id":"B001552NYO","addr":"上海市长宁区长宁路1018号龙之梦城市生活中心","what":"Детский отдел Zara есть. У станции Zhongshan Park (中山公园).","approx":true,"tips":[["Адрес","上海市长宁区长宁路1018号龙之梦城市生活中心"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"zaraKids","zh":"ZARA(上海万象城店)","en":"MixC","ru":"Zara Kids · MixC","ll":[121.369015,31.170352],"id":"B00156NVSE","addr":"上海市闵行区吴中路1599号上海万象城","what":"Детский отдел Zara есть. У станции Ziteng Road (紫藤路).","approx":true,"tips":[["Адрес","上海市闵行区吴中路1599号上海万象城"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"zaraKids","zh":"ZARA(上海七宝领展广场店)","en":"Qibao Link Plaza","ru":"Zara Kids · Qibao Link Plaza","ll":[121.350975,31.155583],"id":"B0HBX7QOIJ","addr":"上海市闵行区漕宝路3366号七宝领展广场","what":"Детский отдел Zara есть. У станции Qibao (七宝).","approx":true,"tips":[["Адрес","上海市闵行区漕宝路3366号七宝领展广场"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"zaraKids","zh":"ZARA(上海嘉定印象城店)","en":"Nanxiang InCity MEGA","ru":"Zara Kids · Nanxiang InCity MEGA","ll":[121.305986,31.304724],"id":"B0FFK8KCHM","addr":"上海市嘉定区陈翔公路2299号南翔印象城MEGA","what":"Детский отдел Zara есть. У станции Chenxiang Highway (陈翔公路).","approx":true,"tips":[["Адрес","上海市嘉定区陈翔公路2299号南翔印象城MEGA"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"zaraAdult","zh":"ZARA(上海时代广场店)","en":"Shanghai Times Square","ru":"Zara · Shanghai Times Square","ll":[121.478174,31.224368],"id":"B00155FXUB","addr":"上海市黄浦区淮海中路111号时代广场","what":"Женские и мужские коллекции. Павильоны L101, L124–129 и L201–203.","approx":false,"tips":[["Адрес","上海市黄浦区淮海中路111号时代广场"]]},
+ {"cat":"zaraAdult","zh":"ZARA(上海南京东路亚太店)","en":"East Nanjing Road","ru":"Zara · East Nanjing Road","ll":[121.479102,31.235771],"id":"B0FFG69NW7","addr":"上海市黄浦区南京东路592号中丝亚太大厦","what":"Женские и мужские коллекции. Флагман на пешеходной Нанкинской улице.","approx":false,"tips":[["Адрес","上海市黄浦区南京东路592号中丝亚太大厦"]]},
+ {"cat":"zaraAdult","zh":"ZARA(上海淮海中路旗舰店)","en":"Middle Huaihai Road","ru":"Zara · Middle Huaihai Road","ll":[121.458478,31.215943],"id":null,"addr":"上海市徐汇区淮海中路988号黄金世界商厦","what":"Женские и мужские коллекции. Флагман напротив iapm. Метка ориентировочная.","approx":true,"tips":[["Адрес","上海市徐汇区淮海中路988号黄金世界商厦"]]},
+ {"cat":"hm","zh":"H&M风格之邸(淮海中路店)","en":"House of H&M","ru":"H&M · House of H&M","ll":[121.46605,31.2196],"id":null,"addr":"上海市黄浦区淮海中路649号","what":"Детский отдел есть. Флагманский магазин, пять этажей.","approx":true,"tips":[["Адрес","上海市黄浦区淮海中路649号"]]},
+ {"cat":"hm","zh":"H&M(晶品购物中心店)","en":"Crystal Galleria","ru":"H&M · Crystal Galleria","ll":[121.446407,31.225586],"id":"B0LRUXD2JM","addr":"上海市静安区愚园路68号CP静安","what":"Детский отдел есть. Магазин на 1–2 этажах.","approx":true,"tips":[["Адрес","上海市静安区愚园路68号CP静安"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(百联徐汇商业广场店)","en":"Bailian Xuhui","ru":"H&M · Bailian Xuhui","ll":[121.437032,31.197471],"id":null,"addr":"上海市徐汇区华山路2038号百联徐汇商业广场","what":"Детский отдел указан на сайте H&M.","approx":true,"tips":[["Адрес","上海市徐汇区华山路2038号百联徐汇商业广场"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(虹桥南丰城店)","en":"The Place","ru":"H&M · The Place","ll":[121.407792,31.207262],"id":"B001550RQU","addr":"上海市长宁区遵义路150号虹桥南丰城","what":"Детский отдел указан на сайте H&M.","approx":true,"tips":[["Адрес","上海市长宁区遵义路150号虹桥南丰城"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(长泰广场店)","en":"Changtai Square","ru":"H&M · Changtai Square","ll":[121.601958,31.205857],"id":"B0FFFH1AVT","addr":"上海市浦东新区祖冲之路1239弄长泰广场","what":"Детский отдел указан на сайте H&M.","approx":true,"tips":[["Адрес","上海市浦东新区祖冲之路1239弄长泰广场"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(瑞虹太阳宫店)","en":"Hall of the Sun","ru":"H&M · Hall of the Sun","ll":[121.49971,31.26359],"id":"B0GU3UK6MZ","addr":"上海市虹口区瑞虹路181号瑞虹太阳宫","what":"В этом же ТЦ есть Zara Kids.","approx":true,"tips":[["Адрес","上海市虹口区瑞虹路181号瑞虹太阳宫"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(世纪汇广场店)","en":"Century Link","ru":"H&M · Century Link","ll":[121.52589,31.22892],"id":"B00156NYWT","addr":"上海市浦东新区世纪大道1192号世纪汇广场LG2-006","what":"Павильон LG2-006 указан в справочнике. В этом же ТЦ есть Zara Kids.","approx":true,"tips":[["Адрес","上海市浦东新区世纪大道1192号世纪汇广场LG2-006"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(凯德晶萃广场店)","en":"LuOne","ru":"H&M · LuOne","ll":[121.477071,31.210312],"id":"B0FFH26VVY","addr":"上海市黄浦区徐家汇路268号凯德晶萃广场","what":"Детский отдел не подтверждён.","approx":true,"tips":[["Адрес","上海市黄浦区徐家汇路268号凯德晶萃广场"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(虹桥天地店)","en":"The Hub","ru":"H&M · The Hub","ll":[121.315438,31.193801],"id":"B0FFFDD5ZY","addr":"上海市闵行区申长路688号虹桥天地购物中心GF-18","what":"Павильон GF-18 указан в справочнике. Детский отдел не подтверждён.","approx":true,"tips":[["Адрес","上海市闵行区申长路688号虹桥天地购物中心GF-18"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(悦荟广场店)","en":"Mosaic · East Nanjing Road","ru":"H&M · Mosaic · East Nanjing Road","ll":[121.483608,31.236614],"id":"B0FFHC66JQ","addr":"上海市黄浦区南京东路353号悦荟广场","what":"Статус работы спорный. Перед визитом проверьте у торгового центра.","approx":true,"tips":[["Адрес","上海市黄浦区南京东路353号悦荟广场"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(正大广场店)","en":"Super Brand Mall","ru":"H&M · Super Brand Mall","ll":[121.49919,31.23665],"id":null,"addr":"上海市浦东新区陆家嘴西路168号正大广场","what":"Есть в местных справочниках. Работа магазина и детский отдел не подтверждены.","approx":true,"tips":[["Адрес","上海市浦东新区陆家嘴西路168号正大广场"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(上海环球港店)","en":"Global Harbor","ru":"H&M · Global Harbor","ll":[121.41308,31.23429],"id":null,"addr":"上海市普陀区中山北路3300号上海环球港","what":"Есть в местных справочниках. Работа магазина и детский отдел не подтверждены.","approx":true,"tips":[["Адрес","上海市普陀区中山北路3300号上海环球港"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(仲盛世界商城店)","en":"Sky Mall","ru":"H&M · Sky Mall","ll":[121.38707,31.107101],"id":"B00155LJ5C","addr":"上海市闵行区都市路5001号仲盛世界商城","what":"Есть в местных справочниках. Работа магазина и детский отдел не подтверждены.","approx":true,"tips":[["Адрес","上海市闵行区都市路5001号仲盛世界商城"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
+ {"cat":"hm","zh":"H&M(长宁龙之梦店)","en":"Cloud Nine","ru":"H&M · Cloud Nine","ll":[121.416666,31.219137],"id":"B001552NYO","addr":"上海市长宁区长宁路1018号龙之梦城市生活中心","what":"Есть в местных справочниках. Работа H&M и детский отдел не подтверждены. В этом же ТЦ есть Zara Kids.","approx":true,"tips":[["Адрес","上海市长宁区长宁路1018号龙之梦城市生活中心"],["Навигация","Метка указывает на здание торгового центра. Павильон ищите по схеме ТЦ."]]},
 ];
 P.forEach((p,i)=>p.n=i+1);
 
@@ -1116,12 +1145,20 @@ document.getElementById("groups").addEventListener("toggle",e=>{
   const d=e.target;if(!d.dataset||!d.dataset.tips)return;
   if(d.open)openTips.add(+d.dataset.tips);else openTips.delete(+d.dataset.tips);
 },true);
+function showPlaceTaxi(place, name=place.ru, address=place.addr){
+  document.getElementById("taxi-zh").textContent=place.zh;
+  const addressLine=document.getElementById("taxi-addr");
+  addressLine.textContent=address||"";
+  addressLine.hidden=!address;
+  document.getElementById("taxi-ru").textContent=name;
+  document.getElementById("taxi-ask").hidden=false;
+  document.getElementById("taxi").hidden=false;
+  document.getElementById("taxi-close").focus();
+}
 document.getElementById("groups").addEventListener("click",e=>{
   const t=e.target.closest("[data-taxi]");
   if(t){const p=P.find(x=>x.n===+t.dataset.taxi);
-    document.getElementById("taxi-zh").textContent=p.zh;
-    document.getElementById("taxi-ru").textContent=p.ru;
-    document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();return;}
+    showPlaceTaxi(p);return;}
   if(e.target.closest("a"))return;
   if(e.target.closest("details"))return;
   const c=e.target.closest(".card");
@@ -1756,9 +1793,7 @@ function showOnMap(a){
 document.getElementById("list").addEventListener("click",e=>{
   const t=e.target.closest("[data-taxiall]");
   if(t){const a=ALL[+t.dataset.taxiall];
-    document.getElementById("taxi-zh").textContent=a.zh;
-    document.getElementById("taxi-ru").textContent=a.en?`${a.ru} · ${a.en}`:a.ru;
-    document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();return;}
+    showPlaceTaxi(a,a.en?`${a.ru} · ${a.en}`:a.ru,a.ref.addr);return;}
   const b=e.target.closest("[data-show]");if(b)showOnMap(ALL[+b.dataset.show]);
 });
 function setListView(v){
@@ -1822,9 +1857,7 @@ document.getElementById("sheet-x").onclick=closeSheet;
 sheetBody.addEventListener("click",e=>{
   const t=e.target.closest("[data-taxi]");if(!t)return;
   const p=P.find(x=>x.n===+t.dataset.taxi);
-  document.getElementById("taxi-zh").textContent=p.zh;
-  document.getElementById("taxi-ru").textContent=p.ru;
-  document.getElementById("taxi").hidden=false;document.getElementById("taxi-close").focus();
+  showPlaceTaxi(p);
 });
 
 // ===== Строка категорий: выпадающий список слоёв и счётчик включённых =====
