@@ -530,6 +530,7 @@ body{padding:0;overflow:hidden}
       <span class="slot" data-slot="hm"></span>
       <span class="slot" data-slot="zaraAdult"></span>
       <span class="slot" data-slot="outlets"></span>
+      <span class="slot" data-slot="tea"></span>
       <button class="lchip" id="l-mkt" aria-pressed="false" style="--c:var(--c-mkt)"><i class="ic-sq"></i>Рынки и подарки <b data-n="MARKETS"></b></button>
       <button class="lchip" id="l-malls" aria-pressed="false" style="--c:var(--c-mall)"><i class="ic-sq"></i>ТЦ <b data-n="MALLS"></b></button>
       <button class="lchip" id="l-uniqlo" aria-pressed="false" style="--c:var(--c-uq)"><i class="ic-sq"></i>Uniqlo <b data-n="UNIQLO"></b></button>
@@ -906,7 +907,8 @@ const CATS={
   zaraKids:{name:"Zara Kids",c:"--c-kids"},
   hm:{name:"H&M",c:"--c-cer"},
   zaraAdult:{name:"Zara · взрослым",c:"--c-uq"},
-  outlets:{name:"Аутлеты",c:"--c-mall"}
+  outlets:{name:"Аутлеты",c:"--c-mall"},
+  tea:{name:"Чай",c:"--c-food"}
 };
 // lng/lat — координаты Amap (GCJ-02); null — точки нет
 const P=[
@@ -985,6 +987,17 @@ const P=[
  {"cat":"outlets","zh":"上海佛罗伦萨小镇","en":"Florentia Village Shanghai","ru":"Florentia Village · Пудун","addr":"上海市浦东新区卓耀路58弄","ll":[121.764356,31.195953],"id":"B0FFK77SV4","what":"ANTA, ANTA Kids, Li-Ning, Li-Ning Kids, Adidas и ASICS. Удобно совместить с поездкой в аэропорт Пудун (PVG).","tips":[["Адрес","上海市浦东新区卓耀路58弄"],["Как добраться","Линия 2 до 远东大道 (Far East Avenue), затем бесплатный шаттл. До PVG, по данным аутлета, около 10 минут на машине."]]},
  {"cat":"outlets","zh":"比斯特上海购物村","en":"Bicester Shanghai Village","ru":"Bicester · у Диснейленда","addr":"上海市浦东新区申迪东路88号","ll":[121.679498,31.140497],"id":"B0FFGNSTVR","what":"Аутлет у Диснейленда с Polo Ralph Lauren, Coach, Nike, Adidas Originals и New Balance Kids.","tips":[["Адрес","上海市浦东新区申迪东路88号"],["Как добраться","Линия 11 до 迪士尼 (Disney Resort), дальше на шаттле курортной зоны или на DiDi."]]},
  {"cat":"outlets","zh":"汇金奥特莱斯","en":"Huijin Outlet","ru":"Huijin · Южный вокзал","addr":"上海市徐汇区沪闵路9001-3号","ll":[121.428085,31.15463],"id":"B0FFHIDJ5R","what":"Городской аутлет для короткого заезда. Adidas Outlet расположен в южной части комплекса, 石龙路750号.","tips":[["Адрес","上海市徐汇区沪闵路9001-3号"],["Как добраться","Метро до 上海南站 (Shanghai South Railway Station), выход 4."]]},
+ {"cat":"tea","zh":"武夷星茶业(上海环球金融中心店)","en":"Wuyistar · SWFC","ru":"Уишаньский чай · Wuyistar, SWFC","addr":"浦东新区世纪大道100号 上海环球金融中心3楼322室","ll":[121.50776,31.234293],"id":null,"what":"Фирменный магазин производителя из Уишаня. Спросите Да Хун Пао 大红袍 средней прожарки в небольшой заводской пачке.","tips":[["Адрес","浦东新区世纪大道100号 上海环球金融中心3楼322室"],["Этаж","3-й этаж, павильон 322"],["Часы","09:30–21:00, тел. 021-5068-1691"],["Метро","陆家嘴, линия 14, выход 9A"]],"approx":true},
+ {"cat":"tea","zh":"八马茶业(上海环球金融中心店)","en":"Bama Tea · SWFC","ru":"Bama Tea · SWFC","addr":"浦东新区世纪大道100号 上海环球金融中心2楼","ll":[121.507677,31.23454],"id":null,"what":"Фирменный магазин. Спросите Да Хун Пао 大红袍 или Жоу Гуй 肉桂. Удобно сравнить с Wuyistar этажом выше.","tips":[["Адрес","浦东新区世纪大道100号 上海环球金融中心2楼"],["Этаж","2-й этаж"],["Часы","09:00–21:00, тел. 159-2126-2592"]],"approx":true},
+ {"cat":"tea","zh":"武夷星茶业(天山茶城店)","en":"Wuyistar · Tianshan Tea City","ru":"Уишаньский чай · Wuyistar, Тяньшань","addr":"长宁区中山西路520号 天山茶城2093铺","ll":[121.412075,31.212725],"id":null,"what":"Фирменный павильон Wuyistar. За запечатанным Да Хун Пао 大红袍 и другими уишаньскими улунами 武夷岩茶.","tips":[["Адрес","长宁区中山西路520号 天山茶城2093铺"],["Павильон","2093, 2-й этаж"]],"approx":true},
+ {"cat":"tea","zh":"八马茶业(长宁来福士店)","en":"Bama Tea · Raffles City Changning","ru":"Bama Tea · Raffles City","addr":"长宁区长宁路1139号 来福士广场东区5楼","ll":[121.41427,31.21586],"id":null,"what":"Фасованные уишаньские улуны и Те Гуань Инь 铁观音.","tips":[["Адрес","长宁区长宁路1139号 来福士广场东区5楼"],["Где искать","Восточное крыло, 5-й этаж"],["Метро","中山公园, выход 3"]],"approx":true},
+ {"cat":"tea","zh":"黄隆泰茶庄(福建中路店)","en":"Huang Long Tai","ru":"Хуан Лун Тай · зелёный чай","addr":"黄浦区福建中路337号","ll":[121.48019,31.23608],"id":null,"what":"Старый шанхайский чайный магазин. Сюда за Сиху Лунцзином 西湖龙井 и другими зелёными чаями Чжэцзяна.","tips":[["Адрес","黄浦区福建中路337号"]],"approx":true},
+ {"cat":"tea","zh":"叙友茶庄(淮海中路总店)","en":"Xuyou Tea House · Huaihai Road","ru":"Сюйю · зелёный чай","addr":"黄浦区淮海中路605号","ll":[121.46675,31.22007],"id":null,"what":"Исторический чайный магазин на Хуайхай-лу. Спросите Хуаншань Маофэн 黄山毛峰 в небольшой пачке.","tips":[["Адрес","黄浦区淮海中路605号"],["Телефон","021-53062974"]],"approx":true},
+ {"cat":"tea","zh":"正山堂(长乐路店)","en":"Zhengshantang · Changle Road","ru":"Чжэншаньтан · Чанлэ-лу","addr":"静安区长乐路814号","ll":[121.44733,31.21599],"id":null,"what":"Фирменный магазин красного чая. Спросите Чжэншань Сяочжун 正山小种. Цзинь Цзюнь Мэй 金骏眉 у этой марки дороже.","tips":[["Адрес","静安区长乐路814号"]],"approx":true},
+ {"cat":"tea","zh":"正山堂(东昌路店)","en":"Zhengshantang · Dongchang Road","ru":"Чжэншаньтан · Дунчан-лу","addr":"浦东新区东昌路599号","ll":[121.51165,31.23374],"id":null,"what":"Фирменная точка на стороне Пудуна. Спросите Чжэншань Сяочжун 正山小种 или Цзинь Цзюнь Мэй 金骏眉.","tips":[["Адрес","浦东新区东昌路599号"]],"approx":true},
+ {"cat":"tea","zh":"第一百货商业中心","en":"Shanghai No. 1 Department Store","ru":"Первый универмаг · Нанкинская","addr":"黄浦区南京东路830号","ll":[121.474912,31.23554],"id":"B001548591","what":"В продуктовом отделе в 2026 году был фасованный зелёный Би Ло Чунь 中茶 碧螺春 75 г. Текущие остатки не подтверждены.","tips":[["Адрес","黄浦区南京东路830号"]]},
+ {"cat":"tea","zh":"Olé精品超市(静安嘉里中心店)","en":"Olé · Jing An Kerry Centre","ru":"Olé · Цзинъань","addr":"静安区南京西路1515号 静安嘉里中心B2","ll":[121.449525,31.224025],"id":"B0LBCZDAO4","what":"Если уже будете у храма Цзинъань, посмотрите фасованный чай. На полке можно поискать марки 中茶 и 海堤. Наличие не подтверждено.","tips":[["Адрес","静安区南京西路1515号 静安嘉里中心B2"],["Где искать","Уровень B2"]]},
+ {"cat":"tea","zh":"大润发(杨浦店)","en":"RT-Mart · Yangpu","ru":"RT-Mart · Янпу","addr":"杨浦区黄兴路1618号","ll":[121.522422,31.288995],"id":"B0I36N90YO","what":"В 2026 году здесь продавались фасованные зелёный чай 绿茶 и Маоцзянь 毛尖. Текущие остатки не подтверждены.","tips":[["Адрес","杨浦区黄兴路1618号"],["Часы","07:30–22:00"]]}
 ];
 P.forEach((p,i)=>p.n=i+1);
 
@@ -1144,8 +1157,9 @@ document.getElementById("panel").addEventListener("click",e=>{
   const b=e.target.closest("[data-cat]");if(!b)return;
   on[b.dataset.cat]=!on[b.dataset.cat];
   render();drawList();
-  if(b.dataset.cat==="outlets"&&on.outlets){
-    const bounds=P.filter(p=>p.cat==="outlets").map(p=>[p.ll[1],p.ll[0]]);
+  const cat=b.dataset.cat;
+  if((cat==="outlets"||cat==="tea")&&on[cat]){
+    const bounds=P.filter(p=>p.cat===cat).map(p=>[p.ll[1],p.ll[0]]);
     map.fitBounds(bounds,{padding:[24,64],animate:false});
   }
 });
